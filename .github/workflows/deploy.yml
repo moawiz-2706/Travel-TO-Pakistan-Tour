@@ -1,0 +1,43 @@
+name: Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - main # Trigger deployment on push to main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Kubernetes context
+        run: |
+          kubectl config set-cluster my-cluster --server=https://my-k8s-server
+          kubectl config set-credentials my-user --token=$K8S_TOKEN
+          kubectl config set-context my-context --cluster=my-cluster --user=my-user
+          kubectl config use-context my-context
+
+      - name: Build Docker images
+        run: |
+          docker build -t my-frontend ./frontend
+          docker build -t my-backend ./backend
+          docker build -t my-mongodb ./mongodb
+
+      - name: Push Docker images to Docker Hub
+        run: |
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker push my-frontend
+          docker push my-backend
+          docker push my-mongodb
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f k8s/namespace.yaml
+          kubectl apply -f k8s/frontend/deployment.yaml
+          kubectl apply -f k8s/frontend/service.yaml
+          kubectl apply -f k8s/backend/deployment.yaml
+          kubectl apply -f k8s/backend/service.yaml
+          kubectl apply -f k8s/mongodb/service.yaml
