@@ -22,9 +22,9 @@ jobs:
 
       - name: Build Docker Images
         run: |
-          docker buildx build --load -t $FRONTEND_IMAGE "./travel\ to\ pakistan/frontend"
-          docker buildx build --load -t $BACKEND_IMAGE "./travel\ to\ pakistan/backend"
-          docker buildx build --load -t $MONGODB_IMAGE "./travel\ to\ pakistan/mongodb"
+          docker buildx build --load -t $FRONTEND_IMAGE ./frontend
+          docker buildx build --load -t $BACKEND_IMAGE ./Backend
+          docker buildx build --load -t $MONGODB_IMAGE ./mongodb
 
       - name: Push Docker Images
         run: |
