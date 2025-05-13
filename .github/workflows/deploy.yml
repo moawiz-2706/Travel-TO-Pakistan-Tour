@@ -19,6 +19,7 @@ jobs:
         with:
           fetch-depth: 1
           clean: true
+          submodules: false  # Explicitly disable submodules
 
       - name: Configure System Paths
         shell: powershell
@@ -27,17 +28,25 @@ jobs:
           $env:Path += ";C:\Program Files\Git\cmd"
           $env:Path += ";C:\kubectl"
 
-      - name: Clean Environment
+      - name: Full Environment Cleanup
         shell: powershell
         run: |
+          # Force remove all Kubernetes resources
+          kubectl delete --all all --all-namespaces --force --grace-period=0 || true
+          
+          # Complete Minikube cleanup
           minikube delete --all --purge
           Remove-Item -Path "$HOME\.minikube" -Recurse -Force -ErrorAction SilentlyContinue
           Remove-Item -Path "$HOME\.docker" -Recurse -Force -ErrorAction SilentlyContinue
-          docker context rm minikube -f
+          docker system prune -af
 
-      - name: Configure Firewall Rules
+      - name: Configure Network
         shell: powershell
         run: |
+          # Reset Hyper-V network
+          Get-VMSwitch | Where-Object { $_.SwitchType -eq "Internal" } | Remove-VMSwitch -Force
+          
+          # Configure firewall
           Remove-NetFirewallRule -Name "Minikube*" -ErrorAction SilentlyContinue
           New-NetFirewallRule -Name "MinikubeDocker" -DisplayName "Minikube Docker" `
             -Direction Inbound -Protocol TCP -LocalPort 2376 -Action Allow
@@ -47,28 +56,32 @@ jobs:
       - name: Initialize Minikube Cluster
         shell: powershell
         run: |
+          # Create fresh Minikube instance
           minikube start `
             --driver=$env:MINIKUBE_DRIVER `
-            --cni=flannel `
-            --memory=4096 `
-            --cpus=2 `
-            --disk-size=20g `
+            --cni=calico `
+            --memory=6144 `
+            --cpus=4 `
+            --disk-size=30g `
             --force `
-            --wait-timeout=15m `
+            --wait=all `
+            --wait-timeout=20m `
             --apiserver-ips=127.0.0.1 `
-            --apiserver-name=localhost
+            --apiserver-name=localhost `
+            --extra-config=kubelet.cgroup-driver=systemd
 
-          minikube addons enable ingress
-          minikube addons enable metrics-server
+          # Verify cluster status
+          minikube status
+          kubectl cluster-info
 
-      - name: Configure Docker Environment
+      - name: Configure Docker Integration
         shell: powershell
         run: |
           # Get fresh Minikube IP
           $env:MINIKUBE_IP = minikube ip
           "MINIKUBE_IP=$env:MINIKUBE_IP" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           
-          # Set certificate path
+          # Set certificate paths
           $env:DOCKER_CERT_PATH = "$HOME\.minikube\certs"
           "DOCKER_CERT_PATH=$env:DOCKER_CERT_PATH" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
@@ -83,7 +96,7 @@ jobs:
           "DOCKER_HOST=$env:DOCKER_HOST" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           "DOCKER_TLS_VERIFY=$env:DOCKER_TLS_VERIFY" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
-          # Create Docker context
+          # Create and verify Docker context
           docker context create minikube `
             --docker "host=$env:DOCKER_HOST,ca=$env:DOCKER_CERT_PATH/ca.pem,cert=$env:DOCKER_CERT_PATH/cert.pem,key=$env:DOCKER_CERT_PATH/key.pem"
           
@@ -102,11 +115,7 @@ jobs:
               try {
                   Write-Output "Testing Docker connection (attempt $($retryCount + 1))..."
                   
-                  # Refresh environment variables
-                  $env:MINIKUBE_IP = minikube ip
-                  $env:DOCKER_HOST = "tcp://$env:MINIKUBE_IP:2376"
-                  
-                  # Test basic connectivity
+                  # Verify network connectivity
                   Test-NetConnection -ComputerName $env:MINIKUBE_IP -Port 2376
                   
                   # Test Docker commands
@@ -119,7 +128,9 @@ jobs:
                   Write-Output "Connection failed, retrying in 15 seconds..."
                   Start-Sleep -Seconds 15
                   
-                  # Reset Docker context
+                  # Refresh environment
+                  $env:MINIKUBE_IP = minikube ip
+                  $env:DOCKER_HOST = "tcp://$env:MINIKUBE_IP:2376"
                   docker context use minikube
               }
           }
@@ -128,6 +139,7 @@ jobs:
               throw "Failed to establish Docker connection after $maxRetries attempts"
           }
 
+      
       
       - name: Build & Push Frontend
         uses: docker/build-push-action@v5
