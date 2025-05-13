@@ -11,8 +11,6 @@ jobs:
     env:
       FRONTEND_IMAGE: moawiz/travel-frontend:${{ github.sha }}
       BACKEND_IMAGE: moawiz/travel-backend:${{ github.sha }}
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     steps:
       - name: Checkout code
@@ -76,35 +74,28 @@ jobs:
           Test-Path "$HOME\.minikube\certs\key.pem" | Out-String
           Write-Output "DOCKER_* variables after docker-env:"
           Get-ChildItem Env: | Where-Object { $_.Name -like "DOCKER_*" } | ForEach-Object { Write-Output "$($_.Name)=$($_.Value)" }
-          Write-Output "Creating Docker context for tcp://$minikubeIp:2376"
-          $attempt = 1
-          while ($attempt -le 3) {
-            docker context create minikube --docker "host=tcp://$minikubeIp:2376,ca=$HOME\.minikube\ca.crt,cert=$HOME\.minikube\certs\cert.pem,key=$HOME\.minikube\certs\key.pem" --description "Minikube Docker"
-            if ($LASTEXITCODE -eq 0) { break }
-            Write-Output "Context creation failed, attempt $attempt"
-            Remove-Item -Path "$HOME\.docker\contexts" -Recurse -Force -ErrorAction SilentlyContinue
-            $attempt++
-            Start-Sleep -Seconds 5
-          }
-          if ($LASTEXITCODE -eq 0) {
-            docker context use minikube
-          } else {
-            Write-Output "Context creation failed, falling back to DOCKER_HOST"
-            $Env:DOCKER_HOST = "tcp://$minikubeIp:2376"
-            $Env:DOCKER_TLS_VERIFY = "1"
-            $Env:DOCKER_CERT_PATH = "$HOME\.minikube\certs"
-          }
+          Write-Output "Using DOCKER_HOST for tcp://$minikubeIp:2376"
+          $Env:DOCKER_HOST = "tcp://$minikubeIp:2376"
+          $Env:DOCKER_TLS_VERIFY = "1"
+          $Env:DOCKER_CERT_PATH = "$HOME\.minikube\certs"
+          Write-Output "Docker contexts:"
+          docker context ls
         shell: powershell
 
       - name: Test Docker connection to Minikube
         run: |
+          $minikubeIp = minikube ip
+          Write-Output "Testing network to $minikubeIp:2376"
+          Test-NetConnection -ComputerName $minikubeIp -Port 2376 | Out-String
           $attempt = 1
           while ($attempt -le 3) {
             docker info --format '{{.ServerVersion}}'
             if ($LASTEXITCODE -eq 0) { break }
             Write-Output "Docker daemon not reachable, attempt $attempt"
             & minikube docker-env --shell powershell | Invoke-Expression
-            docker context use minikube -ErrorAction SilentlyContinue
+            $Env:DOCKER_HOST = "tcp://$minikubeIp:2376"
+            $Env:DOCKER_TLS_VERIFY = "1"
+            $Env:DOCKER_CERT_PATH = "$HOME\.minikube\certs"
             $attempt++
             Start-Sleep -Seconds 15
           }
