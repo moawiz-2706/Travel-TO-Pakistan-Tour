@@ -25,21 +25,32 @@ jobs:
           Stop-Service -Name "com.docker.service" -ErrorAction SilentlyContinue
         shell: powershell
 
+      - name: Verify Hyper-V
+        run: |
+          $hyperv = Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V
+          if ($hyperv.State -ne "Enabled") { Write-Output "Hyper-V is not enabled"; exit 1 }
+          Write-Output "Hyper-V is enabled"
+        shell: powershell
+
       - name: Configure Firewall for Minikube Docker
         run: |
           New-NetFirewallRule -Name "MinikubeDocker" -DisplayName "Minikube Docker" -Direction Inbound -Protocol TCP -LocalPort 2376 -Action Allow -ErrorAction SilentlyContinue
           New-NetFirewallRule -Name "MinikubeICMP" -DisplayName "Minikube ICMP" -Protocol ICMPv4 -IcmpType 8 -Action Allow -Direction Inbound -ErrorAction SilentlyContinue
         shell: powershell
 
-      - name: Reset Docker Contexts
+      - name: Reset Docker Contexts and Environment
         run: |
           Remove-Item -Path "$HOME\.docker\contexts" -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item Env:DOCKER_HOST -ErrorAction SilentlyContinue
+          Remove-Item Env:DOCKER_TLS_VERIFY -ErrorAction SilentlyContinue
+          Remove-Item Env:DOCKER_CERT_PATH -ErrorAction SilentlyContinue
           docker context use default
         shell: powershell
 
       - name: Start Minikube
         run: |
           minikube status; if ($LASTEXITCODE -ne 0) { minikube start --driver=hyperv --network-plugin=cni --cni=flannel }
+          Write-Output "Minikube IP: $(minikube ip)"
         shell: powershell
 
       - name: Verify Minikube API Server
@@ -52,6 +63,7 @@ jobs:
           & minikube docker-env --shell powershell | Invoke-Expression
           $minikubeIp = minikube ip
           if (-not $minikubeIp) { Write-Output "Failed to get Minikube IP"; exit 1 }
+          Write-Output "Configuring Docker context for tcp://$minikubeIp:2376"
           docker context create minikube --docker "host=tcp://$minikubeIp:2376,ca=$HOME\.minikube\ca.crt,cert=$HOME\.minikube\certs\cert.pem,key=$HOME\.minikube\certs\key.pem" --description "Minikube Docker"
           docker context use minikube
         shell: powershell
@@ -106,7 +118,8 @@ jobs:
           kubectl create secret generic google-secrets `
             --from-literal=GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" `
             --from-literal=GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" `
-            --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" `
+            --from-literal=JWT_SECRET="${{ secrets.JW
+System: T_SECRET }}" `
             -n travel-app-namespace --dry-run=client -o yaml | kubectl apply -f -
         shell: powershell
 
