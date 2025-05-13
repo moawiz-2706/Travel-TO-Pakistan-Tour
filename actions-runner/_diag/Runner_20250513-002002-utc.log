@@ -67,3 +67,57 @@
 [2025-05-13 00:20:02Z INFO ConfigurationStore] IsConfigured: True
 [2025-05-13 00:20:02Z INFO ConfigurationManager] Is configured: True
 [2025-05-13 00:20:02Z INFO Runner] Try determine runner startup type base on console redirects.
+[2025-05-13 00:20:02Z INFO Runner] Set runner startup type - Manual
+[2025-05-13 00:20:02Z INFO CommandSettings] Flag 'once': 'False'
+[2025-05-13 00:20:02Z INFO CommandSettings] Flag 'once': 'False'
+[2025-05-13 00:20:02Z INFO Runner] RunAsync
+[2025-05-13 00:20:02Z INFO ConfigurationManager] LoadSettings
+[2025-05-13 00:20:02Z INFO ConfigurationStore] IsConfigured()
+[2025-05-13 00:20:02Z INFO ConfigurationStore] IsConfigured: True
+[2025-05-13 00:20:02Z INFO ConfigurationManager] Is configured: True
+[2025-05-13 00:20:02Z INFO ConfigurationManager] Settings Loaded
+[2025-05-13 00:20:02Z INFO MessageListener] {
+  "AgentId": 2,
+  "AgentName": "DESKTOP-DO27US3",
+  "PoolId": 1,
+  "PoolName": "Default",
+  "ServerUrl": "https://pipelinesghubeus11.actions.githubusercontent.com/YtDrhldJpOQaubzGAtuX6RbdlVDFMWtjBQ53C9kKzlGhawB59z/",
+  "GitHubUrl": "https://github.com/moawiz-2706/Travel-TO-Pakistan-Tour",
+  "WorkFolder": "_work"
+}
+[2025-05-13 00:20:02Z INFO MessageListener] Loading Credentials
+[2025-05-13 00:20:02Z INFO ConfigurationStore] HasCredentials()
+[2025-05-13 00:20:02Z INFO ConfigurationStore] stored True
+[2025-05-13 00:20:02Z INFO CredentialManager] GetCredentialProvider
+[2025-05-13 00:20:02Z INFO CredentialManager] Creating type OAuth
+[2025-05-13 00:20:02Z INFO CredentialManager] Creating credential type: OAuth
+[2025-05-13 00:20:02Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel to pakistan\actions-runner\bin'
+[2025-05-13 00:20:02Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel to pakistan\actions-runner'
+[2025-05-13 00:20:02Z INFO HostContext] Well known config file 'RSACredentials': 'C:\Users\MOAWIZ\Desktop\travel to pakistan\actions-runner\.credentials_rsaparams'
+[2025-05-13 00:20:02Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\MOAWIZ\Desktop\travel to pakistan\actions-runner\.credentials_rsaparams
+[2025-05-13 00:20:02Z INFO MessageListener] Attempt to create session.
+[2025-05-13 00:20:02Z INFO MessageListener] Connecting to the Runner Server...
+[2025-05-13 00:20:02Z INFO RunnerServer] EstablishVssConnection
+[2025-05-13 00:20:02Z INFO RunnerServer] Establish connection with 100 seconds timeout.
+[2025-05-13 00:20:02Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2025-05-13 00:20:02Z INFO RunnerServer] EstablishVssConnection
+[2025-05-13 00:20:02Z INFO RunnerServer] Establish connection with 60 seconds timeout.
+[2025-05-13 00:20:02Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2025-05-13 00:20:02Z INFO RunnerServer] EstablishVssConnection
+[2025-05-13 00:20:02Z INFO RunnerServer] Establish connection with 60 seconds timeout.
+[2025-05-13 00:20:02Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2025-05-13 00:20:03Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2025-05-13 00:20:03Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2025-05-13 00:20:03Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2025-05-13 00:20:03Z INFO MessageListener] VssConnection created
+[2025-05-13 00:20:03Z INFO Terminal] WRITE LINE: 
+[2025-05-13 00:20:03Z INFO Terminal] WRITE LINE: 
+[2025-05-13 00:20:03Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\MOAWIZ\Desktop\travel to pakistan\actions-runner\.credentials_rsaparams
+[2025-05-13 00:20:03Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\MOAWIZ\Desktop\travel to pakistan\actions-runner\.credentials_rsaparams
+[2025-05-13 00:20:04Z INFO GitHubActionsService] AAD Correlation ID for this token request: Unknown
+[2025-05-13 00:20:05Z INFO MessageListener] Session created.
+[2025-05-13 00:20:05Z INFO Terminal] WRITE LINE: Current runner version: '2.323.0'
+[2025-05-13 00:20:05Z INFO Terminal] WRITE LINE: 2025-05-13 00:20:05Z: Listening for Jobs
+[2025-05-13 00:20:05Z INFO JobDispatcher] Set runner/worker IPC timeout to 30 seconds.
+[2025-05-13 00:20:05Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\MOAWIZ\Desktop\travel to pakistan\actions-runner\.credentials_rsaparams
+[2025-05-13 00:20:06Z INFO GitHubActionsService] AAD Correlation ID for this token request: Unknown
