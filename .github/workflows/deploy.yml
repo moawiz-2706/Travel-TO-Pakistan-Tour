@@ -26,8 +26,9 @@ jobs:
 
       - name: Verify GitHub connectivity
         run: |
-          Test-NetConnection -ComputerName github.com -Port 443 | Out-String
-          if ($LASTEXITCODE -ne 0) { Write-Output "Cannot reach GitHub"; exit 1 }
+          $result = Test-NetConnection -ComputerName github.com -Port 443
+          Write-Output $result | Out-String
+          if (-not $result.TcpTestSucceeded) { Write-Output "Cannot reach GitHub"; exit 1 }
         shell: powershell
 
       - name: Configure System Paths
