@@ -13,11 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set Docker Hub image tags
+      - name: Build Docker Images
         run: |
-          echo "FRONTEND_IMAGE=moawiz/frontend:latest" >> $GITHUB_ENV
-          echo "BACKEND_IMAGE=moawiz/backend:latest" >> $GITHUB_ENV
-          echo "MONGODB_IMAGE=moawiz/mongodb:latest" >> $GITHUB_ENV
+          docker build -t $FRONTEND_IMAGE "./travel to pakistan/frontend"
+          docker build -t $BACKEND_IMAGE "./travel to pakistan/backend"
+          docker build -t $MONGODB_IMAGE "./travel to pakistan/mongodb"
 
       - name: Build Docker Images
         run: |
