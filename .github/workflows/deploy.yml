@@ -40,8 +40,8 @@ jobs:
 
       - name: Clean Environment
         run: |
-          minikube delete --all --purge -ErrorAction SilentlyContinue
-          docker context rm minikube -f -ErrorAction SilentlyContinue
+          minikube delete --all --purge --ErrorAction SilentlyContinue
+          docker context rm minikube -f --ErrorAction SilentlyContinue
           Remove-Item -Path "$HOME\.minikube" -Recurse -Force -ErrorAction SilentlyContinue
           Remove-Item -Path "$HOME\.docker" -Recurse -Force -ErrorAction SilentlyContinue
         shell: powershell
@@ -82,9 +82,7 @@ jobs:
         run: |
           $env:MINIKUBE_IP = minikube ip
           if (-not $env:MINIKUBE_IP) { Write-Output "Failed to get Minikube IP"; exit 1 }
-          "MINIKUBE_IP=$env:MINIKUBE_IP" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           $env:DOCKER_CERT_PATH = "$HOME\.minikube\certs"
-          "DOCKER_CERT_PATH=$env:DOCKER_CERT_PATH" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           if (-not (Test-Path "$env:DOCKER_CERT_PATH\ca.crt")) { throw "Missing CA certificate" }
           if (-not (Test-Path "$env:DOCKER_CERT_PATH\cert.pem")) { throw "Missing client certificate" }
           if (-not (Test-Path "$env:DOCKER_CERT_PATH\key.pem")) { throw "Missing client key" }
