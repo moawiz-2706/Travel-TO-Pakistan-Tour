@@ -9,14 +9,26 @@ jobs:
   deploy:
     runs-on: self-hosted
     env:
-      FRONTEND_IMAGE: moawiz/travel-frontend:latest
-      BACKEND_IMAGE: moawiz/travel-backend:latest
+      FRONTEND_IMAGE: moawiz/travel-frontend:${{ github.sha }}
+      BACKEND_IMAGE: moawiz/travel-backend:${{ github.sha }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Stop Docker Desktop (optional, if conflicts occur)
+        run: |
+          Stop-Service -Name "com.docker.service" -ErrorAction SilentlyContinue
+        shell: powershell
+
+      - name: Start Minikube
+        run: |
+          minikube start --driver=docker
+        shell: powershell
 
       - name: Set up Docker to use Minikube's environment
         run: |
@@ -24,20 +36,37 @@ jobs:
         shell: powershell
 
       - name: Test Docker connection to Minikube
-        run: docker info
+        run: |
+          docker info --format '{{.ServerVersion}}' || { echo "Docker daemon not reachable"; exit 1; }
         shell: powershell
 
-      - name: Build Docker Images
-        run: |
-          docker build -t $env:FRONTEND_IMAGE ".\travel to pakistan\frontend"
-          docker build -t $env:BACKEND_IMAGE ".\travel to pakistan\backend"
-        shell: powershell
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Push Docker Images
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Frontend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./travel-to-pakistan/frontend
+          push: true
+          tags: ${{ env.FRONTEND_IMAGE }}
+
+      - name: Build and push Backend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./travel-to-pakistan/backend
+          push: true
+          tags: ${{ env.BACKEND_IMAGE }}
+
+      - name: Update Kubernetes manifests with image tags
         run: |
-          echo $env:DOCKER_PASSWORD | docker login -u $env:DOCKER_USERNAME --password-stdin
-          docker push $env:FRONTEND_IMAGE
-          docker push $env:BACKEND_IMAGE
+          (Get-Content ".\travel-to-pakistan\backend\deployment.yaml") -replace 'moawiz/travel-backend:latest', 'moawiz/travel-backend:${{ github.sha }}' | Set-Content ".\travel-to-pakistan\backend\deployment.yaml"
+          (Get-Content ".\travel-to-pakistan\frontend\deployment.yaml") -replace 'moawiz/travel-frontend:latest', 'moawiz/travel-frontend:${{ github.sha }}' | Set-Content ".\travel-to-pakistan\frontend\deployment.yaml"
         shell: powershell
 
       - name: Create Kubernetes Secrets
@@ -46,16 +75,17 @@ jobs:
           kubectl create secret generic google-secrets `
             --from-literal=GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" `
             --from-literal=GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" `
+            --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" `
             -n travel-app-namespace --dry-run=client -o yaml | kubectl apply -f -
         shell: powershell
 
       - name: Deploy to Minikube
         run: |
-          kubectl apply -f ".\travel to pakistan\mongodb\pvc.yaml"
-          kubectl apply -f ".\travel to pakistan\mongodb\deployment.yaml"
-          kubectl apply -f ".\travel to pakistan\mongodb\service.yaml"
-          kubectl apply -f ".\travel to pakistan\backend\deployment.yaml"
-          kubectl apply -f ".\travel to pakistan\backend\service.yaml"
-          kubectl apply -f ".\travel to pakistan\frontend\deployment.yaml"
-          kubectl apply -f ".\travel to pakistan\frontend\service.yaml"
+          kubectl apply -f ".\travel-to-pakistan\mongodb\pvc.yaml"
+          kubectl apply -f ".\travel-to-pakistan\mongodb\deployment.yaml"
+          kubectl apply -f ".\travel-to-pakistan\mongodb\service.yaml"
+          kubectl apply -f ".\travel-to-pakistan\backend\deployment.yaml"
+          kubectl apply -f ".\travel-to-pakistan\backend\service.yaml"
+          kubectl apply -f ".\travel-to-pakistan\frontend\deployment.yaml"
+          kubectl apply -f ".\travel-to-pakistan\frontend\service.yaml"
         shell: powershell

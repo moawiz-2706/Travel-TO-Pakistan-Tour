@@ -1,5 +1,5 @@
-# Use Node.js 18 as the base image
-FROM node:18
+# Use Node.js LTS as the base image
+FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
@@ -16,5 +16,5 @@ COPY . .
 # Expose the port the backend runs on
 EXPOSE 5000
 
-# Command to run the application
-CMD ["node", "server.js"]
+# Start the application
+CMD ["npm", "start"]

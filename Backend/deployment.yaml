@@ -17,14 +17,17 @@ spec:
     spec:
       containers:
         - name: backend
-          image: moawiz/travel-backend:latest
+          image: moawiz/travel-backend:latest # Will be replaced by workflow
           ports:
             - containerPort: 5000
           env:
             - name: MONGODB_URI
               value: "mongodb://mongodb-service.travel-app-namespace.svc.cluster.local:27017/tourism-db"
             - name: JWT_SECRET
-              value: "your_jwt_secret_here"
+              valueFrom:
+                secretKeyRef:
+                  name: google-secrets
+                  key: JWT_SECRET
             - name: GOOGLE_CLIENT_ID
               valueFrom:
                 secretKeyRef:
@@ -35,3 +38,22 @@ spec:
                 secretKeyRef:
                   name: google-secrets
                   key: GOOGLE_CLIENT_SECRET
+          readinessProbe:
+            httpGet:
+              path: /health # Replace with your backend's health endpoint
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health # Replace with your backend's health endpoint
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
