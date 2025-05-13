@@ -28,56 +28,71 @@ jobs:
           $env:Path += ";C:\Program Files\Git\cmd"
           $env:Path += ";C:\kubectl"
 
-      - name: Full Environment Cleanup
+      - name: Safe Environment Cleanup
         shell: powershell
         run: |
-          # PowerShell-compatible cleanup
-          try { kubectl delete all --all --all-namespaces --force --grace-period=0 } catch { }
-          minikube delete --all --purge
+          # Graceful cleanup that handles missing clusters
+          minikube delete --all --purge || true
+          docker context rm minikube -f || true
           Remove-Item -Path "$HOME\.minikube" -Recurse -Force -ErrorAction SilentlyContinue
-          Remove-Item -Path "$HOME\.docker" -Recurse -Force -ErrorAction SilentlyContinue
-          docker system prune -af
+          Remove-Item -Path "$HOME\.docker\contexts" -Recurse -Force -ErrorAction SilentlyContinue
 
-      - name: Configure Network
+      - name: Configure Network Infrastructure
         shell: powershell
         run: |
-          Get-VMSwitch | Where-Object { $_.SwitchType -eq "Internal" } | Remove-VMSwitch -Force -ErrorAction SilentlyContinue
-          Remove-NetFirewallRule -Name "Minikube*" -ErrorAction SilentlyContinue
-          New-NetFirewallRule -Name "MinikubeDocker" -DisplayName "Minikube Docker" -Direction Inbound -Protocol TCP -LocalPort 2376 -Action Allow
-          New-NetFirewallRule -Name "MinikubeAPI" -DisplayName "Minikube API" -Direction Inbound -Protocol TCP -LocalPort 8443 -Action Allow
+          # Reset network configuration
+          Get-NetFirewallRule -Name "Minikube*" | Remove-NetFirewallRule -ErrorAction SilentlyContinue
+          New-NetFirewallRule -Name "MinikubeDocker" -DisplayName "Minikube Docker" `
+            -Direction Inbound -Protocol TCP -LocalPort 2376 -Action Allow
+          New-NetFirewallRule -Name "MinikubeAPI" -DisplayName "Minikube API" `
+            -Direction Inbound -Protocol TCP -LocalPort 8443 -Action Allow
+
+          # Configure Hyper-V virtual switch
+          $switchName = "MinikubeSwitch"
+          if (-not (Get-VMSwitch -Name $switchName -ErrorAction SilentlyContinue)) {
+              New-VMSwitch -Name $switchName -SwitchType Internal
+          }
 
       - name: Initialize Minikube Cluster
         shell: powershell
         run: |
+          # Start cluster with enhanced configuration
           minikube start `
             --driver=$env:MINIKUBE_DRIVER `
-            --cni=calico `
-            --memory=6144 `
+            --cni=flannel `
+            --memory=8192 `
             --cpus=4 `
-            --disk-size=30g `
+            --disk-size=40g `
             --force `
             --wait=all `
-            --wait-timeout=20m `
+            --wait-timeout=25m `
             --apiserver-ips=127.0.0.1 `
             --apiserver-name=localhost `
-            --extra-config=kubelet.cgroup-driver=systemd
+            --extra-config=kubelet.cgroup-driver=systemd `
+            --embed-certs
 
+          # Verify cluster health
           minikube status
           kubectl cluster-info
+          kubectl get pods -A
 
-      - name: Configure Docker Integration
+      - name: Configure Docker Environment
         shell: powershell
         run: |
+          # Get fresh cluster information
           $env:MINIKUBE_IP = minikube ip
           "MINIKUBE_IP=$env:MINIKUBE_IP" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           
+          # Configure certificate paths
           $env:DOCKER_CERT_PATH = "$HOME\.minikube\certs"
           "DOCKER_CERT_PATH=$env:DOCKER_CERT_PATH" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
+          # Verify certificates exist
           if (-not (Test-Path "$env:DOCKER_CERT_PATH\ca.pem")) { throw "Missing CA certificate" }
           if (-not (Test-Path "$env:DOCKER_CERT_PATH\cert.pem")) { throw "Missing client certificate" }
           if (-not (Test-Path "$env:DOCKER_CERT_PATH\key.pem")) { throw "Missing client key" }
 
+          # Configure Docker context
           docker context create minikube `
             --docker "host=tcp://$env:MINIKUBE_IP:2376,ca=$env:DOCKER_CERT_PATH/ca.pem,cert=$env:DOCKER_CERT_PATH/cert.pem,key=$env:DOCKER_CERT_PATH/key.pem"
           
@@ -95,14 +110,21 @@ jobs:
           while (-not $success -and $retryCount -lt $maxRetries) {
               try {
                   Write-Output "Testing Docker connection (attempt $($retryCount + 1))..."
+                  
+                  # Verify network connectivity
                   Test-NetConnection -ComputerName $env:MINIKUBE_IP -Port 2376
+                  
+                  # Test Docker functionality
                   docker info
                   docker run --rm hello-world
+                  
                   $success = $true
               } catch {
                   $retryCount++
                   Write-Output "Connection failed, retrying in 15 seconds..."
                   Start-Sleep -Seconds 15
+                  
+                  # Refresh environment
                   $env:MINIKUBE_IP = minikube ip
                   docker context use minikube
               }
@@ -112,7 +134,7 @@ jobs:
               throw "Failed to establish Docker connection after $maxRetries attempts"
           }
 
-      # Remaining steps remain the same
+      # Remaining deployment steps remain unchanged
       - name: Build & Push Frontend
         uses: docker/build-push-action@v5
         with:
