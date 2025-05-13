@@ -12,7 +12,6 @@ jobs:
       FRONTEND_IMAGE: moawiz/travel-frontend:${{ github.sha }}
       BACKEND_IMAGE: moawiz/travel-backend:${{ github.sha }}
       MINIKUBE_DRIVER: hyperv
-      DOCKER_CERT_PATH: ${{ env.HOME }}\.minikube\certs  # Corrected line
 
     steps:
       - name: Checkout code
@@ -23,6 +22,14 @@ jobs:
           $env:Path += ";C:\Program Files\Docker\Docker\resources\bin"
           $env:Path += ";C:\Program Files\Git\cmd"
           $env:Path += ";C:\kubectl"
+
+      - name: Set Environment Variables
+        shell: powershell
+        run: |
+          # Set certificate path using native PowerShell environment variable
+          $certPath = "$HOME\.minikube\certs"
+          "DOCKER_CERT_PATH=$certPath" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          Write-Output "Set DOCKER_CERT_PATH to $certPath"
 
       - name: Clean Docker Environment
         run: |
@@ -59,18 +66,18 @@ jobs:
 
       - name: Configure Docker-Minikube Integration
         run: |
-          # Get Minikube environment variables
-          minikube docker-env --shell powershell | ForEach-Object {
-            if ($_ -match '\$Env:([^=]+)\s*=\s*"([^"]+)"') {
-              $varName = $matches[1]
-              $varValue = $matches[2]
-              "$varName=$varValue" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-            }
+          # Configure Docker environment
+          minikube docker-env --shell powershell | Out-String -Stream | ForEach-Object {
+              if ($_ -match '\$Env:([^=]+)\s*=\s*"([^"]+)"') {
+                  $varName = $matches[1]
+                  $varValue = $matches[2]
+                  "$varName=$varValue" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+              }
           }
 
           # Verify certificates
           if (-not (Test-Path "$env:DOCKER_CERT_PATH\ca.pem")) {
-            throw "Missing CA certificate at $env:DOCKER_CERT_PATH"
+              throw "Missing CA certificate at $env:DOCKER_CERT_PATH"
           }
 
           # Create Docker context
@@ -115,23 +122,30 @@ jobs:
 
       - name: Deploy Kubernetes Stack
         run: |
+          # Create namespace
           kubectl create namespace travel-app --dry-run=client -o yaml | kubectl apply -f -
 
+          # Create secrets
           kubectl create secret generic app-secrets -n travel-app `
             --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" `
             --from-literal=GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" `
             --from-literal=GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" `
             --dry-run=client -o yaml | kubectl apply -f -
 
+          # Deploy MongoDB
           kubectl apply -f ./travel-to-pakistan/mongodb/ -n travel-app
           kubectl wait --for=condition=ready pod -l app=mongodb -n travel-app --timeout=300s
+
+          # Deploy application components
           kubectl apply -f ./travel-to-pakistan/backend/ -n travel-app
           kubectl apply -f ./travel-to-pakistan/frontend/ -n travel-app
 
+          # Expose services
           kubectl expose deployment frontend -n travel-app --type=NodePort --port=80
           kubectl expose deployment backend -n travel-app --type=NodePort --port=3000
 
-          minikube service list -n travel-app
+          # Verify deployment
+          kubectl get all -n travel-app
         shell: powershell
 
       - name: Smoke Tests
@@ -139,6 +153,26 @@ jobs:
           $frontendUrl = minikube service frontend -n travel-app --url
           $backendUrl = minikube service backend -n travel-app --url
 
-          Invoke-WebRequest "$frontendUrl/health" -UseBasicParsing
-          Invoke-WebRequest "$backendUrl/api/health" -UseBasicParsing
+          # Add retry logic
+          $maxRetries = 5
+          $retryInterval = 10
+
+          function Test-Endpoint {
+              param($url)
+              $retryCount = 0
+              while ($retryCount -lt $maxRetries) {
+                  try {
+                      $response = Invoke-WebRequest $url -UseBasicParsing -TimeoutSec 30
+                      if ($response.StatusCode -eq 200) { return $true }
+                  } catch {
+                      Write-Output "Attempt $($retryCount+1) failed for $url"
+                  }
+                  $retryCount++
+                  Start-Sleep -Seconds $retryInterval
+              }
+              return $false
+          }
+
+          if (-not (Test-Endpoint "$frontendUrl/health")) { throw "Frontend health check failed" }
+          if (-not (Test-Endpoint "$backendUrl/api/health")) { throw "Backend health check failed" }
         shell: powershell
