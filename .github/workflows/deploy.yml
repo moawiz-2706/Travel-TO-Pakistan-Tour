@@ -27,12 +27,12 @@ jobs:
 
       - name: Start Minikube
         run: |
-          minikube status || minikube start --driver=docker
+          minikube status; if ($LASTEXITCODE -ne 0) { minikube start --driver=docker }
         shell: powershell
 
       - name: Verify Minikube API Server
         run: |
-          kubectl cluster-info || { Write-Output "Minikube API server not reachable"; minikube stop; minikube start --driver=docker; exit 1 }
+          kubectl cluster-info; if ($LASTEXITCODE -ne 0) { Write-Output "Minikube API server not reachable"; minikube stop; minikube start --driver=docker; exit 1 }
         shell: powershell
 
       - name: Set up Docker to use Minikube's environment
