@@ -41,9 +41,7 @@ jobs:
       - name: Reset Docker Contexts and Environment
         run: |
           Remove-Item -Path "$HOME\.docker\contexts" -Recurse -Force -ErrorAction SilentlyContinue
-          Remove-Item Env:DOCKER_HOST -ErrorAction SilentlyContinue
-          Remove-Item Env:DOCKER_TLS_VERIFY -ErrorAction SilentlyContinue
-          Remove-Item Env:DOCKER_CERT_PATH -ErrorAction SilentlyContinue
+          Remove-Item Env:DOCKER_HOST, Env:DOCKER_TLS_VERIFY, Env:DOCKER_CERT_PATH, Env:DOCKER_USERNAME, Env:DOCKER_PASSWORD -ErrorAction SilentlyContinue
           docker context use default
           Write-Output "DOCKER_* variables after reset:"
           Get-ChildItem Env: | Where-Object { $_.Name -like "DOCKER_*" } | ForEach-Object { Write-Output "$($_.Name)=$($_.Value)" }
@@ -72,11 +70,30 @@ jobs:
           & minikube docker-env --shell powershell | Invoke-Expression
           $minikubeIp = minikube ip
           if (-not $minikubeIp) { Write-Output "Failed to get Minikube IP"; exit 1 }
-          Write-Output "Configuring Docker context for tcp://$minikubeIp:2376"
-          Write-Output "DOCKER_* variables before context creation:"
+          Write-Output "Checking Minikube certificates..."
+          Test-Path "$HOME\.minikube\ca.crt" | Out-String
+          Test-Path "$HOME\.minikube\certs\cert.pem" | Out-String
+          Test-Path "$HOME\.minikube\certs\key.pem" | Out-String
+          Write-Output "DOCKER_* variables after docker-env:"
           Get-ChildItem Env: | Where-Object { $_.Name -like "DOCKER_*" } | ForEach-Object { Write-Output "$($_.Name)=$($_.Value)" }
-          docker context create minikube --docker "host=tcp://$minikubeIp:2376,ca=$HOME\.minikube\ca.crt,cert=$HOME\.minikube\certs\cert.pem,key=$HOME\.minikube\certs\key.pem" --description "Minikube Docker"
-          docker context use minikube
+          Write-Output "Creating Docker context for tcp://$minikubeIp:2376"
+          $attempt = 1
+          while ($attempt -le 3) {
+            docker context create minikube --docker "host=tcp://$minikubeIp:2376,ca=$HOME\.minikube\ca.crt,cert=$HOME\.minikube\certs\cert.pem,key=$HOME\.minikube\certs\key.pem" --description "Minikube Docker"
+            if ($LASTEXITCODE -eq 0) { break }
+            Write-Output "Context creation failed, attempt $attempt"
+            Remove-Item -Path "$HOME\.docker\contexts" -Recurse -Force -ErrorAction SilentlyContinue
+            $attempt++
+            Start-Sleep -Seconds 5
+          }
+          if ($LASTEXITCODE -eq 0) {
+            docker context use minikube
+          } else {
+            Write-Output "Context creation failed, falling back to DOCKER_HOST"
+            $Env:DOCKER_HOST = "tcp://$minikubeIp:2376"
+            $Env:DOCKER_TLS_VERIFY = "1"
+            $Env:DOCKER_CERT_PATH = "$HOME\.minikube\certs"
+          }
         shell: powershell
 
       - name: Test Docker connection to Minikube
@@ -87,7 +104,7 @@ jobs:
             if ($LASTEXITCODE -eq 0) { break }
             Write-Output "Docker daemon not reachable, attempt $attempt"
             & minikube docker-env --shell powershell | Invoke-Expression
-            docker context use minikube
+            docker context use minikube -ErrorAction SilentlyContinue
             $attempt++
             Start-Sleep -Seconds 15
           }
