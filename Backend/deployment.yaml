@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: my-backend
+          image: moawiz/backend:latest
           ports:
             - containerPort: 5000
           env:
