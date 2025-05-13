@@ -61,34 +61,35 @@ jobs:
           minikube addons enable ingress
           minikube addons enable metrics-server
 
-      - name: Configure Docker Integration
+      - name: Configure Docker Environment
         shell: powershell
         run: |
-          # Get current Minikube IP
+          # Get fresh Minikube IP
           $env:MINIKUBE_IP = minikube ip
           "MINIKUBE_IP=$env:MINIKUBE_IP" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-          Write-Output "Current Minikube IP: $env:MINIKUBE_IP"
-
-          # Set certificate paths
+          
+          # Set certificate path
           $env:DOCKER_CERT_PATH = "$HOME\.minikube\certs"
           "DOCKER_CERT_PATH=$env:DOCKER_CERT_PATH" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
-          # Verify certificates exist
-          if (-not (Test-Path "$env:DOCKER_CERT_PATH\ca.pem")) { throw "CA certificate missing" }
-          if (-not (Test-Path "$env:DOCKER_CERT_PATH\cert.pem")) { throw "Client certificate missing" }
-          if (-not (Test-Path "$env:DOCKER_CERT_PATH\key.pem")) { throw "Client key missing" }
+          # Verify certificates
+          if (-not (Test-Path "$env:DOCKER_CERT_PATH\ca.pem")) { throw "Missing CA certificate" }
+          if (-not (Test-Path "$env:DOCKER_CERT_PATH\cert.pem")) { throw "Missing client certificate" }
+          if (-not (Test-Path "$env:DOCKER_CERT_PATH\key.pem")) { throw "Missing client key" }
+
+          # Configure Docker environment
+          $env:DOCKER_HOST = "tcp://$env:MINIKUBE_IP:2376"
+          $env:DOCKER_TLS_VERIFY = "1"
+          "DOCKER_HOST=$env:DOCKER_HOST" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "DOCKER_TLS_VERIFY=$env:DOCKER_TLS_VERIFY" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
           # Create Docker context
           docker context create minikube `
-            --docker "host=tcp://$env:MINIKUBE_IP:2376,ca=$env:DOCKER_CERT_PATH/ca.pem,cert=$env:DOCKER_CERT_PATH/cert.pem,key=$env:DOCKER_CERT_PATH/key.pem"
+            --docker "host=$env:DOCKER_HOST,ca=$env:DOCKER_CERT_PATH/ca.pem,cert=$env:DOCKER_CERT_PATH/cert.pem,key=$env:DOCKER_CERT_PATH/key.pem"
           
           docker context use minikube
           Write-Output "Current Docker contexts:"
           docker context ls
-
-          # Test network connectivity
-          Write-Output "Testing connection to Docker daemon..."
-          Test-NetConnection -ComputerName $env:MINIKUBE_IP -Port 2376
 
       - name: Validate Docker Connection
         shell: powershell
@@ -100,18 +101,26 @@ jobs:
           while (-not $success -and $retryCount -lt $maxRetries) {
               try {
                   Write-Output "Testing Docker connection (attempt $($retryCount + 1))..."
+                  
+                  # Refresh environment variables
+                  $env:MINIKUBE_IP = minikube ip
+                  $env:DOCKER_HOST = "tcp://$env:MINIKUBE_IP:2376"
+                  
+                  # Test basic connectivity
+                  Test-NetConnection -ComputerName $env:MINIKUBE_IP -Port 2376
+                  
+                  # Test Docker commands
                   docker info
-                  docker buildx create --use
                   docker run --rm hello-world
+                  
                   $success = $true
               } catch {
                   $retryCount++
                   Write-Output "Connection failed, retrying in 15 seconds..."
                   Start-Sleep -Seconds 15
                   
-                  # Refresh environment variables
-                  $env:MINIKUBE_IP = minikube ip
-                  $env:DOCKER_CERT_PATH = "$HOME\.minikube\certs"
+                  # Reset Docker context
+                  docker context use minikube
               }
           }
 
@@ -119,6 +128,7 @@ jobs:
               throw "Failed to establish Docker connection after $maxRetries attempts"
           }
 
+      
       - name: Build & Push Frontend
         uses: docker/build-push-action@v5
         with:
