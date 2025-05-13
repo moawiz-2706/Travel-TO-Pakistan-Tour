@@ -1,22 +1,29 @@
 name: CI/CD to Docker Hub and Minikube
+
 on:
   push:
     branches:
       - master
+
 jobs:
   deploy:
     runs-on: self-hosted
+    shell: bash
     env:
       FRONTEND_IMAGE: moawiz/travel-frontend:latest
       BACKEND_IMAGE: moawiz/travel-backend:latest
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Set up Docker to use Minikube's environment
+        shell: bash
         run: |
-          minikube docker-env | Invoke-Expression
+          eval $(minikube docker-env)
+
       - name: Build Docker Images
         run: |
           docker build -t $FRONTEND_IMAGE "./travel to pakistan/frontend"
@@ -27,6 +34,7 @@ jobs:
           echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
           docker push $FRONTEND_IMAGE
           docker push $BACKEND_IMAGE
+
       - name: Create Kubernetes Secrets
         run: |
           kubectl create namespace travel-app-namespace --dry-run=client -o yaml | kubectl apply -f -
@@ -34,12 +42,13 @@ jobs:
             --from-literal=GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" \
             --from-literal=GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" \
             -n travel-app-namespace --dry-run=client -o yaml | kubectl apply -f -
+
       - name: Deploy to Minikube
         run: |
-          kubectl apply -f "travel to pakistan/mongodb/pvc.yaml"
-          kubectl apply -f "travel to pakistan/mongodb/deployment.yaml"
-          kubectl apply -f "travel to pakistan/mongodb/service.yaml"
-          kubectl apply -f "travel to pakistan/backend/deployment.yaml"
-          kubectl apply -f "travel to pakistan/backend/service.yaml"
-          kubectl apply -f "travel to pakistan/frontend/deployment.yaml"
-          kubectl apply -f "travel to pakistan/frontend/service.yaml"
+          kubectl apply -f "./travel to pakistan/mongodb/pvc.yaml"
+          kubectl apply -f "./travel to pakistan/mongodb/deployment.yaml"
+          kubectl apply -f "./travel to pakistan/mongodb/service.yaml"
+          kubectl apply -f "./travel to pakistan/backend/deployment.yaml"
+          kubectl apply -f "./travel to pakistan/backend/service.yaml"
+          kubectl apply -f "./travel to pakistan/frontend/deployment.yaml"
+          kubectl apply -f "./travel to pakistan/frontend/service.yaml"
