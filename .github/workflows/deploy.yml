@@ -19,8 +19,8 @@ jobs:
           minikube docker-env | Invoke-Expression
       - name: Build Docker Images
         run: |
-          docker build -t $FRONTEND_IMAGE "../../../frontend"
-          docker build -t $BACKEND_IMAGE "../../../backend"
+          docker build -t $FRONTEND_IMAGE "travel to pakistan/frontend"
+          docker build -t $BACKEND_IMAGE "travel to pakistan/backend"
       - name: Push Docker Images
         run: |
           echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
@@ -35,10 +35,10 @@ jobs:
             -n travel-app-namespace --dry-run=client -o yaml | kubectl apply -f -
       - name: Deploy to Minikube
         run: |
-          kubectl apply -f "./travel to pakistan/mongodb/pvc.yaml"
-          kubectl apply -f "./travel to pakistan/mongodb/deployment.yaml"
-          kubectl apply -f "./travel to pakistan/mongodb/service.yaml"
-          kubectl apply -f "./travel to pakistan/backend/deployment.yaml"
-          kubectl apply -f "./travel to pakistan/backend/service.yaml"
-          kubectl apply -f "./travel to pakistan/frontend/deployment.yaml"
-          kubectl apply -f "./travel to pakistan/frontend/service.yaml"
+          kubectl apply -f "travel to pakistan/mongodb/pvc.yaml"
+          kubectl apply -f "travel to pakistan/mongodb/deployment.yaml"
+          kubectl apply -f "travel to pakistan/mongodb/service.yaml"
+          kubectl apply -f "travel to pakistan/backend/deployment.yaml"
+          kubectl apply -f "travel to pakistan/backend/service.yaml"
+          kubectl apply -f "travel to pakistan/frontend/deployment.yaml"
+          kubectl apply -f "travel to pakistan/frontend/service.yaml"
