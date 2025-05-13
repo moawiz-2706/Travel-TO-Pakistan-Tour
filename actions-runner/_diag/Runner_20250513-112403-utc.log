@@ -5,3 +5,174 @@
 [2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
 [2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
 [2025-05-13 11:24:03Z INFO HostContext] Well known config file 'Runner': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.runner'
+[2025-05-13 11:24:03Z INFO Listener] Runner is built for Windows (X64) - win-x64.
+[2025-05-13 11:24:03Z INFO Listener] RuntimeInformation: Microsoft Windows 10.0.22631.
+[2025-05-13 11:24:03Z INFO Listener] Version: 2.323.0
+[2025-05-13 11:24:03Z INFO Listener] Commit: d8b82f44a9ec0258904d5869ae683c31d5aac299
+[2025-05-13 11:24:03Z INFO Listener] Culture: en-US
+[2025-05-13 11:24:03Z INFO Listener] UI Culture: en-US
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-13 11:24:03Z INFO Listener] Validating directory permissions for: 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-13 11:24:03Z INFO CommandLineParser] Parse
+[2025-05-13 11:24:03Z INFO CommandLineParser] Parsing 1 args
+[2025-05-13 11:24:03Z INFO CommandLineParser] parsing argument
+[2025-05-13 11:24:03Z INFO CommandLineParser] HasArgs: False
+[2025-05-13 11:24:03Z INFO CommandLineParser] Adding Command: run
+[2025-05-13 11:24:03Z INFO Listener] Arguments parsed
+[2025-05-13 11:24:03Z INFO Runner] ExecuteCommand
+[2025-05-13 11:24:03Z INFO ConfigurationStore] currentAssemblyLocation: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin\Runner.Listener.dll
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-13 11:24:03Z INFO ConfigurationStore] binPath: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-13 11:24:03Z INFO ConfigurationStore] RootFolder: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-13 11:24:03Z INFO HostContext] Well known config file 'Runner': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.runner'
+[2025-05-13 11:24:03Z INFO ConfigurationStore] ConfigFilePath: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.runner
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-13 11:24:03Z INFO HostContext] Well known config file 'MigratedRunner': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.runner_migrated'
+[2025-05-13 11:24:03Z INFO ConfigurationStore] MigratedConfigFilePath: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.runner_migrated
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-13 11:24:03Z INFO HostContext] Well known config file 'Credentials': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials'
+[2025-05-13 11:24:03Z INFO ConfigurationStore] CredFilePath: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-13 11:24:03Z INFO HostContext] Well known config file 'MigratedCredentials': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials_migrated'
+[2025-05-13 11:24:03Z INFO ConfigurationStore] MigratedCredFilePath: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials_migrated
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-13 11:24:03Z INFO HostContext] Well known config file 'Service': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.service'
+[2025-05-13 11:24:03Z INFO ConfigurationStore] ServiceConfigFilePath: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.service
+[2025-05-13 11:24:03Z INFO CommandSettings] Flag 'help': 'False'
+[2025-05-13 11:24:03Z INFO CommandSettings] Flag 'version': 'False'
+[2025-05-13 11:24:03Z INFO CommandSettings] Flag 'commit': 'False'
+[2025-05-13 11:24:03Z INFO CommandSettings] Flag 'check': 'False'
+[2025-05-13 11:24:03Z INFO CommandSettings] Command 'configure': 'False'
+[2025-05-13 11:24:03Z INFO CommandSettings] Command 'remove': 'False'
+[2025-05-13 11:24:03Z INFO CommandSettings] Command 'warmup': 'False'
+[2025-05-13 11:24:03Z INFO ConfigurationManager] LoadSettings
+[2025-05-13 11:24:03Z INFO ConfigurationStore] IsConfigured()
+[2025-05-13 11:24:03Z INFO ConfigurationStore] IsConfigured: True
+[2025-05-13 11:24:03Z INFO ConfigurationManager] Is configured: True
+[2025-05-13 11:24:03Z INFO ConfigurationStore] Read setting file: 325 chars
+[2025-05-13 11:24:03Z INFO ConfigurationManager] Settings Loaded
+[2025-05-13 11:24:03Z INFO ConfigurationStore] IsServiceConfigured()
+[2025-05-13 11:24:03Z INFO ConfigurationStore] IsServiceConfigured: False
+[2025-05-13 11:24:03Z INFO CommandSettings] Command 'run': 'True'
+[2025-05-13 11:24:03Z INFO ConfigurationStore] IsConfigured()
+[2025-05-13 11:24:03Z INFO ConfigurationStore] IsConfigured: True
+[2025-05-13 11:24:03Z INFO ConfigurationManager] Is configured: True
+[2025-05-13 11:24:03Z INFO Runner] Could not parse the argument value '' for StartupType. Defaulting to Manual
+[2025-05-13 11:24:03Z INFO Runner] Set runner startup type - Manual
+[2025-05-13 11:24:03Z INFO CommandSettings] Flag 'once': 'False'
+[2025-05-13 11:24:03Z INFO CommandSettings] Flag 'once': 'False'
+[2025-05-13 11:24:03Z INFO Runner] RunAsync
+[2025-05-13 11:24:03Z INFO ConfigurationManager] LoadSettings
+[2025-05-13 11:24:03Z INFO ConfigurationStore] IsConfigured()
+[2025-05-13 11:24:03Z INFO ConfigurationStore] IsConfigured: True
+[2025-05-13 11:24:03Z INFO ConfigurationManager] Is configured: True
+[2025-05-13 11:24:03Z INFO ConfigurationManager] Settings Loaded
+[2025-05-13 11:24:03Z INFO MessageListener] {
+  "AgentId": 4,
+  "AgentName": "DESKTOP-DO27US3",
+  "PoolId": 1,
+  "PoolName": "Default",
+  "ServerUrl": "https://pipelinesghubeus11.actions.githubusercontent.com/YtDrhldJpOQaubzGAtuX6RbdlVDFMWtjBQ53C9kKzlGhawB59z/",
+  "GitHubUrl": "https://github.com/moawiz-2706/Travel-TO-Pakistan-Tour",
+  "WorkFolder": "_work"
+}
+[2025-05-13 11:24:03Z INFO MessageListener] Loading Credentials
+[2025-05-13 11:24:03Z INFO ConfigurationStore] HasCredentials()
+[2025-05-13 11:24:03Z INFO ConfigurationStore] stored True
+[2025-05-13 11:24:03Z INFO CredentialManager] GetCredentialProvider
+[2025-05-13 11:24:03Z INFO CredentialManager] Creating type OAuth
+[2025-05-13 11:24:03Z INFO CredentialManager] Creating credential type: OAuth
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-13 11:24:03Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-13 11:24:03Z INFO HostContext] Well known config file 'RSACredentials': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials_rsaparams'
+[2025-05-13 11:24:03Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials_rsaparams
+[2025-05-13 11:24:03Z INFO MessageListener] Attempt to create session.
+[2025-05-13 11:24:03Z INFO MessageListener] Connecting to the Runner Server...
+[2025-05-13 11:24:03Z INFO RunnerServer] EstablishVssConnection
+[2025-05-13 11:24:03Z INFO RunnerServer] Establish connection with 100 seconds timeout.
+[2025-05-13 11:24:03Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2025-05-13 11:24:03Z INFO RunnerServer] EstablishVssConnection
+[2025-05-13 11:24:03Z INFO RunnerServer] Establish connection with 60 seconds timeout.
+[2025-05-13 11:24:03Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2025-05-13 11:24:03Z INFO RunnerServer] EstablishVssConnection
+[2025-05-13 11:24:03Z INFO RunnerServer] Establish connection with 60 seconds timeout.
+[2025-05-13 11:24:03Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2025-05-13 11:24:05Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2025-05-13 11:24:05Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2025-05-13 11:24:05Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2025-05-13 11:24:05Z INFO MessageListener] VssConnection created
+[2025-05-13 11:24:05Z INFO Terminal] WRITE LINE: 
+[2025-05-13 11:24:05Z INFO Terminal] WRITE LINE: 
+[2025-05-13 11:24:05Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials_rsaparams
+[2025-05-13 11:24:05Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials_rsaparams
+[2025-05-13 11:24:06Z INFO GitHubActionsService] AAD Correlation ID for this token request: Unknown
+[2025-05-13 11:24:07Z INFO MessageListener] Session created.
+[2025-05-13 11:24:07Z INFO Terminal] WRITE LINE: Current runner version: '2.323.0'
+[2025-05-13 11:24:07Z INFO Terminal] WRITE LINE: 2025-05-13 11:24:07Z: Listening for Jobs
+[2025-05-13 11:24:07Z INFO JobDispatcher] Set runner/worker IPC timeout to 30 seconds.
+[2025-05-13 11:24:07Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials_rsaparams
+[2025-05-13 11:24:08Z INFO GitHubActionsService] AAD Correlation ID for this token request: Unknown
+[2025-05-13 11:24:52Z INFO MessageListener] Message '4886877953462454513' received from session '047cefc3-f7db-42cb-a980-b4f2c24a0c44'.
+[2025-05-13 11:24:52Z INFO ConfigurationStore] HasCredentials()
+[2025-05-13 11:24:52Z INFO ConfigurationStore] stored True
+[2025-05-13 11:24:52Z INFO CredentialManager] GetCredentialProvider
+[2025-05-13 11:24:52Z INFO CredentialManager] Creating type OAuth
+[2025-05-13 11:24:52Z INFO CredentialManager] Creating credential type: OAuth
+[2025-05-13 11:24:52Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials_rsaparams
+[2025-05-13 11:24:52Z INFO ActionsRunServer] EstablishVssConnection
+[2025-05-13 11:24:52Z INFO ActionsRunServer] Establish connection with 100 seconds timeout.
+[2025-05-13 11:24:52Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2025-05-13 11:24:53Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2025-05-13 11:24:53Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials_rsaparams
+[2025-05-13 11:24:53Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials_rsaparams
+[2025-05-13 11:24:54Z INFO GitHubActionsService] AAD Correlation ID for this token request: Unknown
+[2025-05-13 11:24:55Z INFO JobDispatcher] Job request 15 for plan ddedd565-ffa0-421c-9f34-4559bc013db0 job e07742bd-189a-5079-918b-43f8b2f94b89 received.
+[2025-05-13 11:24:55Z INFO JobDispatcher] Pull OrchestrationId ddedd565-ffa0-421c-9f34-4559bc013db0.deploy.__default from JWT claims
+[2025-05-13 11:24:55Z INFO MessageListener] Received job status event. JobState: Busy
+[2025-05-13 11:24:55Z INFO MessageListener] _getMessagesTokenSource is already disposed.
+[2025-05-13 11:24:55Z INFO Terminal] WRITE LINE: 2025-05-13 11:24:55Z: Running job: deploy
+[2025-05-13 11:24:55Z INFO JobDispatcher] Start renew job request 15 for job e07742bd-189a-5079-918b-43f8b2f94b89.
+[2025-05-13 11:24:55Z INFO JobDispatcher] Successfully renew job request 15, job is valid till 5/13/2025 11:34:56 AM
+[2025-05-13 11:24:55Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-13 11:24:55Z INFO ProcessInvokerWrapper] Starting process:
+[2025-05-13 11:24:55Z INFO ProcessInvokerWrapper]   File name: 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin\Runner.Worker.exe'
+[2025-05-13 11:24:55Z INFO ProcessInvokerWrapper]   Arguments: 'spawnclient 2316 2324'
+[2025-05-13 11:24:55Z INFO ProcessInvokerWrapper]   Working directory: 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-13 11:24:55Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2025-05-13 11:24:55Z INFO ProcessInvokerWrapper]   Encoding web name:  ; code page: ''
+[2025-05-13 11:24:55Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'True'
+[2025-05-13 11:24:55Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2025-05-13 11:24:55Z INFO ProcessInvokerWrapper]   Persist current code page: 'False'
+[2025-05-13 11:24:55Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2025-05-13 11:24:55Z INFO ProcessInvokerWrapper]   High priority process: 'True'
+[2025-05-13 11:24:55Z INFO ProcessInvokerWrapper] Process started with process id 7312, waiting for process exit.
+[2025-05-13 11:24:55Z INFO JobDispatcher] Send job request message to worker for job e07742bd-189a-5079-918b-43f8b2f94b89.
+[2025-05-13 11:24:55Z INFO ProcessChannel] Sending message of length 32550, with hash 'bd008f8853f06da07e5cc7bbd2bb7d21886987e9bb1b2e6de12359d346e82bf6'
+[2025-05-13 11:24:56Z INFO JobNotification] Entering JobStarted Notification
+[2025-05-13 11:24:56Z INFO JobNotification] Entering StartMonitor
+[2025-05-13 11:25:56Z INFO JobDispatcher] Successfully renew job request 15, job is valid till 5/13/2025 11:35:57 AM
+[2025-05-13 11:26:57Z INFO JobDispatcher] Successfully renew job request 15, job is valid till 5/13/2025 11:36:57 AM
+[2025-05-13 11:27:57Z INFO JobDispatcher] Successfully renew job request 15, job is valid till 5/13/2025 11:37:58 AM
+[2025-05-13 11:28:28Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-13 11:28:28Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-13 11:28:28Z INFO ProcessInvokerWrapper] Finished process 7312 with exit code 102, and elapsed time 00:03:33.1481547.
+[2025-05-13 11:28:28Z INFO JobDispatcher] Worker finished for job e07742bd-189a-5079-918b-43f8b2f94b89. Code: 102
+[2025-05-13 11:28:28Z INFO JobDispatcher] finish job request for job e07742bd-189a-5079-918b-43f8b2f94b89 with result: Failed
+[2025-05-13 11:28:28Z INFO Terminal] WRITE LINE: 2025-05-13 11:28:28Z: Job deploy completed with result: Failed
+[2025-05-13 11:28:28Z INFO JobDispatcher] Stop renew job request for job e07742bd-189a-5079-918b-43f8b2f94b89.
+[2025-05-13 11:28:28Z INFO JobDispatcher] job renew has been cancelled, stop renew job request 15.
+[2025-05-13 11:28:28Z INFO JobNotification] Entering JobCompleted Notification
+[2025-05-13 11:28:28Z INFO JobNotification] Entering EndMonitor
+[2025-05-13 11:28:28Z INFO MessageListener] Received job status event. JobState: Online
+[2025-05-13 11:55:19Z INFO MessageListener] No message retrieved from session '047cefc3-f7db-42cb-a980-b4f2c24a0c44' within last 30 minutes.
+[2025-05-13 12:14:46Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials_rsaparams
+[2025-05-13 12:14:47Z INFO GitHubActionsService] AAD Correlation ID for this token request: Unknown

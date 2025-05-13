@@ -27,7 +27,12 @@ jobs:
 
       - name: Start Minikube
         run: |
-          minikube start --driver=docker
+          minikube status || minikube start --driver=docker
+        shell: powershell
+
+      - name: Verify Minikube API Server
+        run: |
+          kubectl cluster-info || { Write-Output "Minikube API server not reachable"; minikube stop; minikube start --driver=docker; exit 1 }
         shell: powershell
 
       - name: Set up Docker to use Minikube's environment
@@ -37,7 +42,7 @@ jobs:
 
       - name: Test Docker connection to Minikube
         run: |
-          docker info --format '{{.ServerVersion}}' || { echo "Docker daemon not reachable"; exit 1; }
+          docker info --format '{{.ServerVersion}}'; if ($LASTEXITCODE -ne 0) { Write-Output "Docker daemon not reachable"; exit 1 }
         shell: powershell
 
       - name: Set up Docker Buildx
