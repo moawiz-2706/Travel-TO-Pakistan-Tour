@@ -9,8 +9,8 @@ jobs:
   deploy:
     runs-on: self-hosted
     env:
-      FRONTEND_IMAGE: "moawiz/travel-frontend:${{ github.sha }}"
-      BACKEND_IMAGE: "moawiz/travel-backend:${{ github.sha }}"
+      FRONTEND_IMAGE: moawiz/travel-frontend:${{ github.sha }}
+      BACKEND_IMAGE: moawiz/travel-backend:${{ github.sha }}
       MINIKUBE_DRIVER: hyperv
 
     steps:
@@ -18,47 +18,49 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-          clean: true
-          submodules: false
+          retries: 3
+          retry-wait: 30
+        env:
+          GIT_TRACE: 1
+          GIT_CURL_VERBOSE: 1
+
+      - name: Verify GitHub connectivity
+        run: |
+          Test-NetConnection -ComputerName github.com -Port 443 | Out-String
+          if ($LASTEXITCODE -ne 0) { Write-Output "Cannot reach GitHub"; exit 1 }
+        shell: powershell
 
       - name: Configure System Paths
-        shell: powershell
         run: |
           $env:Path += ";C:\Program Files\Docker\Docker\resources\bin"
           $env:Path += ";C:\Program Files\Git\cmd"
           $env:Path += ";C:\kubectl"
+        shell: powershell
 
       - name: Safe Environment Cleanup
-        shell: powershell
         run: |
-          # Graceful cleanup that handles missing clusters
-          minikube delete --all --purge || true
-          docker context rm minikube -f || true
+          minikube delete --all --purge -ErrorAction SilentlyContinue
+          docker context rm minikube -f -ErrorAction SilentlyContinue
           Remove-Item -Path "$HOME\.minikube" -Recurse -Force -ErrorAction SilentlyContinue
-          Remove-Item -Path "$HOME\.docker\contexts" -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item -Path "$HOME\.docker" -Recurse -Force -ErrorAction SilentlyContinue
+        shell: powershell
 
       - name: Configure Network Infrastructure
-        shell: powershell
         run: |
-          # Reset network configuration
           Get-NetFirewallRule -Name "Minikube*" | Remove-NetFirewallRule -ErrorAction SilentlyContinue
-          New-NetFirewallRule -Name "MinikubeDocker" -DisplayName "Minikube Docker" `
-            -Direction Inbound -Protocol TCP -LocalPort 2376 -Action Allow
-          New-NetFirewallRule -Name "MinikubeAPI" -DisplayName "Minikube API" `
-            -Direction Inbound -Protocol TCP -LocalPort 8443 -Action Allow
-
-          # Configure Hyper-V virtual switch
+          New-NetFirewallRule -Name "MinikubeDocker" -DisplayName "Minikube Docker" -Direction Inbound -Protocol TCP -LocalPort 2376 -Action Allow
+          New-NetFirewallRule -Name "MinikubeAPI" -DisplayName "Minikube API" -Direction Inbound -Protocol TCP -LocalPort 8443 -Action Allow
           $switchName = "MinikubeSwitch"
           if (-not (Get-VMSwitch -Name $switchName -ErrorAction SilentlyContinue)) {
-              New-VMSwitch -Name $switchName -SwitchType Internal
+            New-VMSwitch -Name $switchName -SwitchType Internal
           }
+        shell: powershell
 
       - name: Initialize Minikube Cluster
-        shell: powershell
         run: |
-          # Start cluster with enhanced configuration
           minikube start `
             --driver=$env:MINIKUBE_DRIVER `
+            --network-plugin=cni `
             --cni=flannel `
             --memory=8192 `
             --cpus=4 `
@@ -70,133 +72,117 @@ jobs:
             --apiserver-name=localhost `
             --extra-config=kubelet.cgroup-driver=systemd `
             --embed-certs
-
-          # Verify cluster health
           minikube status
           kubectl cluster-info
           kubectl get pods -A
+        shell: powershell
 
       - name: Configure Docker Environment
-        shell: powershell
         run: |
-          # Get fresh cluster information
           $env:MINIKUBE_IP = minikube ip
+          if (-not $env:MINIKUBE_IP) { Write-Output "Failed to get Minikube IP"; exit 1 }
           "MINIKUBE_IP=$env:MINIKUBE_IP" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-          
-          # Configure certificate paths
           $env:DOCKER_CERT_PATH = "$HOME\.minikube\certs"
           "DOCKER_CERT_PATH=$env:DOCKER_CERT_PATH" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-
-          # Verify certificates exist
-          if (-not (Test-Path "$env:DOCKER_CERT_PATH\ca.pem")) { throw "Missing CA certificate" }
+          if (-not (Test-Path "$env:DOCKER_CERT_PATH\ca.crt")) { throw "Missing CA certificate" }
           if (-not (Test-Path "$env:DOCKER_CERT_PATH\cert.pem")) { throw "Missing client certificate" }
           if (-not (Test-Path "$env:DOCKER_CERT_PATH\key.pem")) { throw "Missing client key" }
-
-          # Configure Docker context
-          docker context create minikube `
-            --docker "host=tcp://$env:MINIKUBE_IP:2376,ca=$env:DOCKER_CERT_PATH/ca.pem,cert=$env:DOCKER_CERT_PATH/cert.pem,key=$env:DOCKER_CERT_PATH/key.pem"
-          
-          docker context use minikube
-          Write-Output "Current Docker contexts:"
+          & minikube docker-env --shell powershell | Invoke-Expression
+          $Env:DOCKER_HOST = "tcp://$env:MINIKUBE_IP:2376"
+          $Env:DOCKER_TLS_VERIFY = "1"
+          $Env:DOCKER_CERT_PATH = "$HOME\.minikube\certs"
+          Write-Output "DOCKER_* variables:"
+          Get-ChildItem Env: | Where-Object { $_.Name -like "DOCKER_*" } | ForEach-Object { Write-Output "$($_.Name)=$($_.Value)" }
+          Write-Output "Docker contexts:"
           docker context ls
+        shell: powershell
 
       - name: Validate Docker Connection
-        shell: powershell
         run: |
+          $minikubeIp = $env:MINIKUBE_IP
+          Write-Output "Testing network to $minikubeIp:2376"
+          Test-NetConnection -ComputerName $minikubeIp -Port 2376 | Out-String
+          $attempt = 1
           $maxRetries = 5
-          $retryCount = 0
-          $success = $false
-
-          while (-not $success -and $retryCount -lt $maxRetries) {
-              try {
-                  Write-Output "Testing Docker connection (attempt $($retryCount + 1))..."
-                  
-                  # Verify network connectivity
-                  Test-NetConnection -ComputerName $env:MINIKUBE_IP -Port 2376
-                  
-                  # Test Docker functionality
-                  docker info
-                  docker run --rm hello-world
-                  
-                  $success = $true
-              } catch {
-                  $retryCount++
-                  Write-Output "Connection failed, retrying in 15 seconds..."
-                  Start-Sleep -Seconds 15
-                  
-                  # Refresh environment
-                  $env:MINIKUBE_IP = minikube ip
-                  docker context use minikube
-              }
+          while ($attempt -le $maxRetries) {
+            Write-Output "Docker info attempt $attempt"
+            docker info --format '{{.ServerVersion}}'
+            if ($LASTEXITCODE -eq 0) { break }
+            Write-Output "Docker daemon not reachable, resetting environment..."
+            & minikube docker-env --shell powershell | Invoke-Expression
+            $Env:DOCKER_HOST = "tcp://$minikubeIp:2376"
+            $Env:DOCKER_TLS_VERIFY = "1"
+            $Env:DOCKER_CERT_PATH = "$HOME\.minikube\certs"
+            $attempt++
+            Start-Sleep -Seconds 15
           }
+          if ($LASTEXITCODE -ne 0) { Write-Output "Docker daemon unreachable after $maxRetries retries"; exit 1 }
+          docker run --rm hello-world
+        shell: powershell
 
-          if (-not $success) {
-              throw "Failed to establish Docker connection after $maxRetries attempts"
-          }
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          install: true
+          config: |
+            [builder]
+            timeout = 120s
 
-      # Remaining deployment steps remain unchanged
-      - name: Build & Push Frontend
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push Frontend
         uses: docker/build-push-action@v5
         with:
           context: ./travel-to-pakistan/frontend
-          tags: ${{ env.FRONTEND_IMAGE }}
           push: true
-        env:
-          DOCKER_HOST: tcp://${{ env.MINIKUBE_IP }}:2376
-          DOCKER_TLS_VERIFY: 1
-          DOCKER_CERT_PATH: ${{ env.HOME }}\.minikube\certs
+          tags: ${{ env.FRONTEND_IMAGE }}
 
-      - name: Build & Push Backend
+      - name: Build and Push Backend
         uses: docker/build-push-action@v5
         with:
           context: ./travel-to-pakistan/backend
-          tags: ${{ env.BACKEND_IMAGE }}
           push: true
-        env:
-          DOCKER_HOST: tcp://${{ env.MINIKUBE_IP }}:2376
-          DOCKER_TLS_VERIFY: 1
-          DOCKER_CERT_PATH: ${{ env.HOME }}\.minikube\certs
+          tags: ${{ env.BACKEND_IMAGE }}
 
       - name: Deploy Kubernetes Stack
-        shell: powershell
         run: |
           kubectl create namespace travel-app --dry-run=client -o yaml | kubectl apply -f -
-
           kubectl create secret generic app-secrets -n travel-app `
             --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" `
             --from-literal=GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" `
             --from-literal=GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" `
             --dry-run=client -o yaml | kubectl apply -f -
-
           kubectl apply -f ./travel-to-pakistan/mongodb/ -n travel-app
           kubectl wait --for=condition=ready pod -l app=mongodb -n travel-app --timeout=300s
           kubectl apply -f ./travel-to-pakistan/backend/ -n travel-app
           kubectl apply -f ./travel-to-pakistan/frontend/ -n travel-app
-
           kubectl expose deployment frontend -n travel-app --type=NodePort --port=80
           kubectl expose deployment backend -n travel-app --type=NodePort --port=3000
-
           minikube service list -n travel-app
+        shell: powershell
 
       - name: Smoke Tests
-        shell: powershell
         run: |
           $frontendUrl = minikube service frontend -n travel-app --url
           $backendUrl = minikube service backend -n travel-app --url
-
           function Test-Endpoint {
-              param($url)
-              $retryCount = 0
-              while ($retryCount -lt 5) {
-                  try {
-                      $response = Invoke-WebRequest $url -UseBasicParsing -TimeoutSec 30
-                      if ($response.StatusCode -eq 200) { return $true }
-                  } catch { }
-                  $retryCount++
-                  Start-Sleep -Seconds 15
-              }
-              return $false
+            param($url)
+            $retryCount = 0
+            $maxRetries = 5
+            while ($retryCount -lt $maxRetries) {
+              try {
+                $response = Invoke-WebRequest $url -UseBasicParsing -TimeoutSec 30
+                if ($response.StatusCode -eq 200) { return $true }
+              } catch { }
+              $retryCount++
+              Start-Sleep -Seconds 15
+            }
+            return $false
           }
-
           if (-not (Test-Endpoint "$frontendUrl/health")) { throw "Frontend health check failed" }
           if (-not (Test-Endpoint "$backendUrl/api/health")) { throw "Backend health check failed" }
+        shell: powershell
