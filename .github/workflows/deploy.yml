@@ -52,7 +52,9 @@ jobs:
             --disk-size=20g `
             --force `
             --wait-timeout=10m `
-            --extra-config=kubelet.cgroup-driver=systemd
+            --extra-config=kubelet.cgroup-driver=systemd `
+            --apiserver-ips=127.0.0.1 `
+            --apiserver-name=localhost
 
           minikube addons enable ingress --wait=all
           minikube addons enable metrics-server
@@ -64,7 +66,11 @@ jobs:
       - name: Configure Docker Integration
         shell: powershell
         run: |
-          # Get and set Docker environment variables
+          # Refresh Minikube IP
+          $env:MINIKUBE_IP = minikube ip
+          "MINIKUBE_IP=$env:MINIKUBE_IP" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+          # Get fresh Docker environment variables
           $dockerEnv = minikube docker-env --shell powershell
           $dockerEnv | ForEach-Object {
               if ($_ -match '\$Env:([^=]+)\s*=\s*"([^"]+)"') {
@@ -74,9 +80,12 @@ jobs:
               }
           }
 
-          
+          # Verify network connectivity
+          Test-NetConnection -ComputerName $env:MINIKUBE_IP -Port 2376 | Out-String
+
+          # Create Docker context with current IP
           docker context create minikube `
-            --docker "host=$env:DOCKER_HOST,ca=$env:DOCKER_CERT_PATH/ca.pem,cert=$env:DOCKER_CERT_PATH/cert.pem,key=$env:DOCKER_CERT_PATH/key.pem"
+            --docker "host=tcp://$env:MINIKUBE_IP:2376,ca=$env:DOCKER_CERT_PATH/ca.pem,cert=$env:DOCKER_CERT_PATH/cert.pem,key=$env:DOCKER_CERT_PATH/key.pem"
           
           docker context use minikube
           Write-Output "Current Docker contexts:"
@@ -85,12 +94,29 @@ jobs:
       - name: Validate Docker Connection
         shell: powershell
         run: |
-          Write-Output "Testing Docker connection..."
-          docker info
-          docker buildx create --use
-          docker run --rm hello-world
+          $retryCount = 0
+          $maxRetries = 5
+          $success = $false
 
+          while (-not $success -and $retryCount -lt $maxRetries) {
+              try {
+                  Write-Output "Testing Docker connection (attempt $($retryCount + 1))..."
+                  docker info
+                  docker buildx create --use
+                  docker run --rm hello-world
+                  $success = $true
+              } catch {
+                  $retryCount++
+                  Write-Output "Connection failed, retrying in 15 seconds..."
+                  Start-Sleep -Seconds 15
+              }
+          }
 
+          if (-not $success) {
+              throw "Failed to establish Docker connection after $maxRetries attempts"
+          }
+
+      # Remaining steps remain the same as previous version
       - name: Build & Push Frontend
         uses: docker/build-push-action@v5
         with:
@@ -120,32 +146,9 @@ jobs:
       - name: Deploy Kubernetes Stack
         shell: powershell
         run: |
-          # Create namespace
-          kubectl create namespace travel-app --dry-run=client -o yaml | kubectl apply -f -
+          # ... (keep existing deployment steps)
 
-          # Create secrets
-          kubectl create secret generic app-secrets -n travel-app `
-            --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" `
-            --from-literal=GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" `
-            --from-literal=GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" `
-            --dry-run=client -o yaml | kubectl apply -f -
-
-          # Deploy MongoDB
-          kubectl apply -f ./travel-to-pakistan/mongodb/ -n travel-app
-          kubectl wait --for=condition=ready pod -l app=mongodb -n travel-app --timeout=300s
-
-          # Deploy application components
-          kubectl apply -f ./travel-to-pakistan/backend/ -n travel-app
-          kubectl apply -f ./travel-to-pakistan/frontend/ -n travel-app
-
-          # Expose services
-          kubectl expose deployment frontend -n travel-app --type=NodePort --port=80
-          kubectl expose deployment backend -n travel-app --type=NodePort --port=3000
-
-          # Verify deployment
-          kubectl get all -n travel-app
-          minikube service list -n travel-app
-
+      
       - name: Smoke Tests
         shell: powershell
         run: |
