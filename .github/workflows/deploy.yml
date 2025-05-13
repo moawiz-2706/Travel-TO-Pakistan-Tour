@@ -45,11 +45,20 @@ jobs:
           Remove-Item Env:DOCKER_TLS_VERIFY -ErrorAction SilentlyContinue
           Remove-Item Env:DOCKER_CERT_PATH -ErrorAction SilentlyContinue
           docker context use default
+          Write-Output "DOCKER_* variables after reset:"
+          Get-ChildItem Env: | Where-Object { $_.Name -like "DOCKER_*" } | ForEach-Object { Write-Output "$($_.Name)=$($_.Value)" }
         shell: powershell
 
       - name: Start Minikube
         run: |
-          minikube status; if ($LASTEXITCODE -ne 0) { minikube start --driver=hyperv --network-plugin=cni --cni=flannel }
+          $status = minikube status
+          $ip = minikube ip
+          if ($LASTEXITCODE -ne 0 -or -not $ip) {
+            Write-Output "Minikube not running or no IP, resetting..."
+            minikube delete --all --purge
+            Remove-Item -Path "$HOME\.minikube" -Recurse -Force -ErrorAction SilentlyContinue
+            minikube start --driver=hyperv --network-plugin=cni --cni=flannel
+          }
           Write-Output "Minikube IP: $(minikube ip)"
         shell: powershell
 
@@ -64,6 +73,8 @@ jobs:
           $minikubeIp = minikube ip
           if (-not $minikubeIp) { Write-Output "Failed to get Minikube IP"; exit 1 }
           Write-Output "Configuring Docker context for tcp://$minikubeIp:2376"
+          Write-Output "DOCKER_* variables before context creation:"
+          Get-ChildItem Env: | Where-Object { $_.Name -like "DOCKER_*" } | ForEach-Object { Write-Output "$($_.Name)=$($_.Value)" }
           docker context create minikube --docker "host=tcp://$minikubeIp:2376,ca=$HOME\.minikube\ca.crt,cert=$HOME\.minikube\certs\cert.pem,key=$HOME\.minikube\certs\key.pem" --description "Minikube Docker"
           docker context use minikube
         shell: powershell
@@ -78,7 +89,7 @@ jobs:
             & minikube docker-env --shell powershell | Invoke-Expression
             docker context use minikube
             $attempt++
-            Start-Sleep -Seconds 10
+            Start-Sleep -Seconds 15
           }
           if ($LASTEXITCODE -ne 0) { Write-Output "Docker daemon still unreachable after retries"; exit 1 }
         shell: powershell
