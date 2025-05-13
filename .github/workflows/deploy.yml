@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 1
           clean: true
-          submodules: false  # Explicitly disable submodules
+          submodules: false
 
       - name: Configure System Paths
         shell: powershell
@@ -31,10 +31,8 @@ jobs:
       - name: Full Environment Cleanup
         shell: powershell
         run: |
-          # Force remove all Kubernetes resources
-          kubectl delete --all all --all-namespaces --force --grace-period=0 || true
-          
-          # Complete Minikube cleanup
+          # PowerShell-compatible cleanup
+          try { kubectl delete all --all --all-namespaces --force --grace-period=0 } catch { }
           minikube delete --all --purge
           Remove-Item -Path "$HOME\.minikube" -Recurse -Force -ErrorAction SilentlyContinue
           Remove-Item -Path "$HOME\.docker" -Recurse -Force -ErrorAction SilentlyContinue
@@ -43,20 +41,14 @@ jobs:
       - name: Configure Network
         shell: powershell
         run: |
-          # Reset Hyper-V network
-          Get-VMSwitch | Where-Object { $_.SwitchType -eq "Internal" } | Remove-VMSwitch -Force
-          
-          # Configure firewall
+          Get-VMSwitch | Where-Object { $_.SwitchType -eq "Internal" } | Remove-VMSwitch -Force -ErrorAction SilentlyContinue
           Remove-NetFirewallRule -Name "Minikube*" -ErrorAction SilentlyContinue
-          New-NetFirewallRule -Name "MinikubeDocker" -DisplayName "Minikube Docker" `
-            -Direction Inbound -Protocol TCP -LocalPort 2376 -Action Allow
-          New-NetFirewallRule -Name "MinikubeAPI" -DisplayName "Minikube API" `
-            -Direction Inbound -Protocol TCP -LocalPort 8443 -Action Allow
+          New-NetFirewallRule -Name "MinikubeDocker" -DisplayName "Minikube Docker" -Direction Inbound -Protocol TCP -LocalPort 2376 -Action Allow
+          New-NetFirewallRule -Name "MinikubeAPI" -DisplayName "Minikube API" -Direction Inbound -Protocol TCP -LocalPort 8443 -Action Allow
 
       - name: Initialize Minikube Cluster
         shell: powershell
         run: |
-          # Create fresh Minikube instance
           minikube start `
             --driver=$env:MINIKUBE_DRIVER `
             --cni=calico `
@@ -70,35 +62,24 @@ jobs:
             --apiserver-name=localhost `
             --extra-config=kubelet.cgroup-driver=systemd
 
-          # Verify cluster status
           minikube status
           kubectl cluster-info
 
       - name: Configure Docker Integration
         shell: powershell
         run: |
-          # Get fresh Minikube IP
           $env:MINIKUBE_IP = minikube ip
           "MINIKUBE_IP=$env:MINIKUBE_IP" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           
-          # Set certificate paths
           $env:DOCKER_CERT_PATH = "$HOME\.minikube\certs"
           "DOCKER_CERT_PATH=$env:DOCKER_CERT_PATH" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
-          # Verify certificates
           if (-not (Test-Path "$env:DOCKER_CERT_PATH\ca.pem")) { throw "Missing CA certificate" }
           if (-not (Test-Path "$env:DOCKER_CERT_PATH\cert.pem")) { throw "Missing client certificate" }
           if (-not (Test-Path "$env:DOCKER_CERT_PATH\key.pem")) { throw "Missing client key" }
 
-          # Configure Docker environment
-          $env:DOCKER_HOST = "tcp://$env:MINIKUBE_IP:2376"
-          $env:DOCKER_TLS_VERIFY = "1"
-          "DOCKER_HOST=$env:DOCKER_HOST" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-          "DOCKER_TLS_VERIFY=$env:DOCKER_TLS_VERIFY" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-
-          # Create and verify Docker context
           docker context create minikube `
-            --docker "host=$env:DOCKER_HOST,ca=$env:DOCKER_CERT_PATH/ca.pem,cert=$env:DOCKER_CERT_PATH/cert.pem,key=$env:DOCKER_CERT_PATH/key.pem"
+            --docker "host=tcp://$env:MINIKUBE_IP:2376,ca=$env:DOCKER_CERT_PATH/ca.pem,cert=$env:DOCKER_CERT_PATH/cert.pem,key=$env:DOCKER_CERT_PATH/key.pem"
           
           docker context use minikube
           Write-Output "Current Docker contexts:"
@@ -114,23 +95,15 @@ jobs:
           while (-not $success -and $retryCount -lt $maxRetries) {
               try {
                   Write-Output "Testing Docker connection (attempt $($retryCount + 1))..."
-                  
-                  # Verify network connectivity
                   Test-NetConnection -ComputerName $env:MINIKUBE_IP -Port 2376
-                  
-                  # Test Docker commands
                   docker info
                   docker run --rm hello-world
-                  
                   $success = $true
               } catch {
                   $retryCount++
                   Write-Output "Connection failed, retrying in 15 seconds..."
                   Start-Sleep -Seconds 15
-                  
-                  # Refresh environment
                   $env:MINIKUBE_IP = minikube ip
-                  $env:DOCKER_HOST = "tcp://$env:MINIKUBE_IP:2376"
                   docker context use minikube
               }
           }
@@ -139,8 +112,7 @@ jobs:
               throw "Failed to establish Docker connection after $maxRetries attempts"
           }
 
-      
-      
+      # Remaining steps remain the same
       - name: Build & Push Frontend
         uses: docker/build-push-action@v5
         with:
@@ -190,21 +162,16 @@ jobs:
           $frontendUrl = minikube service frontend -n travel-app --url
           $backendUrl = minikube service backend -n travel-app --url
 
-          $maxRetries = 5
-          $retryInterval = 15
-
           function Test-Endpoint {
               param($url)
               $retryCount = 0
-              while ($retryCount -lt $maxRetries) {
+              while ($retryCount -lt 5) {
                   try {
                       $response = Invoke-WebRequest $url -UseBasicParsing -TimeoutSec 30
                       if ($response.StatusCode -eq 200) { return $true }
-                  } catch {
-                      Write-Output "Attempt $($retryCount+1)/$maxRetries failed for $url"
-                  }
+                  } catch { }
                   $retryCount++
-                  Start-Sleep -Seconds $retryInterval
+                  Start-Sleep -Seconds 15
               }
               return $false
           }
