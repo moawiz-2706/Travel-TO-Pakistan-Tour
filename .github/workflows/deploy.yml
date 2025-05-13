@@ -12,13 +12,11 @@ jobs:
       FRONTEND_IMAGE: moawiz/travel-frontend:${{ github.sha }}
       BACKEND_IMAGE: moawiz/travel-backend:${{ github.sha }}
       MINIKUBE_DRIVER: hyperv
-      DOCKER_CERT_PATH: ${{ github.workspace }}/.minikube/certs
+      DOCKER_CERT_PATH: ${{ runner.user.home }}\.minikube\certs  # Changed to user home
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
 
       - name: Configure System Paths
         run: |
@@ -58,34 +56,48 @@ jobs:
           minikube addons enable metrics-server
           
           $env:MINIKUBE_IP = minikube ip
-          "MINIKUBE_IP=$env:MINIKUBE_IP" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "MINIKUBE_IP=$env:MINIKUBE_IP" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          Write-Output "Minikube IP: $env:MINIKUBE_IP"
         shell: powershell
 
       - name: Configure Docker-Minikube Integration
         run: |
-          # Generate and persist environment variables
-          minikube docker-env | ForEach-Object {
-            if ($_ -match "export (.*)=\"(.*)\"") {
-              $varName = $matches[1]
-              $varValue = $matches[2]
-              "$varName=$varValue" | Out-File -FilePath $env:GITHUB_ENV -Append
-            }
+          # Get and persist environment variables
+          $envVars = minikube docker-env --shell powershell
+          Write-Output "Raw docker-env output: $envVars"
+          
+          $envVars | ForEach-Object {
+              if ($_ -match '\$Env:([^=]+)\s*=\s*"([^"]+)"') {
+                  $varName = $matches[1]
+                  $varValue = $matches[2]
+                  Write-Output "Found variable: $varName"
+                  "$varName=$varValue" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+              }
           }
 
           # Verify certificates
           if (-not (Test-Path "$env:DOCKER_CERT_PATH\ca.pem")) {
-            throw "Missing Minikube TLS certificates"
+              throw "Missing CA certificate at $env:DOCKER_CERT_PATH"
+          }
+          if (-not (Test-Path "$env:DOCKER_CERT_PATH\cert.pem")) {
+              throw "Missing client certificate at $env:DOCKER_CERT_PATH"
           }
 
-          # Permanent Docker configuration
+          # Configure Docker context
           docker context create minikube `
             --docker "host=tcp://$env:MINIKUBE_IP:2376,ca=$env:DOCKER_CERT_PATH/ca.pem,cert=$env:DOCKER_CERT_PATH/cert.pem,key=$env:DOCKER_CERT_PATH/key.pem"
           
           docker context use minikube
+          Write-Output "Current Docker contexts:"
+          docker context ls
         shell: powershell
 
       - name: Validate Docker Connection
         run: |
+          Write-Output "Docker environment variables:"
+          Get-ChildItem Env: | Where-Object { $_.Name -like "DOCKER_*" }
+          
+          Write-Output "Testing Docker connection..."
           docker info
           docker buildx create --use
           docker run --rm hello-world
@@ -119,23 +131,21 @@ jobs:
 
       - name: Deploy Kubernetes Stack
         run: |
-          # Create namespace if not exists
+          # Create namespace
           kubectl create namespace travel-app --dry-run=client -o yaml | kubectl apply -f -
 
-          # Secret management
+          # Create secrets
           kubectl create secret generic app-secrets -n travel-app `
             --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" `
             --from-literal=GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" `
             --from-literal=GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" `
             --dry-run=client -o yaml | kubectl apply -f -
 
-          # Database first
+          # Deploy MongoDB
           kubectl apply -f ./travel-to-pakistan/mongodb/ -n travel-app
-          
-          # Wait for MongoDB readiness
-          kubectl wait --for=condition=ready pod -l app=mongodb -n travel-app --timeout=120s
+          kubectl wait --for=condition=ready pod -l app=mongodb -n travel-app --timeout=300s
 
-          # Application components
+          # Deploy backend and frontend
           kubectl apply -f ./travel-to-pakistan/backend/ -n travel-app
           kubectl apply -f ./travel-to-pakistan/frontend/ -n travel-app
 
@@ -143,7 +153,8 @@ jobs:
           kubectl expose deployment frontend -n travel-app --type=NodePort --port=80
           kubectl expose deployment backend -n travel-app --type=NodePort --port=3000
 
-          # Get endpoints
+          # Verify services
+          kubectl get pods,svc -n travel-app
           minikube service list -n travel-app
         shell: powershell
 
@@ -151,7 +162,27 @@ jobs:
         run: |
           $frontendUrl = minikube service frontend -n travel-app --url
           $backendUrl = minikube service backend -n travel-app --url
+          Write-Output "Frontend URL: $frontendUrl"
+          Write-Output "Backend URL: $backendUrl"
 
-          Invoke-WebRequest "$frontendUrl/health" -UseBasicParsing
-          Invoke-WebRequest "$backendUrl/api/health" -UseBasicParsing
+          # Add retry logic
+          $maxRetries = 5
+          $retryCount = 0
+          $success = $false
+
+          while (-not $success -and $retryCount -lt $maxRetries) {
+              try {
+                  Invoke-WebRequest "$frontendUrl/health" -UseBasicParsing -TimeoutSec 30
+                  Invoke-WebRequest "$backendUrl/api/health" -UseBasicParsing -TimeoutSec 30
+                  $success = $true
+              } catch {
+                  $retryCount++
+                  Write-Output "Attempt $retryCount failed. Retrying in 10 seconds..."
+                  Start-Sleep -Seconds 10
+              }
+          }
+
+          if (-not $success) {
+              throw "Smoke tests failed after $maxRetries attempts"
+          }
         shell: powershell
