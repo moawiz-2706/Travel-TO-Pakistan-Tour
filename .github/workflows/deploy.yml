@@ -38,11 +38,14 @@ jobs:
       - name: Set up Docker to use Minikube's environment
         run: |
           & minikube docker-env --shell powershell | Invoke-Expression
+          $minikubeIp = minikube ip
+          docker context create minikube --docker host=tcp://$minikubeIp:2376,ca=$HOME\.minikube\ca.crt,cert=$HOME\.minikube\certs\cert.pem,key=$HOME\.minikube\certs\key.pem --description "Minikube Docker"
+          docker context use minikube
         shell: powershell
 
       - name: Test Docker connection to Minikube
         run: |
-          docker info --format '{{.ServerVersion}}'; if ($LASTEXITCODE -ne 0) { Write-Output "Docker daemon not reachable"; exit 1 }
+          docker info --format '{{.ServerVersion}}'; if ($LASTEXITCODE -ne 0) { Write-Output "Docker daemon not reachable"; & minikube docker-env --shell powershell | Invoke-Expression; docker info --format '{{.ServerVersion}}'; if ($LASTEXITCODE -ne 0) { exit 1 } }
         shell: powershell
 
       - name: Set up Docker Buildx
