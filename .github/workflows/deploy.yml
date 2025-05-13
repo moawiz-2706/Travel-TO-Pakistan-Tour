@@ -25,6 +25,12 @@ jobs:
           Stop-Service -Name "com.docker.service" -ErrorAction SilentlyContinue
         shell: powershell
 
+      - name: Configure Firewall for Minikube Docker
+        run: |
+          New-NetFirewallRule -Name "MinikubeDocker" -DisplayName "Minikube Docker" -Direction Inbound -Protocol TCP -LocalPort 2376 -Action Allow -ErrorAction SilentlyContinue
+          New-NetFirewallRule -Name "MinikubeICMP" -DisplayName "Minikube ICMP" -Protocol ICMPv4 -IcmpType 8 -Action Allow -Direction Inbound -ErrorAction SilentlyContinue
+        shell: powershell
+
       - name: Reset Docker Contexts
         run: |
           Remove-Item -Path "$HOME\.docker\contexts" -Recurse -Force -ErrorAction SilentlyContinue
@@ -33,25 +39,36 @@ jobs:
 
       - name: Start Minikube
         run: |
-          minikube status; if ($LASTEXITCODE -ne 0) { minikube start --driver=docker }
+          minikube status; if ($LASTEXITCODE -ne 0) { minikube start --driver=hyperv --network-plugin=cni --cni=flannel }
         shell: powershell
 
       - name: Verify Minikube API Server
         run: |
-          kubectl cluster-info; if ($LASTEXITCODE -ne 0) { Write-Output "Minikube API server not reachable"; minikube stop; minikube start --driver=docker; exit 1 }
+          kubectl cluster-info; if ($LASTEXITCODE -ne 0) { Write-Output "Minikube API server not reachable"; minikube stop; minikube start --driver=hyperv --network-plugin=cni --cni=flannel; exit 1 }
         shell: powershell
 
       - name: Set up Docker to use Minikube's environment
         run: |
           & minikube docker-env --shell powershell | Invoke-Expression
           $minikubeIp = minikube ip
+          if (-not $minikubeIp) { Write-Output "Failed to get Minikube IP"; exit 1 }
           docker context create minikube --docker "host=tcp://$minikubeIp:2376,ca=$HOME\.minikube\ca.crt,cert=$HOME\.minikube\certs\cert.pem,key=$HOME\.minikube\certs\key.pem" --description "Minikube Docker"
           docker context use minikube
         shell: powershell
 
       - name: Test Docker connection to Minikube
         run: |
-          docker info --format '{{.ServerVersion}}'; if ($LASTEXITCODE -ne 0) { Write-Output "Docker daemon not reachable"; & minikube docker-env --shell powershell | Invoke-Expression; docker context use minikube; docker info --format '{{.ServerVersion}}'; if ($LASTEXITCODE -ne 0) { exit 1 } }
+          $attempt = 1
+          while ($attempt -le 3) {
+            docker info --format '{{.ServerVersion}}'
+            if ($LASTEXITCODE -eq 0) { break }
+            Write-Output "Docker daemon not reachable, attempt $attempt"
+            & minikube docker-env --shell powershell | Invoke-Expression
+            docker context use minikube
+            $attempt++
+            Start-Sleep -Seconds 10
+          }
+          if ($LASTEXITCODE -ne 0) { Write-Output "Docker daemon still unreachable after retries"; exit 1 }
         shell: powershell
 
       - name: Set up Docker Buildx
