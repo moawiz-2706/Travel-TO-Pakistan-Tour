@@ -38,7 +38,7 @@ jobs:
           $env:Path += ";C:\kubectl"
         shell: powershell
 
-      - name: Safe Environment Cleanup
+      - name: Clean Environment
         run: |
           minikube delete --all --purge -ErrorAction SilentlyContinue
           docker context rm minikube -f -ErrorAction SilentlyContinue
@@ -53,7 +53,7 @@ jobs:
           New-NetFirewallRule -Name "MinikubeAPI" -DisplayName "Minikube API" -Direction Inbound -Protocol TCP -LocalPort 8443 -Action Allow
           $switchName = "MinikubeSwitch"
           if (-not (Get-VMSwitch -Name $switchName -ErrorAction SilentlyContinue)) {
-            New-VMSwitch -Name $switchName -SwitchType Internal
+            New-VMSwitch -Name $switchName -SwitchType External -NetAdapterName (Get-NetAdapter | Where-Object { $_.Status -eq "Up" } | Select-Object -First 1).Name
           }
         shell: powershell
 
@@ -63,16 +63,16 @@ jobs:
             --driver=$env:MINIKUBE_DRIVER `
             --network-plugin=cni `
             --cni=flannel `
-            --memory=8192 `
-            --cpus=4 `
-            --disk-size=40g `
+            --memory=4096 `
+            --cpus=2 `
+            --disk-size=20g `
             --force `
-            --wait=all `
-            --wait-timeout=25m `
-            --apiserver-ips=127.0.0.1 `
-            --apiserver-name=localhost `
-            --extra-config=kubelet.cgroup-driver=systemd `
-            --embed-certs
+            --wait-timeout=15m `
+            --embed-certs `
+            --http-proxy=$env:HTTP_PROXY `
+            --https-proxy=$env:HTTPS_PROXY
+          minikube addons enable ingress
+          minikube addons enable metrics-server
           minikube status
           kubectl cluster-info
           kubectl get pods -A
