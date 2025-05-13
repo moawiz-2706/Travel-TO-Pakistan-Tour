@@ -118,8 +118,7 @@ jobs:
           kubectl create secret generic google-secrets `
             --from-literal=GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" `
             --from-literal=GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" `
-            --from-literal=JWT_SECRET="${{ secrets.JW
-System: T_SECRET }}" `
+            --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" `
             -n travel-app-namespace --dry-run=client -o yaml | kubectl apply -f -
         shell: powershell
 
