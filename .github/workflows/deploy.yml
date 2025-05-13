@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Configure System Paths
         shell: powershell
@@ -51,10 +53,10 @@ jobs:
             --cpus=2 `
             --disk-size=20g `
             --force `
-            --wait-timeout=10m `
-            --extra-config=kubelet.cgroup-driver=systemd `
+            --wait-timeout=15m `
             --apiserver-ips=127.0.0.1 `
-            --apiserver-name=localhost
+            --apiserver-name=localhost `
+            --extra-config=apiserver.runtime-config=storage.k8s.io/v1
 
           minikube addons enable ingress --wait=all
           minikube addons enable metrics-server
@@ -66,24 +68,11 @@ jobs:
       - name: Configure Docker Integration
         shell: powershell
         run: |
-          # Refresh Minikube IP
+          # Refresh environment variables
           $env:MINIKUBE_IP = minikube ip
-          "MINIKUBE_IP=$env:MINIKUBE_IP" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-
-          # Get fresh Docker environment variables
-          $dockerEnv = minikube docker-env --shell powershell
-          $dockerEnv | ForEach-Object {
-              if ($_ -match '\$Env:([^=]+)\s*=\s*"([^"]+)"') {
-                  $varName = $matches[1]
-                  $varValue = $matches[2]
-                  "$varName=$varValue" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-              }
-          }
-
-          # Verify network connectivity
-          Test-NetConnection -ComputerName $env:MINIKUBE_IP -Port 2376 | Out-String
-
-          # Create Docker context with current IP
+          $env:DOCKER_CERT_PATH = "$HOME\.minikube\certs"
+          
+          # Create Docker context
           docker context create minikube `
             --docker "host=tcp://$env:MINIKUBE_IP:2376,ca=$env:DOCKER_CERT_PATH/ca.pem,cert=$env:DOCKER_CERT_PATH/cert.pem,key=$env:DOCKER_CERT_PATH/key.pem"
           
@@ -91,11 +80,15 @@ jobs:
           Write-Output "Current Docker contexts:"
           docker context ls
 
+          # Verify network connectivity
+          Write-Output "Testing connection to Docker daemon..."
+          Test-NetConnection -ComputerName $env:MINIKUBE_IP -Port 2376
+
       - name: Validate Docker Connection
         shell: powershell
         run: |
-          $retryCount = 0
           $maxRetries = 5
+          $retryCount = 0
           $success = $false
 
           while (-not $success -and $retryCount -lt $maxRetries) {
@@ -116,7 +109,6 @@ jobs:
               throw "Failed to establish Docker connection after $maxRetries attempts"
           }
 
-      # Remaining steps remain the same as previous version
       - name: Build & Push Frontend
         uses: docker/build-push-action@v5
         with:
@@ -126,9 +118,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
         env:
-          DOCKER_HOST: ${{ env.DOCKER_HOST }}
-          DOCKER_TLS_VERIFY: ${{ env.DOCKER_TLS_VERIFY }}
-          DOCKER_CERT_PATH: ${{ env.DOCKER_CERT_PATH }}
+          DOCKER_HOST: tcp://${{ env.MINIKUBE_IP }}:2376
+          DOCKER_TLS_VERIFY: 1
+          DOCKER_CERT_PATH: ${{ env.HOME }}\.minikube\certs
 
       - name: Build & Push Backend
         uses: docker/build-push-action@v5
@@ -139,23 +131,45 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
         env:
-          DOCKER_HOST: ${{ env.DOCKER_HOST }}
-          DOCKER_TLS_VERIFY: ${{ env.DOCKER_TLS_VERIFY }}
-          DOCKER_CERT_PATH: ${{ env.DOCKER_CERT_PATH }}
+          DOCKER_HOST: tcp://${{ env.MINIKUBE_IP }}:2376
+          DOCKER_TLS_VERIFY: 1
+          DOCKER_CERT_PATH: ${{ env.HOME }}\.minikube\certs
 
       - name: Deploy Kubernetes Stack
         shell: powershell
         run: |
-          # ... (keep existing deployment steps)
+          # Create namespace
+          kubectl create namespace travel-app --dry-run=client -o yaml | kubectl apply -f -
 
-      
+          # Create secrets
+          kubectl create secret generic app-secrets -n travel-app `
+            --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" `
+            --from-literal=GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" `
+            --from-literal=GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" `
+            --dry-run=client -o yaml | kubectl apply -f -
+
+          # Deploy MongoDB
+          kubectl apply -f ./travel-to-pakistan/mongodb/ -n travel-app
+          kubectl wait --for=condition=ready pod -l app=mongodb -n travel-app --timeout=300s
+
+          # Deploy application components
+          kubectl apply -f ./travel-to-pakistan/backend/ -n travel-app
+          kubectl apply -f ./travel-to-pakistan/frontend/ -n travel-app
+
+          # Expose services
+          kubectl expose deployment frontend -n travel-app --type=NodePort --port=80
+          kubectl expose deployment backend -n travel-app --type=NodePort --port=3000
+
+          # Verify deployment
+          kubectl get all -n travel-app
+          minikube service list -n travel-app
+
       - name: Smoke Tests
         shell: powershell
         run: |
           $frontendUrl = minikube service frontend -n travel-app --url
           $backendUrl = minikube service backend -n travel-app --url
-
-
+ 
           $maxRetries = 5
           $retryInterval = 15
 
