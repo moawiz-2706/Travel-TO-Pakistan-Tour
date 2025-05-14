@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: moawiz/travel-backend:latest # Will be replaced by workflow
+          image: moawiz/travel-backend:latest
           ports:
             - containerPort: 5000
           env:
@@ -38,22 +38,12 @@ spec:
                 secretKeyRef:
                   name: google-secrets
                   key: GOOGLE_CLIENT_SECRET
-          readinessProbe:
-            httpGet:
-              path: /health # Replace with your backend's health endpoint
-              port: 5000
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /health # Replace with your backend's health endpoint
-              port: 5000
-            initialDelaySeconds: 15
-            periodSeconds: 20
+            - name: NEXT_PUBLIC_NEWS_API_KEY
+              value: "aefdd3c8233d4b45a1ad62021b0e0cf2"
           resources:
             requests:
               memory: "256Mi"
               cpu: "250m"
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: "1024Mi"
+              cpu: "1000m"
