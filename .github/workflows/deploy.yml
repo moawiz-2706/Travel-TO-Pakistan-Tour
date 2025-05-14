@@ -41,40 +41,27 @@ jobs:
               throw "Docker not found in standard locations"
           }
 
-          # 2. Force kill all Docker processes
-          $processNames = @("Docker Desktop", "Docker", "com.docker.*")
+          # 2. Stop existing Docker processes
+          $processNames = @("Docker Desktop", "docker", "com.docker.*")
           foreach ($name in $processNames) {
               try {
-                  Get-Process -Name $name -ErrorAction Stop | Stop-Process -Force
+                  Get-Process -Name $name -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+                  Write-Output "Stopped $name processes"
               } catch {
-                  Write-Output "No $name processes to kill"
+                  Write-Output "No $name processes to stop"
               }
           }
           Start-Sleep -Seconds 5
 
-          # 3. Start Docker Desktop with multiple methods
-          $startMethods = @(
-              { Start-Process $dockerPath -PassThru },
-              { Start-Process $dockerPath -Verb RunAs -PassThru },
-              { & $dockerPath }
-          )
-
-          $dockerStarted = $false
-          foreach ($method in $startMethods) {
-              try {
-                  Write-Output "Attempting Docker start with method: $($method.ToString())"
-                  $process = Invoke-Command $method
-                  if ($process -and $process.Id) {
-                      $dockerStarted = $true
-                      break
-                  }
-              } catch {
-                  Write-Output "Start method failed: $_"
+          # 3. Start Docker Desktop
+          try {
+              Write-Output "Starting Docker Desktop"
+              $process = Start-Process $dockerPath -PassThru -ErrorAction Stop
+              if (-not $process.Id) {
+                  throw "Failed to start Docker process"
               }
-          }
-
-          if (-not $dockerStarted) {
-              throw "All Docker start methods failed"
+          } catch {
+              throw "Failed to start Docker: $_"
           }
 
           # 4. Wait for Docker to become ready
@@ -83,22 +70,23 @@ jobs:
 
           while ($timer.Elapsed.TotalSeconds -lt $env:DOCKER_START_TIMEOUT) {
               try {
-                  # Multiple verification methods
                   $dockerVersion = docker version --format '{{.Server.Version}}' 2>$null
+                  $dockerInfo = docker info 2>$null
                   $dockerRunning = (Get-Process "com.docker.backend" -ErrorAction SilentlyContinue) -ne $null
-                  
-                  if ($LASTEXITCODE -eq 0 -and $dockerVersion -and $dockerRunning) {
+
+                  if ($LASTEXITCODE -eq 0 -and $dockerVersion -and $dockerInfo -and $dockerRunning) {
                       $dockerReady = $true
                       break
                   }
-              } catch {}
+              } catch {
+                  Write-Output "Docker not ready yet: $_"
+              }
 
-              Write-Output "Waiting for Docker to start... ($([math]::Floor($timer.Elapsed.TotalSeconds))s"
+              Write-Output "Waiting for Docker to start... ($([math]::Floor($timer.Elapsed.TotalSeconds))s)"
               Start-Sleep -Seconds 10
           }
 
           if (-not $dockerReady) {
-              # Enhanced diagnostics
               Write-Output "=== System Diagnostics ==="
               Write-Output "## Services ##"
               Get-Service | Where-Object { $_.Name -like "*docker*" } | Format-Table -AutoSize
@@ -107,7 +95,8 @@ jobs:
               Get-Process | Where-Object { $_.ProcessName -like "*docker*" } | Format-Table -AutoSize
               
               Write-Output "## Docker Info ##"
-              docker info 2>$null || Write-Output "docker info failed"
+              docker info 2>$null
+              if ($LASTEXITCODE -ne 0) { Write-Output "docker info failed" }
               
               throw "Docker failed to start after $([math]::Floor($timer.Elapsed.TotalSeconds)) seconds"
           }
@@ -117,27 +106,33 @@ jobs:
       - name: Clean System State
         shell: powershell
         run: |
-          # Safe cleanup with error suppression
+          # Clean Docker resources
           try {
-              docker ps -aq | ForEach-Object { docker rm -f $_ } 2>$null
+              docker ps -aq | ForEach-Object { docker rm -f $_ 2>$null }
               docker volume prune -f 2>$null
               docker network prune -f 2>$null
               docker system prune -a -f 2>$null
+              Write-Output "Docker cleanup completed"
           } catch {
-              Write-Output "Cleanup encountered errors: $_"
+              Write-Output "Docker cleanup encountered errors: $_"
           }
 
           # Minikube cleanup
           if (Get-Command minikube -ErrorAction SilentlyContinue) {
-              minikube delete --all --purge 2>$null
-              Remove-Item -Path "$HOME\.minikube" -Recurse -Force -ErrorAction SilentlyContinue
+              try {
+                  minikube delete --all --purge 2>$null
+                  Remove-Item -Path "$HOME\.minikube" -Recurse -Force -ErrorAction SilentlyContinue
+                  Write-Output "Minikube cleanup completed"
+              } catch {
+                  Write-Output "Minikube cleanup encountered errors: $_"
+              }
           }
 
       - name: Initialize Minikube
         shell: powershell
         run: |
-          # Try with Docker runtime first
           try {
+              Write-Output "Starting Minikube with Docker driver"
               minikube start `
                 --driver=$env:MINIKUBE_DRIVER `
                 --kubernetes-version=$env:KUBERNETES_VERSION `
@@ -147,7 +142,7 @@ jobs:
                 --wait=all `
                 --alsologtostderr
           } catch {
-              Write-Output "Docker runtime failed, trying containerd fallback"
+              Write-Output "Docker driver failed, trying containerd"
               minikube start `
                 --driver=$env:MINIKUBE_DRIVER `
                 --container-runtime=containerd `
@@ -159,7 +154,7 @@ jobs:
                 --alsologtostderr
           }
 
-          # Configure environment
+          # Enable addons and configure environment
           minikube addons enable ingress
           minikube addons enable metrics-server
           minikube docker-env | Invoke-Expression
@@ -233,9 +228,12 @@ jobs:
               while ($retry -lt $maxRetries) {
                   try {
                       $response = Invoke-WebRequest "$url$endpoint" -UseBasicParsing -TimeoutSec 15
-                      if ($response.StatusCode -eq 200) { return $true }
+                      if ($response.StatusCode -eq 200) {
+                          Write-Output "Service check passed for $url$endpoint"
+                          return $true
+                      }
                   } catch {
-                      Write-Output "Attempt $($retry + 1) failed: $($_.Exception.Message)"
+                      Write-Output "Attempt $($retry + 1) failed for $url$endpoint: $($_.Exception.Message)"
                   }
                   $retry++
                   if ($retry -lt $maxRetries) {
