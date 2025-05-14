@@ -197,42 +197,61 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Verify Docker Desktop
+      - name: Verify and Start Docker
         shell: powershell
         run: |
-          # Check if Docker Desktop is running
-          if (-not (Get-Process "Docker Desktop" -ErrorAction SilentlyContinue)) {
-              if (Test-Path "C:\Program Files\Docker\Docker\Docker Desktop.exe") {
-                  Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
-                  Start-Sleep -Seconds 30
-              } else {
-                  throw "Docker Desktop not found at default location"
-              }
+          # Check Docker Desktop installation
+          if (-not (Test-Path "C:\Program Files\Docker\Docker\Docker Desktop.exe")) {
+              throw "Docker Desktop not found at default location"
           }
 
-          # Verify Docker is responsive
-          $retry = 0
-          while ($retry -lt 5) {
+          # Kill any stuck Docker processes
+          Get-Process "Docker Desktop" -ErrorAction SilentlyContinue | Stop-Process -Force
+          Start-Sleep -Seconds 5
+
+          # Start Docker Desktop with elevated privileges
+          $psi = New-Object System.Diagnostics.ProcessStartInfo
+          $psi.FileName = "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+          $psi.Verb = "runas"  # Run as administrator
+          [System.Diagnostics.Process]::Start($psi) | Out-Null
+
+          # Extended wait with progressive checks
+          $maxWait = 120
+          $waitInterval = 5
+          $totalWaited = 0
+          $dockerReady = $false
+
+          while ($totalWaited -lt $maxWait) {
               try {
-                  docker ps > $null 2>&1
-                  if ($LASTEXITCODE -eq 0) { break }
-              } catch {
-                  $retry++
-                  if ($retry -ge 5) { throw "Docker not responding after 5 attempts" }
-                  Start-Sleep -Seconds 10
-              }
+                  docker version --format '{{.Server.Version}}' 2>$null
+                  if ($LASTEXITCODE -eq 0) {
+                      $dockerReady = $true
+                      break
+                  }
+              } catch {}
+              
+              Write-Output "Waiting for Docker to start... ($totalWaited/$maxWait seconds)"
+              Start-Sleep -Seconds $waitInterval
+              $totalWaited += $waitInterval
           }
 
-      - name: Clean Docker Containers
-        shell: powershell
-        run: |
-          # Only try to clean containers if Docker is working
-          docker ps -aq | ForEach-Object { docker rm -f $_ } 2>$null
+          if (-not $dockerReady) {
+              # Collect diagnostic information
+              Get-Process "Docker Desktop" | Format-List *
+              docker info
+              throw "Docker failed to start after $maxWait seconds"
+          }
 
-      - name: Clean Minikube
+          Write-Output "Docker started successfully"
+
+      - name: Clean System State
         shell: powershell
         run: |
-          # Skip if Minikube isn't installed or initialized
+          # Clean containers only if Docker is responsive
+          docker ps -aq | ForEach-Object { docker rm -f $_ } 2>$null
+          docker system prune -a -f 2>$null
+
+          # Clean Minikube if exists
           if (Get-Command minikube -ErrorAction SilentlyContinue) {
               minikube delete --all --purge 2>$null
               Remove-Item -Path "$HOME\.minikube" -Recurse -Force -ErrorAction SilentlyContinue
@@ -250,11 +269,20 @@ jobs:
             --wait=all `
             --alsologtostderr
 
+
           minikube addons enable ingress
           minikube addons enable metrics-server
-
-          # Configure Docker environment
           minikube docker-env | Invoke-Expression
+  
+
+      - name: Verify Environment
+        shell: powershell
+        run: |
+          docker ps
+          minikube status
+          kubectl cluster-info
+
+      
 
       - name: Verify Cluster
         shell: powershell
