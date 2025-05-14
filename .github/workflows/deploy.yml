@@ -256,59 +256,36 @@ on:
 jobs:
   build-deploy:
     runs-on: self-hosted
-    env:
-      FRONTEND_IMAGE: "moawiz/travel-frontend:latest"
-      BACKEND_IMAGE: "moawiz/travel-backend:latest"
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: false
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Reset Docker Environment
         shell: powershell
         run: |
-          # Ensure default context and remove Minikube context
           docker context use default
           docker context rm minikube -f -ErrorAction SilentlyContinue
-          # Clear Minikube environment variables
           Remove-Item Env:DOCKER_HOST -ErrorAction SilentlyContinue
           Remove-Item Env:DOCKER_TLS_VERIFY -ErrorAction SilentlyContinue
           Remove-Item Env:DOCKER_CERT_PATH -ErrorAction SilentlyContinue
-          # Verify Docker Desktop daemon
-          docker info --format '{{.ServerVersion}}' || exit 1
-          # Restart Docker service if needed
+          docker info --format '{{.ServerVersion}}'
+          if ($LASTEXITCODE -ne 0) { exit 1 }
           Stop-Process -Name "com.docker.*" -Force -ErrorAction SilentlyContinue
-          Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe" -ErrorAction SilentlyContinue
+          Start-Process "C:\Program Files\Docker\Docker Desktop.exe" -ErrorAction SilentlyContinue
           Start-Sleep -Seconds 30
-          docker info --format '{{.ServerVersion}}' || exit 1
+          docker info --format '{{.ServerVersion}}'
+          if ($LASTEXITCODE -ne 0) { exit 1 }
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and Push Frontend Image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./frontend
-          push: true
-          tags: ${{ env.FRONTEND_IMAGE }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            NODE_ENV=production
-
-      - name: Build and Push Backend Image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./backend
-          push: true
-          tags: ${{ env.BACKEND_IMAGE }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            NODE_ENV=production
 
       - name: Create Docker Hub Pull Secret
         shell: powershell
@@ -331,17 +308,9 @@ jobs:
       - name: Deploy to Minikube
         shell: powershell
         run: |
-          # Create namespace
           kubectl create namespace travel-app-namespace --dry-run=client -o yaml | kubectl apply -f -
-
-          # Deploy MongoDB
           kubectl apply -f ./mongodb/ -n travel-app-namespace
-          kubectl wait --for=condition=ready pod -l app=mongodb -n travel-app-namespace --timeout=300s
-
-          # Deploy backend and frontend
           kubectl apply -f ./backend/ -n travel-app-namespace
           kubectl apply -f ./frontend/ -n travel-app-namespace
-
-          # Expose services
           kubectl expose deployment frontend-deployment -n travel-app-namespace --type=NodePort --port=80 --name=frontend --dry-run=client -o yaml | kubectl apply -f -
           kubectl expose deployment backend-deployment -n travel-app-namespace --type=NodePort --port=5000 --name=backend --dry-run=client -o yaml | kubectl apply -f -
