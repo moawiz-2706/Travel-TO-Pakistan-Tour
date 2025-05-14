@@ -265,21 +265,7 @@ jobs:
           fetch-depth: 1
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Reset Docker Environment
-        shell: powershell
-        run: |
-          docker context use default
-          docker context rm minikube -f -ErrorAction SilentlyContinue
-          Remove-Item Env:DOCKER_HOST -ErrorAction SilentlyContinue
-          Remove-Item Env:DOCKER_TLS_VERIFY -ErrorAction SilentlyContinue
-          Remove-Item Env:DOCKER_CERT_PATH -ErrorAction SilentlyContinue
-          docker info --format '{{.ServerVersion}}'
-          if ($LASTEXITCODE -ne 0) { exit 1 }
-          Stop-Process -Name "com.docker.*" -Force -ErrorAction SilentlyContinue
-          Start-Process "C:\Program Files\Docker\Docker Desktop.exe" -ErrorAction SilentlyContinue
-          Start-Sleep -Seconds 30
-          docker info --format '{{.ServerVersion}}'
-          if ($LASTEXITCODE -ne 0) { exit 1 }
+      
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -308,6 +294,7 @@ jobs:
       - name: Deploy to Minikube
         shell: powershell
         run: |
+     
           kubectl create namespace travel-app-namespace --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -f ./mongodb/ -n travel-app-namespace
           kubectl apply -f ./backend/ -n travel-app-namespace
