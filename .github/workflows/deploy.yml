@@ -11,79 +11,105 @@ jobs:
     env:
       FRONTEND_IMAGE: "moawiz/travel-frontend:${{ github.sha }}"
       BACKEND_IMAGE: "moawiz/travel-backend:${{ github.sha }}"
-      MINIKUBE_DRIVER: docker  # Using Docker driver
+      MINIKUBE_DRIVER: docker
+      KUBERNETES_VERSION: v1.26.3  # Pinned stable version
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Cleanup Docker and Minikube
+      - name: Prerequisites Check
         shell: powershell
         run: |
-          # Stop and remove all containers (including paused ones)
+          # Verify Docker is installed
+          if (-not (Test-Path "C:\Program Files\Docker\Docker\Docker Desktop.exe")) {
+              throw "Docker Desktop not found at default location"
+          }
+
+          # Verify kubectl is available
+          if (-not (Get-Command kubectl -ErrorAction SilentlyContinue)) {
+              throw "kubectl not found in PATH"
+          }
+
+      - name: Full System Cleanup
+        shell: powershell
+        run: |
+          # Stop all containers
           docker ps -aq | ForEach-Object { docker rm -f $_ }
-          
-          # Reset Minikube
+
+          # Full Minikube cleanup
           minikube delete --all --purge
           Remove-Item -Path "$HOME\.minikube" -Recurse -Force -ErrorAction SilentlyContinue
 
-      - name: Ensure Docker is Running
+          # Docker system cleanup
+          docker system prune -a -f
+          docker network prune -f
+
+      - name: Initialize Docker Environment
         shell: powershell
         run: |
-          # Check if Docker Desktop is running
-          $dockerProcess = Get-Process "Docker Desktop" -ErrorAction SilentlyContinue
-          
-          if (-not $dockerProcess) {
-              # Start Docker Desktop if not running
-              if (Test-Path "C:\Program Files\Docker\Docker\Docker Desktop.exe") {
-                  Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
-                  Start-Sleep -Seconds 30  # Wait for Docker to initialize
-              } else {
-                  throw "Docker Desktop not found at default location"
-              }
+          # Start Docker Desktop if not running
+          if (-not (Get-Process "Docker Desktop" -ErrorAction SilentlyContinue)) {
+              Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+              Start-Sleep -Seconds 30
           }
 
-          # Verify Docker is responsive
+          # Wait for Docker to be ready
           $retryCount = 0
-          $maxRetries = 5
-          do {
+          $maxRetries = 10
+          while ($retryCount -lt $maxRetries) {
               try {
-                  docker ps
+                  docker ps > $null 2>&1
                   if ($LASTEXITCODE -eq 0) { break }
-              } catch {
+              }
+              catch {
                   $retryCount++
                   if ($retryCount -ge $maxRetries) {
                       throw "Docker failed to respond after $maxRetries attempts"
                   }
                   Start-Sleep -Seconds 10
               }
-          } while ($true)
+          }
 
-      - name: Start Minikube (Docker Driver)
+      - name: Setup Minikube Cluster
         shell: powershell
         run: |
-          # Start Minikube with Docker driver
-          minikube start --driver=docker --cpus=2 --memory=4096 --disk-size=20g
-          minikube addons enable ingress
-          minikube addons enable metrics-server
+          # Initialize Minikube with explicit parameters
+          minikube start `
+            --driver=$env:MINIKUBE_DRIVER `
+            --kubernetes-version=$env:KUBERNETES_VERSION `
+            --cpus=2 `
+            --memory=4096 `
+            --disk-size=20g `
+            --force `
+            --wait=all `
+            --alsologtostderr
 
           # Configure Docker to use Minikube's environment
           minikube docker-env | Invoke-Expression
 
-      - name: Verify Minikube and Docker
+          # Verify certificates
+          if (-not (Test-Path "$HOME\.minikube\certs\ca.pem")) {
+              minikube logs | Out-File -FilePath "minikube_logs.txt"
+              throw "Minikube certificates missing. See minikube_logs.txt"
+          }
+
+          # Enable addons
+          minikube addons enable ingress
+          minikube addons enable metrics-server
+
+      - name: Verify Cluster Status
         shell: powershell
         run: |
-          # Check Docker connectivity
-          docker ps
-          
           # Check Minikube status
           minikube status
-          
-          # Verify Kubernetes cluster
+          if ($LASTEXITCODE -ne 0) { throw "Minikube not running properly" }
+
+          # Check Kubernetes cluster
           kubectl cluster-info
           kubectl get pods -A
 
-      - name: Build and Push Frontend Image
+      - name: Build and Push Frontend
         uses: docker/build-push-action@v5
         with:
           context: ./travel-to-pakistan/frontend
@@ -91,8 +117,10 @@ jobs:
           tags: ${{ env.FRONTEND_IMAGE }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            NODE_ENV=production
 
-      - name: Build and Push Backend Image
+      - name: Build and Push Backend
         uses: docker/build-push-action@v5
         with:
           context: ./travel-to-pakistan/backend
@@ -100,14 +128,16 @@ jobs:
           tags: ${{ env.BACKEND_IMAGE }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            NODE_ENV=production
 
-      - name: Deploy to Kubernetes
+      - name: Deploy Application Stack
         shell: powershell
         run: |
-          # Create namespace if not exists
+          # Create namespace
           kubectl create namespace travel-app --dry-run=client -o yaml | kubectl apply -f -
 
-          # Deploy MongoDB first
+          # Deploy MongoDB
           kubectl apply -f ./travel-to-pakistan/mongodb/ -n travel-app
           kubectl wait --for=condition=ready pod -l app=mongodb -n travel-app --timeout=300s
 
@@ -115,34 +145,34 @@ jobs:
           kubectl apply -f ./travel-to-pakistan/backend/ -n travel-app
           kubectl apply -f ./travel-to-pakistan/frontend/ -n travel-app
 
-          # Expose services (idempotent)
-          kubectl expose deployment frontend -n travel-app --type=NodePort --port=80 --dry-run=client -o yaml | kubectl apply -f -
-          kubectl expose deployment backend -n travel-app --type=NodePort --port=3000 --dry-run=client -o yaml | kubectl apply -f -
+          # Expose services
+          kubectl expose deployment frontend -n travel-app --type=NodePort --port=80
+          kubectl expose deployment backend -n travel-app --type=NodePort --port=3000
 
-          # Print service URLs
+          # Print service information
           minikube service list -n travel-app
 
-      - name: Smoke Tests
+      - name: Run Smoke Tests
         shell: powershell
         run: |
           $frontendUrl = minikube service frontend -n travel-app --url
           $backendUrl = minikube service backend -n travel-app --url
 
-          function Test-Health {
-              param($url, $maxRetries = 5, $retryDelay = 15)
-              $retryCount = 0
-              while ($retryCount -lt $maxRetries) {
+          function Test-Service {
+              param($url, $endpoint)
+              $retry = 0
+              while ($retry -lt 5) {
                   try {
-                      $response = Invoke-WebRequest "$url/health" -UseBasicParsing -TimeoutSec 10
+                      $response = Invoke-WebRequest "$url$endpoint" -UseBasicParsing -TimeoutSec 10
                       if ($response.StatusCode -eq 200) { return $true }
                   } catch {
-                      Write-Output "Attempt $($retryCount + 1) failed: $($_.Exception.Message)"
+                      Write-Output "Attempt $($retry + 1) failed: $($_.Exception.Message)"
                   }
-                  $retryCount++
-                  Start-Sleep -Seconds $retryDelay
+                  $retry++
+                  Start-Sleep -Seconds 10
               }
               return $false
           }
 
-          if (-not (Test-Health $frontendUrl)) { throw "Frontend health check failed" }
-          if (-not (Test-Health $backendUrl)) { throw "Backend health check failed" }
+          if (-not (Test-Service $frontendUrl "/health")) { throw "Frontend health check failed" }
+          if (-not (Test-Service $backendUrl "/api/health")) { throw "Backend health check failed" }
