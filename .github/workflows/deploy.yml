@@ -267,11 +267,20 @@ jobs:
       - name: Reset Docker Environment
         shell: powershell
         run: |
+          # Ensure default context and remove Minikube context
           docker context use default
+          docker context rm minikube -f -ErrorAction SilentlyContinue
+          # Clear Minikube environment variables
           Remove-Item Env:DOCKER_HOST -ErrorAction SilentlyContinue
           Remove-Item Env:DOCKER_TLS_VERIFY -ErrorAction SilentlyContinue
           Remove-Item Env:DOCKER_CERT_PATH -ErrorAction SilentlyContinue
-          docker info --format '{{.ServerVersion}}'
+          # Verify Docker Desktop daemon
+          docker info --format '{{.ServerVersion}}' || exit 1
+          # Restart Docker service if needed
+          Stop-Process -Name "com.docker.*" -Force -ErrorAction SilentlyContinue
+          Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe" -ErrorAction SilentlyContinue
+          Start-Sleep -Seconds 30
+          docker info --format '{{.ServerVersion}}' || exit 1
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -282,7 +291,7 @@ jobs:
       - name: Build and Push Frontend Image
         uses: docker/build-push-action@v5
         with:
-          context: ./travel-to-pakistan/frontend
+          context: ./frontend
           push: true
           tags: ${{ env.FRONTEND_IMAGE }}
           cache-from: type=gha
@@ -293,7 +302,7 @@ jobs:
       - name: Build and Push Backend Image
         uses: docker/build-push-action@v5
         with:
-          context: ./travel-to-pakistan/backend
+          context: ./backend
           push: true
           tags: ${{ env.BACKEND_IMAGE }}
           cache-from: type=gha
@@ -310,6 +319,15 @@ jobs:
             --docker-email=${{ secrets.DOCKERHUB_EMAIL }} `
             -n travel-app-namespace --dry-run=client -o yaml | kubectl apply -f -
 
+      - name: Create Google Secrets for Backend
+        shell: powershell
+        run: |
+          kubectl create secret generic google-secrets `
+            --from-literal=JWT_SECRET=${{ secrets.JWT_SECRET }} `
+            --from-literal=GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} `
+            --from-literal=GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} `
+            -n travel-app-namespace --dry-run=client -o yaml | kubectl apply -f -
+
       - name: Deploy to Minikube
         shell: powershell
         run: |
@@ -317,13 +335,13 @@ jobs:
           kubectl create namespace travel-app-namespace --dry-run=client -o yaml | kubectl apply -f -
 
           # Deploy MongoDB
-          kubectl apply -f ./travel-to-pakistan/mongodb/ -n travel-app-namespace
+          kubectl apply -f ./mongodb/ -n travel-app-namespace
           kubectl wait --for=condition=ready pod -l app=mongodb -n travel-app-namespace --timeout=300s
 
           # Deploy backend and frontend
-          kubectl apply -f ./travel-to-pakistan/backend/ -n travel-app-namespace
-          kubectl apply -f ./travel-to-pakistan/frontend/ -n travel-app-namespace
+          kubectl apply -f ./backend/ -n travel-app-namespace
+          kubectl apply -f ./frontend/ -n travel-app-namespace
 
           # Expose services
           kubectl expose deployment frontend-deployment -n travel-app-namespace --type=NodePort --port=80 --name=frontend --dry-run=client -o yaml | kubectl apply -f -
-          kubectl expose deployment backend-deployment -n travel-app-namespace --type=NodePort --port=3000 --name=backend --dry-run=client -o yaml | kubectl apply -f -
+          kubectl expose deployment backend-deployment -n travel-app-namespace --type=NodePort --port=5000 --name=backend --dry-run=client -o yaml | kubectl apply -f -
