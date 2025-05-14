@@ -40,10 +40,29 @@ jobs:
 
       - name: Clean Environment
         run: |
-          minikube delete --all --purge --ErrorAction SilentlyContinue
-          docker context rm minikube -f --ErrorAction SilentlyContinue
-          Remove-Item -Path "$HOME\.minikube" -Recurse -Force -ErrorAction SilentlyContinue
-          Remove-Item -Path "$HOME\.docker" -Recurse -Force -ErrorAction SilentlyContinue
+          try {
+            minikube delete --all --purge
+          } catch {
+            Write-Output "Minikube delete failed (likely already deleted), continuing..."
+          }
+
+          try {
+            docker context rm minikube -f
+          } catch {
+            Write-Output "Docker context removal failed, continuing..."
+          }
+
+          try {
+            Remove-Item -Path "$HOME\.minikube" -Recurse -Force
+          } catch {
+            Write-Output "Failed to remove .minikube, continuing..."
+          }
+
+          try {
+            Remove-Item -Path "$HOME\.docker" -Recurse -Force
+          } catch {
+            Write-Output "Failed to remove .docker, continuing..."
+          }
         shell: powershell
 
       - name: Configure Network Infrastructure
