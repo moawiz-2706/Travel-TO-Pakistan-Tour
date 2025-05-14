@@ -192,103 +192,133 @@ jobs:
       BACKEND_IMAGE: "moawiz/travel-backend:${{ github.sha }}"
       MINIKUBE_DRIVER: docker
       KUBERNETES_VERSION: v1.26.3
+      DOCKER_START_TIMEOUT: 180  # 3 minutes timeout for Docker
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Verify and Start Docker
+      - name: System Preparation
         shell: powershell
         run: |
-          # Check Docker Desktop installation
-          if (-not (Test-Path "C:\Program Files\Docker\Docker\Docker Desktop.exe")) {
-              throw "Docker Desktop not found at default location"
+          # Verify Docker installation
+          $dockerPath = "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+          if (-not (Test-Path $dockerPath)) {
+              throw "Docker Desktop not found at $dockerPath"
           }
 
-          # Kill any stuck Docker processes
-          Get-Process "Docker Desktop" -ErrorAction SilentlyContinue | Stop-Process -Force
-          Start-Sleep -Seconds 5
+          # Kill existing Docker processes
+          try {
+              Get-Process "Docker Desktop" -ErrorAction Stop | Stop-Process -Force
+              Start-Sleep -Seconds 5
+          } catch {
+              Write-Output "No running Docker processes to kill"
+          }
 
-          # Start Docker Desktop with elevated privileges
-          $psi = New-Object System.Diagnostics.ProcessStartInfo
-          $psi.FileName = "C:\Program Files\Docker\Docker\Docker Desktop.exe"
-          $psi.Verb = "runas"  # Run as administrator
-          [System.Diagnostics.Process]::Start($psi) | Out-Null
+          # Start Docker Desktop with admin privileges
+          try {
+              $psi = New-Object System.Diagnostics.ProcessStartInfo
+              $psi.FileName = $dockerPath
+              $psi.Verb = "runas"
+              [System.Diagnostics.Process]::Start($psi) | Out-Null
+          } catch {
+              Write-Output "Failed to start Docker as admin, trying normal start"
+              Start-Process $dockerPath
+          }
 
-          # Extended wait with progressive checks
-          $maxWait = 120
-          $waitInterval = 5
-          $totalWaited = 0
+          # Wait for Docker to start
+          $timer = [System.Diagnostics.Stopwatch]::StartNew()
           $dockerReady = $false
 
-          while ($totalWaited -lt $maxWait) {
+          while ($timer.Elapsed.TotalSeconds -lt $env:DOCKER_START_TIMEOUT) {
               try {
-                  docker version --format '{{.Server.Version}}' 2>$null
-                  if ($LASTEXITCODE -eq 0) {
+                  $dockerVersion = docker version --format '{{.Server.Version}}' 2>$null
+                  if ($LASTEXITCODE -eq 0 -and $dockerVersion) {
                       $dockerReady = $true
                       break
                   }
               } catch {}
-              
-              Write-Output "Waiting for Docker to start... ($totalWaited/$maxWait seconds)"
-              Start-Sleep -Seconds $waitInterval
-              $totalWaited += $waitInterval
+
+              Write-Output "Waiting for Docker to start... ($([math]::Floor($timer.Elapsed.TotalSeconds))s"
+              Start-Sleep -Seconds 5
           }
 
           if (-not $dockerReady) {
-              # Collect diagnostic information
-              Get-Process "Docker Desktop" | Format-List *
-              docker info
-              throw "Docker failed to start after $maxWait seconds"
+              # Collect diagnostics
+              Write-Output "=== Docker Diagnostics ==="
+              Get-Service *docker* | Format-Table -AutoSize
+              Get-Process *docker* | Format-Table -AutoSize
+              Get-ChildItem "$env:ProgramData\Docker\config" | Format-Table -AutoSize
+              
+              throw "Docker failed to start after $env:DOCKER_START_TIMEOUT seconds"
           }
 
-          Write-Output "Docker started successfully"
+          Write-Output "Docker started successfully in $([math]::Floor($timer.Elapsed.TotalSeconds)) seconds"
 
       - name: Clean System State
         shell: powershell
         run: |
-          # Clean containers only if Docker is responsive
+          # Clean Docker containers
           docker ps -aq | ForEach-Object { docker rm -f $_ } 2>$null
           docker system prune -a -f 2>$null
 
-          # Clean Minikube if exists
+          # Clean Minikube
           if (Get-Command minikube -ErrorAction SilentlyContinue) {
               minikube delete --all --purge 2>$null
               Remove-Item -Path "$HOME\.minikube" -Recurse -Force -ErrorAction SilentlyContinue
           }
 
-      - name: Initialize Minikube
+      - name: Initialize Minikube with Docker
         shell: powershell
         run: |
-          minikube start `
-            --driver=$env:MINIKUBE_DRIVER `
-            --kubernetes-version=$env:KUBERNETES_VERSION `
-            --cpus=2 `
-            --memory=4096 `
-            --disk-size=20g `
-            --wait=all `
-            --alsologtostderr
+          # Try with Docker runtime first
+          $success = $false
+          try {
+              minikube start `
+                --driver=$env:MINIKUBE_DRIVER `
+                --kubernetes-version=$env:KUBERNETES_VERSION `
+                --cpus=2 `
+                --memory=4096 `
+                --disk-size=20g `
+                --wait=all `
+                --alsologtostderr
+              
+              $success = $true
+          } catch {
+              Write-Output "Minikube with Docker runtime failed: $_"
+          }
 
+          # Fallback to containerd if Docker failed
+          if (-not $success) {
+              Write-Output "Trying fallback to containerd runtime"
+              minikube start `
+                --driver=$env:MINIKUBE_DRIVER `
+                --container-runtime=containerd `
+                --kubernetes-version=$env:KUBERNETES_VERSION `
+                --cpus=2 `
+                --memory=4096 `
+                --disk-size=20g `
+                --wait=all `
+                --alsologtostderr
+          }
 
+          # Configure environment
           minikube addons enable ingress
           minikube addons enable metrics-server
           minikube docker-env | Invoke-Expression
-  
 
       - name: Verify Environment
         shell: powershell
         run: |
-          docker ps
+          Write-Output "=== Docker Info ==="
+          docker info
+          
+          Write-Output "=== Minikube Status ==="
           minikube status
+          
+          Write-Output "=== Kubernetes Cluster Info ==="
           kubectl cluster-info
-
-      
-
-      - name: Verify Cluster
-        shell: powershell
-        run: |
-          minikube status
-          kubectl cluster-info
+          kubectl get nodes
           kubectl get pods -A
 
       - name: Build and Push Frontend
@@ -299,6 +329,8 @@ jobs:
           tags: ${{ env.FRONTEND_IMAGE }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            NODE_ENV=production
 
       - name: Build and Push Backend
         uses: docker/build-push-action@v5
@@ -308,20 +340,31 @@ jobs:
           tags: ${{ env.BACKEND_IMAGE }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            NODE_ENV=production
 
       - name: Deploy Application
         shell: powershell
         run: |
+          # Create namespace
           kubectl create namespace travel-app --dry-run=client -o yaml | kubectl apply -f -
+
+          # Deploy MongoDB
           kubectl apply -f ./travel-to-pakistan/mongodb/ -n travel-app
           kubectl wait --for=condition=ready pod -l app=mongodb -n travel-app --timeout=300s
+
+          # Deploy backend and frontend
           kubectl apply -f ./travel-to-pakistan/backend/ -n travel-app
           kubectl apply -f ./travel-to-pakistan/frontend/ -n travel-app
+
+          # Expose services
           kubectl expose deployment frontend -n travel-app --type=NodePort --port=80
           kubectl expose deployment backend -n travel-app --type=NodePort --port=3000
+
+          # Print service URLs
           minikube service list -n travel-app
 
-      - name: Smoke Tests
+      - name: Run Smoke Tests
         shell: powershell
         run: |
           $frontendUrl = minikube service frontend -n travel-app --url
