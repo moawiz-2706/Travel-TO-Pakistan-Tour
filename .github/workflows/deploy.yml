@@ -11,7 +11,7 @@ jobs:
     env:
       FRONTEND_IMAGE: "moawiz/travel-frontend:${{ github.sha }}"
       BACKEND_IMAGE: "moawiz/travel-backend:${{ github.sha }}"
-      MINIKUBE_DRIVER: docker  # Switch to Docker driver (simpler than Hyper-V)
+      MINIKUBE_DRIVER: docker  # Using Docker driver
 
     steps:
       - name: Checkout code
@@ -27,38 +27,122 @@ jobs:
           minikube delete --all --purge
           Remove-Item -Path "$HOME\.minikube" -Recurse -Force -ErrorAction SilentlyContinue
 
+      - name: Ensure Docker is Running
+        shell: powershell
+        run: |
+          # Check if Docker Desktop is running
+          $dockerProcess = Get-Process "Docker Desktop" -ErrorAction SilentlyContinue
+          
+          if (-not $dockerProcess) {
+              # Start Docker Desktop if not running
+              if (Test-Path "C:\Program Files\Docker\Docker\Docker Desktop.exe") {
+                  Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+                  Start-Sleep -Seconds 30  # Wait for Docker to initialize
+              } else {
+                  throw "Docker Desktop not found at default location"
+              }
+          }
+
+          # Verify Docker is responsive
+          $retryCount = 0
+          $maxRetries = 5
+          do {
+              try {
+                  docker ps
+                  if ($LASTEXITCODE -eq 0) { break }
+              } catch {
+                  $retryCount++
+                  if ($retryCount -ge $maxRetries) {
+                      throw "Docker failed to respond after $maxRetries attempts"
+                  }
+                  Start-Sleep -Seconds 10
+              }
+          } while ($true)
+
       - name: Start Minikube (Docker Driver)
         shell: powershell
         run: |
-          # Ensure Docker is running
-          Start-Service docker
-          
           # Start Minikube with Docker driver
           minikube start --driver=docker --cpus=2 --memory=4096 --disk-size=20g
           minikube addons enable ingress
           minikube addons enable metrics-server
 
+          # Configure Docker to use Minikube's environment
+          minikube docker-env | Invoke-Expression
+
       - name: Verify Minikube and Docker
         shell: powershell
         run: |
-          # Check Docker
+          # Check Docker connectivity
           docker ps
           
-          # Check Minikube
+          # Check Minikube status
           minikube status
+          
+          # Verify Kubernetes cluster
+          kubectl cluster-info
           kubectl get pods -A
 
-      - name: Build and Push Images
+      - name: Build and Push Frontend Image
         uses: docker/build-push-action@v5
         with:
           context: ./travel-to-pakistan/frontend
           push: true
           tags: ${{ env.FRONTEND_IMAGE }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and Push Backend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./travel-to-pakistan/backend
+          push: true
+          tags: ${{ env.BACKEND_IMAGE }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Deploy to Kubernetes
         shell: powershell
         run: |
+          # Create namespace if not exists
+          kubectl create namespace travel-app --dry-run=client -o yaml | kubectl apply -f -
+
+          # Deploy MongoDB first
           kubectl apply -f ./travel-to-pakistan/mongodb/ -n travel-app
+          kubectl wait --for=condition=ready pod -l app=mongodb -n travel-app --timeout=300s
+
+          # Deploy backend and frontend
           kubectl apply -f ./travel-to-pakistan/backend/ -n travel-app
           kubectl apply -f ./travel-to-pakistan/frontend/ -n travel-app
+
+          # Expose services (idempotent)
+          kubectl expose deployment frontend -n travel-app --type=NodePort --port=80 --dry-run=client -o yaml | kubectl apply -f -
+          kubectl expose deployment backend -n travel-app --type=NodePort --port=3000 --dry-run=client -o yaml | kubectl apply -f -
+
+          # Print service URLs
           minikube service list -n travel-app
+
+      - name: Smoke Tests
+        shell: powershell
+        run: |
+          $frontendUrl = minikube service frontend -n travel-app --url
+          $backendUrl = minikube service backend -n travel-app --url
+
+          function Test-Health {
+              param($url, $maxRetries = 5, $retryDelay = 15)
+              $retryCount = 0
+              while ($retryCount -lt $maxRetries) {
+                  try {
+                      $response = Invoke-WebRequest "$url/health" -UseBasicParsing -TimeoutSec 10
+                      if ($response.StatusCode -eq 200) { return $true }
+                  } catch {
+                      Write-Output "Attempt $($retryCount + 1) failed: $($_.Exception.Message)"
+                  }
+                  $retryCount++
+                  Start-Sleep -Seconds $retryDelay
+              }
+              return $false
+          }
+
+          if (-not (Test-Health $frontendUrl)) { throw "Frontend health check failed" }
+          if (-not (Test-Health $backendUrl)) { throw "Backend health check failed" }

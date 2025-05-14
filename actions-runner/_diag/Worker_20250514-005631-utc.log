@@ -1,0 +1,4603 @@
+[2025-05-14 00:56:32Z INFO HostContext] No proxy settings were found based on environmental variables (http_proxy/https_proxy/HTTP_PROXY/HTTPS_PROXY)
+[2025-05-14 00:56:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:32Z INFO HostContext] Well known config file 'Credentials': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials'
+[2025-05-14 00:56:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:32Z INFO HostContext] Well known config file 'Runner': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.runner'
+[2025-05-14 00:56:32Z INFO Worker] Version: 2.323.0
+[2025-05-14 00:56:32Z INFO Worker] Commit: d8b82f44a9ec0258904d5869ae683c31d5aac299
+[2025-05-14 00:56:32Z INFO Worker] Culture: en-US
+[2025-05-14 00:56:32Z INFO Worker] UI Culture: en-US
+[2025-05-14 00:56:32Z INFO Worker] Waiting to receive the job message from the channel.
+[2025-05-14 00:56:32Z INFO ProcessChannel] Receiving message of length 27815, with hash '0dda7b166624f7d63615660910a348b37b5d78d38e3989be1b01302da00970bc'
+[2025-05-14 00:56:32Z INFO Worker] Message received.
+[2025-05-14 00:56:33Z INFO Worker] Job message:
+ {
+  "environmentVariables": [
+    {
+      "type": 2,
+      "file": 1,
+      "line": 12,
+      "col": 7,
+      "map": [
+        {
+          "key": {
+            "type": 0,
+            "file": 1,
+            "line": 12,
+            "col": 7,
+            "lit": "FRONTEND_IMAGE"
+          },
+          "value": {
+            "type": 3,
+            "file": 1,
+            "line": 12,
+            "col": 23,
+            "expr": "format('moawiz/travel-frontend:{0}', github.sha)"
+          }
+        },
+        {
+          "key": {
+            "type": 0,
+            "file": 1,
+            "line": 13,
+            "col": 7,
+            "lit": "BACKEND_IMAGE"
+          },
+          "value": {
+            "type": 3,
+            "file": 1,
+            "line": 13,
+            "col": 22,
+            "expr": "format('moawiz/travel-backend:{0}', github.sha)"
+          }
+        },
+        {
+          "key": {
+            "type": 0,
+            "file": 1,
+            "line": 14,
+            "col": 7,
+            "lit": "MINIKUBE_DRIVER"
+          },
+          "value": {
+            "type": 0,
+            "file": 1,
+            "line": 14,
+            "col": 24,
+            "lit": "docker"
+          }
+        }
+      ]
+    }
+  ],
+  "fileTable": [
+    ".github/workflows/deploy.yml"
+  ],
+  "mask": [
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    }
+  ],
+  "steps": [
+    {
+      "type": "action",
+      "reference": {
+        "type": "repository",
+        "name": "actions/checkout",
+        "ref": "v4",
+        "repositoryType": "GitHub",
+        "path": ""
+      },
+      "displayNameToken": {
+        "type": 0,
+        "file": 1,
+        "line": 17,
+        "col": 15,
+        "lit": "Checkout code"
+      },
+      "contextName": "__actions_checkout",
+      "condition": "success()",
+      "id": "ce4790b2-251e-5077-f66e-a464c6feb979",
+      "name": "__actions_checkout"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "type": "script"
+      },
+      "displayNameToken": {
+        "type": 0,
+        "file": 1,
+        "line": 20,
+        "col": 15,
+        "lit": "Cleanup Docker and Minikube"
+      },
+      "contextName": "__run",
+      "inputs": {
+        "type": 2,
+        "map": [
+          {
+            "key": "script",
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 22,
+              "col": 14,
+              "lit": "# Stop and remove all containers (including paused ones)\ndocker ps -aq | ForEach-Object { docker rm -f $_ }\n\n# Reset Minikube\nminikube delete --all --purge\nRemove-Item -Path \"$HOME\\.minikube\" -Recurse -Force -ErrorAction SilentlyContinue\n"
+            }
+          },
+          {
+            "key": "shell",
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 21,
+              "col": 16,
+              "lit": "powershell"
+            }
+          }
+        ]
+      },
+      "condition": "success()",
+      "id": "d7dedd61-f0d4-52a7-2d12-40566bec885c",
+      "name": "__run"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "type": "script"
+      },
+      "displayNameToken": {
+        "type": 0,
+        "file": 1,
+        "line": 30,
+        "col": 15,
+        "lit": "Start Minikube (Docker Driver)"
+      },
+      "contextName": "__run_2",
+      "inputs": {
+        "type": 2,
+        "map": [
+          {
+            "key": "script",
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 32,
+              "col": 14,
+              "lit": "# Ensure Docker is running\nStart-Service docker\n\n# Start Minikube with Docker driver\nminikube start --driver=docker --cpus=2 --memory=4096 --disk-size=20g\nminikube addons enable ingress\nminikube addons enable metrics-server\n"
+            }
+          },
+          {
+            "key": "shell",
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 31,
+              "col": 16,
+              "lit": "powershell"
+            }
+          }
+        ]
+      },
+      "condition": "success()",
+      "id": "b6da7b27-7b57-5afc-7be1-fd2cca5bc7d5",
+      "name": "__run_2"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "type": "script"
+      },
+      "displayNameToken": {
+        "type": 0,
+        "file": 1,
+        "line": 41,
+        "col": 15,
+        "lit": "Verify Minikube and Docker"
+      },
+      "contextName": "__run_3",
+      "inputs": {
+        "type": 2,
+        "map": [
+          {
+            "key": "script",
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 43,
+              "col": 14,
+              "lit": "# Check Docker\ndocker ps\n\n# Check Minikube\nminikube status\nkubectl get pods -A\n"
+            }
+          },
+          {
+            "key": "shell",
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 42,
+              "col": 16,
+              "lit": "powershell"
+            }
+          }
+        ]
+      },
+      "condition": "success()",
+      "id": "2e11d75e-7fd1-5c13-7f66-069e3b0f8b7a",
+      "name": "__run_3"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "type": "repository",
+        "name": "docker/build-push-action",
+        "ref": "v5",
+        "repositoryType": "GitHub",
+        "path": ""
+      },
+      "displayNameToken": {
+        "type": 0,
+        "file": 1,
+        "line": 51,
+        "col": 15,
+        "lit": "Build and Push Images"
+      },
+      "contextName": "__docker_build-push-action",
+      "inputs": {
+        "type": 2,
+        "file": 1,
+        "line": 54,
+        "col": 11,
+        "map": [
+          {
+            "key": {
+              "type": 0,
+              "file": 1,
+              "line": 54,
+              "col": 11,
+              "lit": "context"
+            },
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 54,
+              "col": 20,
+              "lit": "./travel-to-pakistan/frontend"
+            }
+          },
+          {
+            "key": {
+              "type": 0,
+              "file": 1,
+              "line": 55,
+              "col": 11,
+              "lit": "push"
+            },
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 55,
+              "col": 17,
+              "lit": "true"
+            }
+          },
+          {
+            "key": {
+              "type": 0,
+              "file": 1,
+              "line": 56,
+              "col": 11,
+              "lit": "tags"
+            },
+            "value": {
+              "type": 3,
+              "file": 1,
+              "line": 56,
+              "col": 17,
+              "expr": "env.FRONTEND_IMAGE"
+            }
+          }
+        ]
+      },
+      "condition": "success()",
+      "id": "4f292a5c-ea8b-5061-92e7-62e8767d1dbe",
+      "name": "__docker_build-push-action"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "type": "script"
+      },
+      "displayNameToken": {
+        "type": 0,
+        "file": 1,
+        "line": 58,
+        "col": 15,
+        "lit": "Deploy to Kubernetes"
+      },
+      "contextName": "__run_4",
+      "inputs": {
+        "type": 2,
+        "map": [
+          {
+            "key": "script",
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 60,
+              "col": 14,
+              "lit": "kubectl apply -f ./travel-to-pakistan/mongodb/ -n travel-app\nkubectl apply -f ./travel-to-pakistan/backend/ -n travel-app\nkubectl apply -f ./travel-to-pakistan/frontend/ -n travel-app\nminikube service list -n travel-app"
+            }
+          },
+          {
+            "key": "shell",
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 59,
+              "col": 16,
+              "lit": "powershell"
+            }
+          }
+        ]
+      },
+      "condition": "success()",
+      "id": "4a0464f2-fcfc-5e9b-7e00-0def40c4bf88",
+      "name": "__run_4"
+    }
+  ],
+  "variables": {
+    "system.isScheduled": {
+      "value": "False"
+    },
+    "system.servertype": {
+      "value": "Hosted"
+    },
+    "system.culture": {
+      "value": ""
+    },
+    "system.pipelineStartTime": {
+      "value": "2025-05-14 00:56:27+00:00"
+    },
+    "system.runner.lowdiskspacethreshold": {
+      "value": "100"
+    },
+    "DistributedTask.NewActionMetadata": {
+      "value": "true"
+    },
+    "DistributedTask.EnableCompositeActions": {
+      "value": "true"
+    },
+    "DistributedTask.EnhancedAnnotations": {
+      "value": "true"
+    },
+    "DistributedTask.UploadStepSummary": {
+      "value": "true"
+    },
+    "DistributedTask.ForceGithubJavascriptActionsToNode16": {
+      "value": "true"
+    },
+    "DistributedTask.ForceGithubJavascriptActionsToNode20": {
+      "value": "true"
+    },
+    "DistributedTask.AddWarningToNode12Action": {
+      "value": "true"
+    },
+    "DistributedTask.AddWarningToNode16Action": {
+      "value": "true"
+    },
+    "DistributedTask.LogTemplateErrorsAsDebugMessages": {
+      "value": "true"
+    },
+    "DistributedTask.AllowRunnerContainerHooks": {
+      "value": "true"
+    },
+    "DistributedTask.DeprecateStepOutputCommands": {
+      "value": "true"
+    },
+    "DistributedTask.UseWhich2": {
+      "value": "true"
+    },
+    "DistributedTask.DetailUntarFailure": {
+      "value": "true"
+    },
+    "DistributedTask.UseActionArchiveCache": {
+      "value": "true"
+    },
+    "DistributedTask.EnableJobServerQueueTelemetry": {
+      "value": "true"
+    },
+    "DistributedTask.MarkJobAsFailedOnWorkerCrash": {
+      "value": "true"
+    },
+    "Actions.EnableHttpRedirects": {
+      "value": "true"
+    },
+    "system.teamProjectId": {
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    "build.buildId": {
+      "value": "45"
+    },
+    "build.containerId": {
+      "value": "29651137"
+    },
+    "build.allowCreateArtifacts": {
+      "value": "False"
+    },
+    "system.workflowFilePath": {
+      "value": ".github/workflows/deploy.yml"
+    },
+    "system.phaseDisplayName": {
+      "value": "deploy"
+    },
+    "system.phaseId": {
+      "value": "d4a9a205-d52e-57fb-7b17-15a9d984af62"
+    },
+    "system.phaseName": {
+      "value": "deploy"
+    },
+    "system.phaseAttempt": {
+      "value": "1"
+    },
+    "system.jobIdentifier": {
+      "value": "deploy.__default"
+    },
+    "system.jobAttempt": {
+      "value": "1"
+    },
+    "System.JobPositionInPhase": {
+      "value": "1"
+    },
+    "System.TotalJobsInPhase": {
+      "value": "1"
+    },
+    "system.github.job": {
+      "value": "deploy"
+    },
+    "system.jobDisplayName": {
+      "value": "deploy"
+    },
+    "system.jobId": {
+      "value": "e07742bd-189a-5079-918b-43f8b2f94b89"
+    },
+    "system.jobName": {
+      "value": "__default"
+    },
+    "system.github.token.permissions": {
+      "value": "{\"Contents\":\"read\",\"Metadata\":\"read\",\"Packages\":\"read\"}"
+    },
+    "system.github.token": {
+      "value": "***",
+      "isSecret": true
+    },
+    "system.runnerEnvironment": {
+      "value": "self-hosted"
+    },
+    "system.github.results_endpoint": {
+      "value": "https://results-receiver.actions.githubusercontent.com/"
+    },
+    "system.github.results_upload_with_sdk": {
+      "value": "True"
+    },
+    "actions_uses_cache_service_v2": {
+      "value": "True"
+    },
+    "system.testDotNet8Compatibility": {
+      "value": "true"
+    },
+    "system.dotNet8CompatibilityOutputLength": {
+      "value": "200"
+    },
+    "system.dotNet8CompatibilityOutputPattern": {
+      "value": "GLIBCXX"
+    },
+    "system.dotNet8CompatibilityWarning": {
+      "value": "The Actions runner will no longer support your OS version on November 1, 2024. Please upgrade to a supported version. For information, refer https://github.blog/changelog/2024-08-19-notice-of-upcoming-deprecations-and-breaking-changes-in-github-actions-runners/"
+    },
+    "system.orchestrationId": {
+      "value": "deaccac3-24dc-4c85-8a66-b3ca2c2bd09f.deploy.__default"
+    },
+    "system.runnerGroupName": {
+      "value": "Default"
+    }
+  },
+  "messageType": "PipelineAgentJobRequest",
+  "plan": {
+    "scopeIdentifier": "00000000-0000-0000-0000-000000000000",
+    "planType": "Actions",
+    "version": 41,
+    "planId": "deaccac3-24dc-4c85-8a66-b3ca2c2bd09f",
+    "planGroup": "Actions:00000000-0000-0000-0000-000000000000:1",
+    "artifactUri": "vstfs:///Build/Build/45",
+    "artifactLocation": null,
+    "definition": {
+      "_links": {},
+      "id": 3,
+      "name": "Travel-TO-Pakistan-Tour"
+    },
+    "owner": {
+      "_links": {},
+      "id": 3,
+      "name": "moawiz-2706"
+    }
+  },
+  "timeline": {
+    "id": "deaccac3-24dc-4c85-8a66-b3ca2c2bd09f",
+    "changeId": 0,
+    "location": null
+  },
+  "jobId": "e07742bd-189a-5079-918b-43f8b2f94b89",
+  "jobDisplayName": "deploy",
+  "jobName": "__default",
+  "requestId": 45,
+  "lockedUntil": "0001-01-01T00:00:00",
+  "resources": {
+    "endpoints": [
+      {
+        "data": {
+          "ServerId": "96048f9b-6511-4efd-9f37-5ef9b29d7752",
+          "ServerName": "YtDrhldJpOQaubzGAtuX6RbdlVDFMWtjBQ53C9kKzlGhawB59z",
+          "CacheServerUrl": "https://acghubeus1.actions.githubusercontent.com/YtDrhldJpOQaubzGAtuX6RbdlVDFMWtjBQ53C9kKzlGhawB59z/",
+          "FeedStreamUrl": "https://results-receiver.actions.githubusercontent.com/_ws/ingest.sock",
+          "ResultsServiceUrl": "https://results-receiver.actions.githubusercontent.com/",
+          "ConnectivityChecks": "[\"https://acghubeus0.actions.githubusercontent.com/_apis/health\",\"https://results-receiver.actions.githubusercontent.com/health\",\"https://pkg.actions.githubusercontent.com/health\",\"https://actions-results-receiver-production.githubapp.com/health\",\"https://run-actions-2-azure-eastus.actions.githubusercontent.com/12/health\",\"https://pipelinesghubeus11.actions.githubusercontent.com/_apis/health\"]"
+        },
+        "name": "SystemVssConnection",
+        "url": "https://pipelinesghubeus11.actions.githubusercontent.com/YtDrhldJpOQaubzGAtuX6RbdlVDFMWtjBQ53C9kKzlGhawB59z/",
+        "authorization": {
+          "parameters": {
+            "AccessToken": ***
+          },
+          "scheme": "OAuth"
+        },
+        "isShared": false,
+        "isReady": true
+      }
+    ]
+  },
+  "contextData": {
+    "github": {
+      "t": 2,
+      "d": [
+        {
+          "k": "ref",
+          "v": "refs/heads/master"
+        },
+        {
+          "k": "sha",
+          "v": "cc7f5a1b85b4333721e1948c7762040e74ff66fc"
+        },
+        {
+          "k": "repository",
+          "v": "moawiz-2706/Travel-TO-Pakistan-Tour"
+        },
+        {
+          "k": "repository_owner",
+          "v": "moawiz-2706"
+        },
+        {
+          "k": "repository_owner_id",
+          "v": "129047380"
+        },
+        {
+          "k": "repositoryUrl",
+          "v": "git://github.com/moawiz-2706/Travel-TO-Pakistan-Tour.git"
+        },
+        {
+          "k": "run_id",
+          "v": "15009813752"
+        },
+        {
+          "k": "run_number",
+          "v": "49"
+        },
+        {
+          "k": "retention_days",
+          "v": "90"
+        },
+        {
+          "k": "run_attempt",
+          "v": "1"
+        },
+        {
+          "k": "artifact_cache_size_limit",
+          "v": "10"
+        },
+        {
+          "k": "repository_visibility",
+          "v": "public"
+        },
+        {
+          "k": "repo-self-hosted-runners-disabled",
+          "v": false
+        },
+        {
+          "k": "enterprise-managed-business-id",
+          "v": ""
+        },
+        {
+          "k": "repository_id",
+          "v": "982464313"
+        },
+        {
+          "k": "actor_id",
+          "v": "129047380"
+        },
+        {
+          "k": "actor",
+          "v": "moawiz-2706"
+        },
+        {
+          "k": "triggering_actor",
+          "v": "moawiz-2706"
+        },
+        {
+          "k": "workflow",
+          "v": "CI/CD to Docker Hub and Minikube"
+        },
+        {
+          "k": "head_ref",
+          "v": ""
+        },
+        {
+          "k": "base_ref",
+          "v": ""
+        },
+        {
+          "k": "event_name",
+          "v": "push"
+        },
+        {
+          "k": "event",
+          "v": {
+            "t": 2,
+            "d": [
+              {
+                "k": "after",
+                "v": "cc7f5a1b85b4333721e1948c7762040e74ff66fc"
+              },
+              {
+                "k": "base_ref",
+                "v": null
+              },
+              {
+                "k": "before",
+                "v": "0cd7a79f2ad028801bd29aa12d7c40843c5177ca"
+              },
+              {
+                "k": "commits",
+                "v": {
+                  "t": 1,
+                  "a": [
+                    {
+                      "t": 2,
+                      "d": [
+                        {
+                          "k": "author",
+                          "v": {
+                            "t": 2,
+                            "d": [
+                              {
+                                "k": "email",
+                                "v": "moawiz@gmail.com"
+                              },
+                              {
+                                "k": "name",
+                                "v": "moawiz"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "k": "committer",
+                          "v": {
+                            "t": 2,
+                            "d": [
+                              {
+                                "k": "email",
+                                "v": "moawiz@gmail.com"
+                              },
+                              {
+                                "k": "name",
+                                "v": "moawiz"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "k": "distinct",
+                          "v": true
+                        },
+                        {
+                          "k": "id",
+                          "v": "cc7f5a1b85b4333721e1948c7762040e74ff66fc"
+                        },
+                        {
+                          "k": "message",
+                          "v": "22"
+                        },
+                        {
+                          "k": "timestamp",
+                          "v": "2025-05-14T05:56:16+05:00"
+                        },
+                        {
+                          "k": "tree_id",
+                          "v": "9dc6a336bfab0b259fdd880140478f666a72853f"
+                        },
+                        {
+                          "k": "url",
+                          "v": "https://github.com/moawiz-2706/Travel-TO-Pakistan-Tour/commit/cc7f5a1b85b4333721e1948c7762040e74ff66fc"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "k": "compare",
+                "v": "https://github.com/moawiz-2706/Travel-TO-Pakistan-Tour/compare/0cd7a79f2ad0...cc7f5a1b85b4"
+              },
+              {
+                "k": "created",
+                "v": false
+              },
+              {
+                "k": "deleted",
+                "v": false
+              },
+              {
+                "k": "forced",
+                "v": false
+              },
+              {
+                "k": "head_commit",
+                "v": {
+                  "t": 2,
+                  "d": [
+                    {
+                      "k": "author",
+                      "v": {
+                        "t": 2,
+                        "d": [
+                          {
+                            "k": "email",
+                            "v": "moawiz@gmail.com"
+                          },
+                          {
+                            "k": "name",
+                            "v": "moawiz"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "k": "committer",
+                      "v": {
+                        "t": 2,
+                        "d": [
+                          {
+                            "k": "email",
+                            "v": "moawiz@gmail.com"
+                          },
+                          {
+                            "k": "name",
+                            "v": "moawiz"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "k": "distinct",
+                      "v": true
+                    },
+                    {
+                      "k": "id",
+                      "v": "cc7f5a1b85b4333721e1948c7762040e74ff66fc"
+                    },
+                    {
+                      "k": "message",
+                      "v": "22"
+                    },
+                    {
+                      "k": "timestamp",
+                      "v": "2025-05-14T05:56:16+05:00"
+                    },
+                    {
+                      "k": "tree_id",
+                      "v": "9dc6a336bfab0b259fdd880140478f666a72853f"
+                    },
+                    {
+                      "k": "url",
+                      "v": "https://github.com/moawiz-2706/Travel-TO-Pakistan-Tour/commit/cc7f5a1b85b4333721e1948c7762040e74ff66fc"
+                    }
+                  ]
+                }
+              },
+              {
+                "k": "pusher",
+                "v": {
+                  "t": 2,
+                  "d": [
+                    {
+                      "k": "email",
+                      "v": "129047380+moawiz-2706@users.noreply.github.com"
+                    },
+                    {
+                      "k": "name",
+                      "v": "moawiz-2706"
+                    }
+                  ]
+                }
+              },
+              {
+                "k": "ref",
+                "v": "refs/heads/master"
+              },
+              {
+                "k": "repository",
+                "v": {
+                  "t": 2,
+                  "d": [
+                    {
+                      "k": "allow_forking",
+                      "v": true
+                    },
+                    {
+                      "k": "archive_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/{archive_format}{/ref}"
+                    },
+                    {
+                      "k": "archived",
+                      "v": false
+                    },
+                    {
+                      "k": "assignees_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/assignees{/user}"
+                    },
+                    {
+                      "k": "blobs_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/git/blobs{/sha}"
+                    },
+                    {
+                      "k": "branches_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/branches{/branch}"
+                    },
+                    {
+                      "k": "clone_url",
+                      "v": "https://github.com/moawiz-2706/Travel-TO-Pakistan-Tour.git"
+                    },
+                    {
+                      "k": "collaborators_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/collaborators{/collaborator}"
+                    },
+                    {
+                      "k": "comments_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/comments{/number}"
+                    },
+                    {
+                      "k": "commits_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/commits{/sha}"
+                    },
+                    {
+                      "k": "compare_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/compare/{base}...{head}"
+                    },
+                    {
+                      "k": "contents_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/contents/{+path}"
+                    },
+                    {
+                      "k": "contributors_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/contributors"
+                    },
+                    {
+                      "k": "created_at",
+                      "v": 1747093090.0
+                    },
+                    {
+                      "k": "default_branch",
+                      "v": "master"
+                    },
+                    {
+                      "k": "deployments_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/deployments"
+                    },
+                    {
+                      "k": "description",
+                      "v": null
+                    },
+                    {
+                      "k": "disabled",
+                      "v": false
+                    },
+                    {
+                      "k": "downloads_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/downloads"
+                    },
+                    {
+                      "k": "events_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/events"
+                    },
+                    {
+                      "k": "fork",
+                      "v": false
+                    },
+                    {
+                      "k": "forks",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "forks_count",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "forks_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/forks"
+                    },
+                    {
+                      "k": "full_name",
+                      "v": "moawiz-2706/Travel-TO-Pakistan-Tour"
+                    },
+                    {
+                      "k": "git_commits_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/git/commits{/sha}"
+                    },
+                    {
+                      "k": "git_refs_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/git/refs{/sha}"
+                    },
+                    {
+                      "k": "git_tags_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/git/tags{/sha}"
+                    },
+                    {
+                      "k": "git_url",
+                      "v": "git://github.com/moawiz-2706/Travel-TO-Pakistan-Tour.git"
+                    },
+                    {
+                      "k": "has_discussions",
+                      "v": false
+                    },
+                    {
+                      "k": "has_downloads",
+                      "v": true
+                    },
+                    {
+                      "k": "has_issues",
+                      "v": true
+                    },
+                    {
+                      "k": "has_pages",
+                      "v": false
+                    },
+                    {
+                      "k": "has_projects",
+                      "v": true
+                    },
+                    {
+                      "k": "has_wiki",
+                      "v": true
+                    },
+                    {
+                      "k": "homepage",
+                      "v": null
+                    },
+                    {
+                      "k": "hooks_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/hooks"
+                    },
+                    {
+                      "k": "html_url",
+                      "v": "https://github.com/moawiz-2706/Travel-TO-Pakistan-Tour"
+                    },
+                    {
+                      "k": "id",
+                      "v": 982464313.0
+                    },
+                    {
+                      "k": "is_template",
+                      "v": false
+                    },
+                    {
+                      "k": "issue_comment_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/issues/comments{/number}"
+                    },
+                    {
+                      "k": "issue_events_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/issues/events{/number}"
+                    },
+                    {
+                      "k": "issues_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/issues{/number}"
+                    },
+                    {
+                      "k": "keys_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/keys{/key_id}"
+                    },
+                    {
+                      "k": "labels_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/labels{/name}"
+                    },
+                    {
+                      "k": "language",
+                      "v": "JavaScript"
+                    },
+                    {
+                      "k": "languages_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/languages"
+                    },
+                    {
+                      "k": "license",
+                      "v": null
+                    },
+                    {
+                      "k": "master_branch",
+                      "v": "master"
+                    },
+                    {
+                      "k": "merges_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/merges"
+                    },
+                    {
+                      "k": "milestones_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/milestones{/number}"
+                    },
+                    {
+                      "k": "mirror_url",
+                      "v": null
+                    },
+                    {
+                      "k": "name",
+                      "v": "Travel-TO-Pakistan-Tour"
+                    },
+                    {
+                      "k": "node_id",
+                      "v": "R_kgDOOo83OQ"
+                    },
+                    {
+                      "k": "notifications_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/notifications{?since,all,participating}"
+                    },
+                    {
+                      "k": "open_issues",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "open_issues_count",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "owner",
+                      "v": {
+                        "t": 2,
+                        "d": [
+                          {
+                            "k": "avatar_url",
+                            "v": "https://avatars.githubusercontent.com/u/129047380?v=4"
+                          },
+                          {
+                            "k": "email",
+                            "v": "129047380+moawiz-2706@users.noreply.github.com"
+                          },
+                          {
+                            "k": "events_url",
+                            "v": "https://api.github.com/users/moawiz-2706/events{/privacy}"
+                          },
+                          {
+                            "k": "followers_url",
+                            "v": "https://api.github.com/users/moawiz-2706/followers"
+                          },
+                          {
+                            "k": "following_url",
+                            "v": "https://api.github.com/users/moawiz-2706/following{/other_user}"
+                          },
+                          {
+                            "k": "gists_url",
+                            "v": "https://api.github.com/users/moawiz-2706/gists{/gist_id}"
+                          },
+                          {
+                            "k": "gravatar_id",
+                            "v": ""
+                          },
+                          {
+                            "k": "html_url",
+                            "v": "https://github.com/moawiz-2706"
+                          },
+                          {
+                            "k": "id",
+                            "v": 129047380.0
+                          },
+                          {
+                            "k": "login",
+                            "v": "moawiz-2706"
+                          },
+                          {
+                            "k": "name",
+                            "v": "moawiz-2706"
+                          },
+                          {
+                            "k": "node_id",
+                            "v": "U_kgDOB7EbVA"
+                          },
+                          {
+                            "k": "organizations_url",
+                            "v": "https://api.github.com/users/moawiz-2706/orgs"
+                          },
+                          {
+                            "k": "received_events_url",
+                            "v": "https://api.github.com/users/moawiz-2706/received_events"
+                          },
+                          {
+                            "k": "repos_url",
+                            "v": "https://api.github.com/users/moawiz-2706/repos"
+                          },
+                          {
+                            "k": "site_admin",
+                            "v": false
+                          },
+                          {
+                            "k": "starred_url",
+                            "v": "https://api.github.com/users/moawiz-2706/starred{/owner}{/repo}"
+                          },
+                          {
+                            "k": "subscriptions_url",
+                            "v": "https://api.github.com/users/moawiz-2706/subscriptions"
+                          },
+                          {
+                            "k": "type",
+                            "v": "User"
+                          },
+                          {
+                            "k": "url",
+                            "v": "https://api.github.com/users/moawiz-2706"
+                          },
+                          {
+                            "k": "user_view_type",
+                            "v": "public"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "k": "private",
+                      "v": false
+                    },
+                    {
+                      "k": "pulls_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/pulls{/number}"
+                    },
+                    {
+                      "k": "pushed_at",
+                      "v": 1747184184.0
+                    },
+                    {
+                      "k": "releases_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/releases{/id}"
+                    },
+                    {
+                      "k": "size",
+                      "v": 129964.0
+                    },
+                    {
+                      "k": "ssh_url",
+                      "v": "git@github.com:moawiz-2706/Travel-TO-Pakistan-Tour.git"
+                    },
+                    {
+                      "k": "stargazers",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "stargazers_count",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "stargazers_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/stargazers"
+                    },
+                    {
+                      "k": "statuses_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/statuses/{sha}"
+                    },
+                    {
+                      "k": "subscribers_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/subscribers"
+                    },
+                    {
+                      "k": "subscription_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/subscription"
+                    },
+                    {
+                      "k": "svn_url",
+                      "v": "https://github.com/moawiz-2706/Travel-TO-Pakistan-Tour"
+                    },
+                    {
+                      "k": "tags_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/tags"
+                    },
+                    {
+                      "k": "teams_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/teams"
+                    },
+                    {
+                      "k": "topics",
+                      "v": {
+                        "t": 1
+                      }
+                    },
+                    {
+                      "k": "trees_url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour/git/trees{/sha}"
+                    },
+                    {
+                      "k": "updated_at",
+                      "v": "2025-05-14T00:39:11Z"
+                    },
+                    {
+                      "k": "url",
+                      "v": "https://api.github.com/repos/moawiz-2706/Travel-TO-Pakistan-Tour"
+                    },
+                    {
+                      "k": "visibility",
+                      "v": "public"
+                    },
+                    {
+                      "k": "watchers",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "watchers_count",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "web_commit_signoff_required",
+                      "v": false
+                    }
+                  ]
+                }
+              },
+              {
+                "k": "sender",
+                "v": {
+                  "t": 2,
+                  "d": [
+                    {
+                      "k": "avatar_url",
+                      "v": "https://avatars.githubusercontent.com/u/129047380?v=4"
+                    },
+                    {
+                      "k": "events_url",
+                      "v": "https://api.github.com/users/moawiz-2706/events{/privacy}"
+                    },
+                    {
+                      "k": "followers_url",
+                      "v": "https://api.github.com/users/moawiz-2706/followers"
+                    },
+                    {
+                      "k": "following_url",
+                      "v": "https://api.github.com/users/moawiz-2706/following{/other_user}"
+                    },
+                    {
+                      "k": "gists_url",
+                      "v": "https://api.github.com/users/moawiz-2706/gists{/gist_id}"
+                    },
+                    {
+                      "k": "gravatar_id",
+                      "v": ""
+                    },
+                    {
+                      "k": "html_url",
+                      "v": "https://github.com/moawiz-2706"
+                    },
+                    {
+                      "k": "id",
+                      "v": 129047380.0
+                    },
+                    {
+                      "k": "login",
+                      "v": "moawiz-2706"
+                    },
+                    {
+                      "k": "node_id",
+                      "v": "U_kgDOB7EbVA"
+                    },
+                    {
+                      "k": "organizations_url",
+                      "v": "https://api.github.com/users/moawiz-2706/orgs"
+                    },
+                    {
+                      "k": "received_events_url",
+                      "v": "https://api.github.com/users/moawiz-2706/received_events"
+                    },
+                    {
+                      "k": "repos_url",
+                      "v": "https://api.github.com/users/moawiz-2706/repos"
+                    },
+                    {
+                      "k": "site_admin",
+                      "v": false
+                    },
+                    {
+                      "k": "starred_url",
+                      "v": "https://api.github.com/users/moawiz-2706/starred{/owner}{/repo}"
+                    },
+                    {
+                      "k": "subscriptions_url",
+                      "v": "https://api.github.com/users/moawiz-2706/subscriptions"
+                    },
+                    {
+                      "k": "type",
+                      "v": "User"
+                    },
+                    {
+                      "k": "url",
+                      "v": "https://api.github.com/users/moawiz-2706"
+                    },
+                    {
+                      "k": "user_view_type",
+                      "v": "public"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "k": "server_url",
+          "v": "https://github.com"
+        },
+        {
+          "k": "api_url",
+          "v": "https://api.github.com"
+        },
+        {
+          "k": "graphql_url",
+          "v": "https://api.github.com/graphql"
+        },
+        {
+          "k": "ref_name",
+          "v": "master"
+        },
+        {
+          "k": "ref_protected",
+          "v": false
+        },
+        {
+          "k": "ref_type",
+          "v": "branch"
+        },
+        {
+          "k": "secret_source",
+          "v": "Actions"
+        },
+        {
+          "k": "workflow_ref",
+          "v": "moawiz-2706/Travel-TO-Pakistan-Tour/.github/workflows/deploy.yml@refs/heads/master"
+        },
+        {
+          "k": "workflow_sha",
+          "v": "cc7f5a1b85b4333721e1948c7762040e74ff66fc"
+        }
+      ]
+    },
+    "run-feature-flags": {
+      "t": 2,
+      "d": [
+        {
+          "k": "actions_stream_logs_via_results_service",
+          "v": true
+        },
+        {
+          "k": "actions_use_results_service",
+          "v": true
+        },
+        {
+          "k": "actions_uses_cache_service_v2",
+          "v": true
+        },
+        {
+          "k": "block_artifacts_v3_exempted",
+          "v": false
+        },
+        {
+          "k": "larger_runners_custom_image_generation",
+          "v": false
+        }
+      ]
+    },
+    "partialrerun": false,
+    "needs": {
+      "t": 2
+    },
+    "vars": null,
+    "inputs": {
+      "t": 2
+    },
+    "matrix": null,
+    "strategy": {
+      "t": 2,
+      "d": [
+        {
+          "k": "fail-fast",
+          "v": true
+        },
+        {
+          "k": "job-index",
+          "v": 0.0
+        },
+        {
+          "k": "job-total",
+          "v": 1.0
+        },
+        {
+          "k": "max-parallel",
+          "v": 1.0
+        }
+      ]
+    },
+    "EndpointsOverride": null
+  }
+}
+[2025-05-14 00:56:33Z INFO JobRunner] Job ID e07742bd-189a-5079-918b-43f8b2f94b89
+[2025-05-14 00:56:33Z INFO ConfigurationStore] currentAssemblyLocation: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin\Runner.Worker.dll
+[2025-05-14 00:56:33Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:33Z INFO ConfigurationStore] binPath: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin
+[2025-05-14 00:56:33Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:33Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:33Z INFO ConfigurationStore] RootFolder: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner
+[2025-05-14 00:56:33Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:33Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:33Z INFO HostContext] Well known config file 'Runner': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.runner'
+[2025-05-14 00:56:33Z INFO ConfigurationStore] ConfigFilePath: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.runner
+[2025-05-14 00:56:33Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:33Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:33Z INFO HostContext] Well known config file 'MigratedRunner': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.runner_migrated'
+[2025-05-14 00:56:33Z INFO ConfigurationStore] MigratedConfigFilePath: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.runner_migrated
+[2025-05-14 00:56:33Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:33Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:33Z INFO HostContext] Well known config file 'Credentials': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials'
+[2025-05-14 00:56:33Z INFO ConfigurationStore] CredFilePath: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials
+[2025-05-14 00:56:33Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:33Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:33Z INFO HostContext] Well known config file 'MigratedCredentials': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials_migrated'
+[2025-05-14 00:56:33Z INFO ConfigurationStore] MigratedCredFilePath: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials_migrated
+[2025-05-14 00:56:33Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:33Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:33Z INFO HostContext] Well known config file 'Service': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.service'
+[2025-05-14 00:56:33Z INFO ConfigurationStore] ServiceConfigFilePath: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.service
+[2025-05-14 00:56:33Z INFO ConfigurationStore] Read setting file: 325 chars
+[2025-05-14 00:56:33Z INFO JobRunner] Creating job server with URL: https://pipelinesghubeus11.actions.githubusercontent.com/YtDrhldJpOQaubzGAtuX6RbdlVDFMWtjBQ53C9kKzlGhawB59z/
+[2025-05-14 00:56:33Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2025-05-14 00:56:33Z INFO Worker] Listening for cancel message from the channel.
+[2025-05-14 00:56:33Z INFO Worker] Waiting for the job to complete or for a cancel message from the channel.
+[2025-05-14 00:56:34Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2025-05-14 00:56:34Z INFO JobServer] Creating websocket client ...wss://results-receiver.actions.githubusercontent.com/_ws/ingest.sock
+[2025-05-14 00:56:34Z INFO JobServer] Attempting to start websocket client with delay 00:00:00.
+[2025-05-14 00:56:34Z INFO JobServerQueue] Initializing results client
+[2025-05-14 00:56:34Z INFO JobServerQueue] Start process web console line queue.
+[2025-05-14 00:56:34Z INFO JobServerQueue] Start process file upload queue.
+[2025-05-14 00:56:34Z INFO JobServerQueue] Start results file upload queue.
+[2025-05-14 00:56:34Z INFO JobServerQueue] Starting results-based upload queue...
+[2025-05-14 00:56:34Z INFO JobServerQueue] Start process timeline update queue.
+[2025-05-14 00:56:34Z INFO ExecutionContext] Initialize GitHub context
+[2025-05-14 00:56:34Z INFO ExecutionContext] Initialize Env context
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:34Z INFO JobRunner] Starting the job execution context.
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:34Z INFO JobRunner] Validating directory permissions for: 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Tools': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_tool'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Temp': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp'
+[2025-05-14 00:56:34Z INFO JobRunner] Getting job extension.
+[2025-05-14 00:56:34Z INFO JobRunner] Initialize job. Getting all job steps.
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:34Z INFO HostContext] Well known config file 'Credentials': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.credentials'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:34Z INFO HostContext] Well known config file 'SetupInfo': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\.setup_info'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:34Z INFO PipelineDirectoryManager] Loading tracking config if exists: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_PipelineMapping\moawiz-2706/Travel-TO-Pakistan-Tour\PipelineFolder.json
+[2025-05-14 00:56:34Z INFO PipelineDirectoryManager] Updating job run properties.
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:34Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:35Z INFO JobExtension] Downloading actions
+[2025-05-14 00:56:35Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:35Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:35Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:35Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:56:35Z INFO JobServer] Successfully started websocket client.
+[2025-05-14 00:56:35Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'b75fe506-81c6-4def-8757-7da45e879172', success rate: 1/1.
+[2025-05-14 00:56:35Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:35Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:35Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:35Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:56:35Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:35Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:35Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:35Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:56:35Z INFO ActionManager] Save archive 'https://api.github.com/repos/actions/checkout/zipball/11bd71901bbe5b1630ceea73d27597364c9af683' into C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions\_temp_33221289-c5ff-426f-8b35-9f703678b810\aa5a86e4-20f0-4310-bef4-31103b30d827.zip.
+[2025-05-14 00:56:35Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'b75fe506-81c6-4def-8757-7da45e879172', success rate: 1/1.
+[2025-05-14 00:56:37Z INFO JobServerQueue] Job timeline record has been updated for the first time.
+[2025-05-14 00:56:37Z INFO ActionManager] Request URL: https://api.github.com/repos/actions/checkout/zipball/11bd71901bbe5b1630ceea73d27597364c9af683 X-GitHub-Request-Id: E343:D5453:06D9:978E:6823EA44 Http Status: OK
+[2025-05-14 00:56:38Z INFO ActionManager] Finished getting action repository.
+[2025-05-14 00:56:38Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:38Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:38Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:38Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:56:38Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:38Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:38Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:38Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:56:38Z INFO ActionManager] Save archive 'https://api.github.com/repos/docker/build-push-action/zipball/ca052bb54ab0790a636c9b5f226502c73d547a25' into C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions\_temp_9d2ee906-492f-4026-9200-cfc47bf98798\b8651753-7150-4610-89e9-d808659c355c.zip.
+[2025-05-14 00:56:38Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'b75fe506-81c6-4def-8757-7da45e879172', success rate: 1/1.
+[2025-05-14 00:56:41Z INFO ActionManager] Request URL: https://api.github.com/repos/docker/build-push-action/zipball/ca052bb54ab0790a636c9b5f226502c73d547a25 X-GitHub-Request-Id: E34A:10DFCC:0758:9820:6823EA47 Http Status: OK
+[2025-05-14 00:56:41Z INFO ActionManager] Finished getting action repository.
+[2025-05-14 00:56:41Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:41Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:41Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:41Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:56:41Z INFO ActionManifestManager] Load schema file with definitions: [
+  "null",
+  "boolean",
+  "number",
+  "string",
+  "sequence",
+  "mapping",
+  "any",
+  "action-root",
+  "inputs",
+  "input",
+  "outputs",
+  "output-definition",
+  "runs",
+  "container-runs",
+  "container-runs-args",
+  "container-runs-env",
+  "node-runs",
+  "plugin-runs",
+  "composite-runs",
+  "composite-steps",
+  "composite-step",
+  "run-step",
+  "uses-step",
+  "container-runs-context",
+  "output-value",
+  "input-default-context",
+  "non-empty-string",
+  "string-steps-context",
+  "boolean-steps-context",
+  "step-env",
+  "step-if",
+  "step-with"
+]
+[2025-05-14 00:56:41Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:41Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:41Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:41Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:56:42Z INFO ActionManifestManager] Loaded action.yml file: {
+  "name": "Checkout",
+  "description": "Checkout a Git repository at a particular version",
+  "inputs": {
+    "type": 2,
+    "map": [
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 4,
+          "col": 3,
+          "lit": "repository"
+        },
+        "value": {
+          "type": 3,
+          "file": 2,
+          "line": 6,
+          "col": 14,
+          "expr": "github.repository"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 7,
+          "col": 3,
+          "lit": "ref"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 12,
+          "col": 3,
+          "lit": "token"
+        },
+        "value": {
+          "type": 3,
+          "file": 2,
+          "line": 24,
+          "col": 14,
+          "expr": "github.token"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 25,
+          "col": 3,
+          "lit": "ssh-key"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 37,
+          "col": 3,
+          "lit": "ssh-known-hosts"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 42,
+          "col": 3,
+          "lit": "ssh-strict"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 47,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 48,
+          "col": 3,
+          "lit": "ssh-user"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 51,
+          "col": 14,
+          "lit": "git"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 52,
+          "col": 3,
+          "lit": "persist-credentials"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 54,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 55,
+          "col": 3,
+          "lit": "path"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 57,
+          "col": 3,
+          "lit": "clean"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 59,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 60,
+          "col": 3,
+          "lit": "filter"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 64,
+          "col": 14,
+          "lit": ""
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 65,
+          "col": 3,
+          "lit": "sparse-checkout"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 69,
+          "col": 14,
+          "lit": ""
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 70,
+          "col": 3,
+          "lit": "sparse-checkout-cone-mode"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 73,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 74,
+          "col": 3,
+          "lit": "fetch-depth"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 76,
+          "col": 14,
+          "lit": "1"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 77,
+          "col": 3,
+          "lit": "fetch-tags"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 79,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 80,
+          "col": 3,
+          "lit": "show-progress"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 82,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 83,
+          "col": 3,
+          "lit": "lfs"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 85,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 86,
+          "col": 3,
+          "lit": "submodules"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 94,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 95,
+          "col": 3,
+          "lit": "set-safe-directory"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 97,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 98,
+          "col": 3,
+          "lit": "github-server-url"
+        },
+        "value": ""
+      }
+    ]
+  },
+  "execution": {
+    "executionType": "nodeJS",
+    "hasPre": false,
+    "hasPost": true,
+    "script": "dist/index.js",
+    "pre": null,
+    "post": "dist/index.js",
+    "nodeVersion": "node20",
+    "cleanupCondition": "always()",
+    "initCondition": "always()"
+  },
+  "deprecated": null
+}
+[2025-05-14 00:56:42Z INFO ActionManager] Action node.js file: dist/index.js, no more preparation.
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:56:42Z INFO ActionManager] Load action that reference repository from 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions\actions\checkout\v4'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:56:42Z INFO ActionManifestManager] Loaded action.yml file: {
+  "name": "Checkout",
+  "description": "Checkout a Git repository at a particular version",
+  "inputs": {
+    "type": 2,
+    "map": [
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 4,
+          "col": 3,
+          "lit": "repository"
+        },
+        "value": {
+          "type": 3,
+          "file": 2,
+          "line": 6,
+          "col": 14,
+          "expr": "github.repository"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 7,
+          "col": 3,
+          "lit": "ref"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 12,
+          "col": 3,
+          "lit": "token"
+        },
+        "value": {
+          "type": 3,
+          "file": 2,
+          "line": 24,
+          "col": 14,
+          "expr": "github.token"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 25,
+          "col": 3,
+          "lit": "ssh-key"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 37,
+          "col": 3,
+          "lit": "ssh-known-hosts"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 42,
+          "col": 3,
+          "lit": "ssh-strict"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 47,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 48,
+          "col": 3,
+          "lit": "ssh-user"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 51,
+          "col": 14,
+          "lit": "git"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 52,
+          "col": 3,
+          "lit": "persist-credentials"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 54,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 55,
+          "col": 3,
+          "lit": "path"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 57,
+          "col": 3,
+          "lit": "clean"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 59,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 60,
+          "col": 3,
+          "lit": "filter"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 64,
+          "col": 14,
+          "lit": ""
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 65,
+          "col": 3,
+          "lit": "sparse-checkout"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 69,
+          "col": 14,
+          "lit": ""
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 70,
+          "col": 3,
+          "lit": "sparse-checkout-cone-mode"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 73,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 74,
+          "col": 3,
+          "lit": "fetch-depth"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 76,
+          "col": 14,
+          "lit": "1"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 77,
+          "col": 3,
+          "lit": "fetch-tags"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 79,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 80,
+          "col": 3,
+          "lit": "show-progress"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 82,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 83,
+          "col": 3,
+          "lit": "lfs"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 85,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 86,
+          "col": 3,
+          "lit": "submodules"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 94,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 95,
+          "col": 3,
+          "lit": "set-safe-directory"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 97,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 98,
+          "col": 3,
+          "lit": "github-server-url"
+        },
+        "value": ""
+      }
+    ]
+  },
+  "execution": {
+    "executionType": "nodeJS",
+    "hasPre": false,
+    "hasPost": true,
+    "script": "dist/index.js",
+    "pre": null,
+    "post": "dist/index.js",
+    "nodeVersion": "node20",
+    "cleanupCondition": "always()",
+    "initCondition": "always()"
+  },
+  "deprecated": null
+}
+[2025-05-14 00:56:42Z INFO ActionManager] Action pre node.js file: N/A.
+[2025-05-14 00:56:42Z INFO ActionManager] Action node.js file: dist/index.js.
+[2025-05-14 00:56:42Z INFO ActionManager] Action post node.js file: dist/index.js.
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:56:42Z INFO ActionManifestManager] Ignore action property author.
+[2025-05-14 00:56:42Z INFO ActionManifestManager] Ignore action property branding.
+[2025-05-14 00:56:42Z INFO ActionManifestManager] Loaded action.yml file: {
+  "name": "Build and push Docker images",
+  "description": "Build and push Docker images with Buildx",
+  "inputs": {
+    "type": 2,
+    "map": [
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 10,
+          "col": 3,
+          "lit": "add-hosts"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 13,
+          "col": 3,
+          "lit": "allow"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 16,
+          "col": 3,
+          "lit": "annotations"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 19,
+          "col": 3,
+          "lit": "attests"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 22,
+          "col": 3,
+          "lit": "build-args"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 25,
+          "col": 3,
+          "lit": "build-contexts"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 28,
+          "col": 3,
+          "lit": "builder"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 31,
+          "col": 3,
+          "lit": "cache-from"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 34,
+          "col": 3,
+          "lit": "cache-to"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 37,
+          "col": 3,
+          "lit": "cgroup-parent"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 40,
+          "col": 3,
+          "lit": "context"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 43,
+          "col": 3,
+          "lit": "file"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 46,
+          "col": 3,
+          "lit": "labels"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 49,
+          "col": 3,
+          "lit": "load"
+        },
+        "value": {
+          "type": 0,
+          "file": 3,
+          "line": 52,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 53,
+          "col": 3,
+          "lit": "network"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 56,
+          "col": 3,
+          "lit": "no-cache"
+        },
+        "value": {
+          "type": 0,
+          "file": 3,
+          "line": 59,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 60,
+          "col": 3,
+          "lit": "no-cache-filters"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 63,
+          "col": 3,
+          "lit": "outputs"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 66,
+          "col": 3,
+          "lit": "platforms"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 69,
+          "col": 3,
+          "lit": "provenance"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 72,
+          "col": 3,
+          "lit": "pull"
+        },
+        "value": {
+          "type": 0,
+          "file": 3,
+          "line": 75,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 76,
+          "col": 3,
+          "lit": "push"
+        },
+        "value": {
+          "type": 0,
+          "file": 3,
+          "line": 79,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 80,
+          "col": 3,
+          "lit": "sbom"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 83,
+          "col": 3,
+          "lit": "secrets"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 86,
+          "col": 3,
+          "lit": "secret-envs"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 89,
+          "col": 3,
+          "lit": "secret-files"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 92,
+          "col": 3,
+          "lit": "shm-size"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 95,
+          "col": 3,
+          "lit": "ssh"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 98,
+          "col": 3,
+          "lit": "tags"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 101,
+          "col": 3,
+          "lit": "target"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 104,
+          "col": 3,
+          "lit": "ulimit"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 107,
+          "col": 3,
+          "lit": "github-token"
+        },
+        "value": {
+          "type": 3,
+          "file": 3,
+          "line": 109,
+          "col": 14,
+          "expr": "github.token"
+        }
+      }
+    ]
+  },
+  "execution": {
+    "executionType": "nodeJS",
+    "hasPre": false,
+    "hasPost": true,
+    "script": "dist/index.js",
+    "pre": null,
+    "post": "dist/index.js",
+    "nodeVersion": "node20",
+    "cleanupCondition": "always()",
+    "initCondition": "always()"
+  },
+  "deprecated": null
+}
+[2025-05-14 00:56:42Z INFO ActionManager] Action node.js file: dist/index.js, no more preparation.
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:56:42Z INFO ActionManager] Load action that reference repository from 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions\docker\build-push-action\v5'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:56:42Z INFO ActionManifestManager] Ignore action property author.
+[2025-05-14 00:56:42Z INFO ActionManifestManager] Ignore action property branding.
+[2025-05-14 00:56:42Z INFO ActionManifestManager] Loaded action.yml file: {
+  "name": "Build and push Docker images",
+  "description": "Build and push Docker images with Buildx",
+  "inputs": {
+    "type": 2,
+    "map": [
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 10,
+          "col": 3,
+          "lit": "add-hosts"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 13,
+          "col": 3,
+          "lit": "allow"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 16,
+          "col": 3,
+          "lit": "annotations"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 19,
+          "col": 3,
+          "lit": "attests"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 22,
+          "col": 3,
+          "lit": "build-args"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 25,
+          "col": 3,
+          "lit": "build-contexts"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 28,
+          "col": 3,
+          "lit": "builder"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 31,
+          "col": 3,
+          "lit": "cache-from"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 34,
+          "col": 3,
+          "lit": "cache-to"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 37,
+          "col": 3,
+          "lit": "cgroup-parent"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 40,
+          "col": 3,
+          "lit": "context"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 43,
+          "col": 3,
+          "lit": "file"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 46,
+          "col": 3,
+          "lit": "labels"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 49,
+          "col": 3,
+          "lit": "load"
+        },
+        "value": {
+          "type": 0,
+          "file": 3,
+          "line": 52,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 53,
+          "col": 3,
+          "lit": "network"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 56,
+          "col": 3,
+          "lit": "no-cache"
+        },
+        "value": {
+          "type": 0,
+          "file": 3,
+          "line": 59,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 60,
+          "col": 3,
+          "lit": "no-cache-filters"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 63,
+          "col": 3,
+          "lit": "outputs"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 66,
+          "col": 3,
+          "lit": "platforms"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 69,
+          "col": 3,
+          "lit": "provenance"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 72,
+          "col": 3,
+          "lit": "pull"
+        },
+        "value": {
+          "type": 0,
+          "file": 3,
+          "line": 75,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 76,
+          "col": 3,
+          "lit": "push"
+        },
+        "value": {
+          "type": 0,
+          "file": 3,
+          "line": 79,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 80,
+          "col": 3,
+          "lit": "sbom"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 83,
+          "col": 3,
+          "lit": "secrets"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 86,
+          "col": 3,
+          "lit": "secret-envs"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 89,
+          "col": 3,
+          "lit": "secret-files"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 92,
+          "col": 3,
+          "lit": "shm-size"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 95,
+          "col": 3,
+          "lit": "ssh"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 98,
+          "col": 3,
+          "lit": "tags"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 101,
+          "col": 3,
+          "lit": "target"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 104,
+          "col": 3,
+          "lit": "ulimit"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 3,
+          "line": 107,
+          "col": 3,
+          "lit": "github-token"
+        },
+        "value": {
+          "type": 3,
+          "file": 3,
+          "line": 109,
+          "col": 14,
+          "expr": "github.token"
+        }
+      }
+    ]
+  },
+  "execution": {
+    "executionType": "nodeJS",
+    "hasPre": false,
+    "hasPost": true,
+    "script": "dist/index.js",
+    "pre": null,
+    "post": "dist/index.js",
+    "nodeVersion": "node20",
+    "cleanupCondition": "always()",
+    "initCondition": "always()"
+  },
+  "deprecated": null
+}
+[2025-05-14 00:56:42Z INFO ActionManager] Action pre node.js file: N/A.
+[2025-05-14 00:56:42Z INFO ActionManager] Action node.js file: dist/index.js.
+[2025-05-14 00:56:42Z INFO ActionManager] Action post node.js file: dist/index.js.
+[2025-05-14 00:56:42Z INFO JobExtension] Adding .
+[2025-05-14 00:56:42Z INFO JobExtension] Adding .
+[2025-05-14 00:56:42Z INFO JobExtension] Adding .
+[2025-05-14 00:56:42Z INFO JobExtension] Adding .
+[2025-05-14 00:56:42Z INFO JobExtension] Adding .
+[2025-05-14 00:56:42Z INFO JobExtension] Adding .
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:42Z INFO JobExtension] Total accessible running process: 403.
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:42Z INFO JobExtension] Start checking server connectivity.
+[2025-05-14 00:56:42Z INFO JobExtension] Check server connectivity for https://acghubeus0.actions.githubusercontent.com/_apis/health.
+[2025-05-14 00:56:42Z INFO JobExtension] Check server connectivity for https://results-receiver.actions.githubusercontent.com/health.
+[2025-05-14 00:56:42Z INFO JobExtension] Check server connectivity for https://pkg.actions.githubusercontent.com/health.
+[2025-05-14 00:56:42Z INFO JobExtension] Check server connectivity for https://actions-results-receiver-production.githubapp.com/health.
+[2025-05-14 00:56:42Z INFO JobExtension] Check server connectivity for https://run-actions-2-azure-eastus.actions.githubusercontent.com/12/health.
+[2025-05-14 00:56:42Z INFO JobExtension] Check server connectivity for https://pipelinesghubeus11.actions.githubusercontent.com/_apis/health.
+[2025-05-14 00:56:42Z INFO JobExtension] Start checking service connectivity in background.
+[2025-05-14 00:56:42Z INFO ExecutionContext] Publish step telemetry for current step {
+  "action": "setup_job",
+  "type": "runner",
+  "stage": "Pre",
+  "stepId": "b75fe506-81c6-4def-8757-7da45e879172",
+  "result": "succeeded",
+  "errorMessages": [],
+  "executionTimeInSeconds": 8,
+  "startTime": "2025-05-14T00:56:34.8448273Z",
+  "finishTime": "2025-05-14T00:56:42.8364464Z"
+}.
+[2025-05-14 00:56:42Z INFO JobRunner] Total job steps: 6.
+[2025-05-14 00:56:42Z INFO JobRunner] Run all job steps.
+[2025-05-14 00:56:42Z INFO StepsRunner] Processing step: DisplayName='Checkout code'
+[2025-05-14 00:56:42Z INFO StepsRunner] Evaluating: success()
+[2025-05-14 00:56:42Z INFO StepsRunner] Result: true
+[2025-05-14 00:56:42Z INFO StepsRunner] Starting the step.
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:42Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:42Z INFO StepsRunner] Which2: 'chcp'
+[2025-05-14 00:56:42Z INFO JobServerQueue] Got a step log file to send to results service.
+[2025-05-14 00:56:42Z INFO StepsRunner] Location: 'C:\Windows\system32\chcp.COM'
+[2025-05-14 00:56:42Z INFO JobServerQueue] Starting upload of step log file to results service ResultsLog, C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag\blocks\deaccac3-24dc-4c85-8a66-b3ca2c2bd09f_b75fe506-81c6-4def-8757-7da45e879172.1
+[2025-05-14 00:56:42Z INFO ProcessInvokerWrapper] Starting process:
+[2025-05-14 00:56:42Z INFO ProcessInvokerWrapper]   File name: 'C:\Windows\system32\chcp.COM'
+[2025-05-14 00:56:42Z INFO ProcessInvokerWrapper]   Arguments: '65001'
+[2025-05-14 00:56:42Z INFO ProcessInvokerWrapper]   Working directory: 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:42Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2025-05-14 00:56:42Z INFO ProcessInvokerWrapper]   Encoding web name:  ; code page: ''
+[2025-05-14 00:56:42Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'False'
+[2025-05-14 00:56:42Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2025-05-14 00:56:42Z INFO ProcessInvokerWrapper]   Persist current code page: 'True'
+[2025-05-14 00:56:42Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2025-05-14 00:56:42Z INFO ProcessInvokerWrapper]   High priority process: 'False'
+[2025-05-14 00:56:42Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'b75fe506-81c6-4def-8757-7da45e879172', success rate: 1/1.
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper] Process started with process id 26580, waiting for process exit.
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper] Finished process 26580 with exit code 0, and elapsed time 00:00:00.0527365.
+[2025-05-14 00:56:43Z INFO StepsRunner] Successfully returned to code page 65001 (UTF8)
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:56:43Z INFO ActionManager] Load action that reference repository from 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions\actions\checkout\v4'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Loaded action.yml file: {
+  "name": "Checkout",
+  "description": "Checkout a Git repository at a particular version",
+  "inputs": {
+    "type": 2,
+    "map": [
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 4,
+          "col": 3,
+          "lit": "repository"
+        },
+        "value": {
+          "type": 3,
+          "file": 2,
+          "line": 6,
+          "col": 14,
+          "expr": "github.repository"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 7,
+          "col": 3,
+          "lit": "ref"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 12,
+          "col": 3,
+          "lit": "token"
+        },
+        "value": {
+          "type": 3,
+          "file": 2,
+          "line": 24,
+          "col": 14,
+          "expr": "github.token"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 25,
+          "col": 3,
+          "lit": "ssh-key"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 37,
+          "col": 3,
+          "lit": "ssh-known-hosts"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 42,
+          "col": 3,
+          "lit": "ssh-strict"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 47,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 48,
+          "col": 3,
+          "lit": "ssh-user"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 51,
+          "col": 14,
+          "lit": "git"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 52,
+          "col": 3,
+          "lit": "persist-credentials"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 54,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 55,
+          "col": 3,
+          "lit": "path"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 57,
+          "col": 3,
+          "lit": "clean"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 59,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 60,
+          "col": 3,
+          "lit": "filter"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 64,
+          "col": 14,
+          "lit": ""
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 65,
+          "col": 3,
+          "lit": "sparse-checkout"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 69,
+          "col": 14,
+          "lit": ""
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 70,
+          "col": 3,
+          "lit": "sparse-checkout-cone-mode"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 73,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 74,
+          "col": 3,
+          "lit": "fetch-depth"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 76,
+          "col": 14,
+          "lit": "1"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 77,
+          "col": 3,
+          "lit": "fetch-tags"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 79,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 80,
+          "col": 3,
+          "lit": "show-progress"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 82,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 83,
+          "col": 3,
+          "lit": "lfs"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 85,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 86,
+          "col": 3,
+          "lit": "submodules"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 94,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 95,
+          "col": 3,
+          "lit": "set-safe-directory"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 97,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 98,
+          "col": 3,
+          "lit": "github-server-url"
+        },
+        "value": ""
+      }
+    ]
+  },
+  "execution": {
+    "executionType": "nodeJS",
+    "hasPre": false,
+    "hasPost": true,
+    "script": "dist/index.js",
+    "pre": null,
+    "post": "dist/index.js",
+    "nodeVersion": "node20",
+    "cleanupCondition": "always()",
+    "initCondition": "always()"
+  },
+  "deprecated": null
+}
+[2025-05-14 00:56:43Z INFO ActionManager] Action pre node.js file: N/A.
+[2025-05-14 00:56:43Z INFO ActionManager] Action node.js file: dist/index.js.
+[2025-05-14 00:56:43Z INFO ActionManager] Action post node.js file: dist/index.js.
+[2025-05-14 00:56:43Z INFO ExecutionContext] Reserve record order 8 to 14 for post job actions.
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Temp': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp'
+[2025-05-14 00:56:43Z INFO ExecutionContext] Write event payload to C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp\_github_workflow\event.json
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Temp': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp'
+[2025-05-14 00:56:43Z INFO ExtensionManager] Getting extensions for interface: 'GitHub.Runner.Worker.IFileCommandExtension'
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.AddPathFileCommand, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.SetEnvFileCommand, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.CreateStepSummaryCommand, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.SaveStateFileCommand, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.SetOutputFileCommand, Runner.Worker
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'repository': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 6,
+  "col": 14,
+  "lit": "moawiz-2706/Travel-TO-Pakistan-Tour"
+}
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'ref': default value evaluate result: ""
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'token': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 24,
+  "col": 14,
+  "lit": "***"
+}
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'ssh-key': default value evaluate result: ""
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'ssh-known-hosts': default value evaluate result: ""
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'ssh-strict': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 47,
+  "col": 14,
+  "lit": "true"
+}
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'ssh-user': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 51,
+  "col": 14,
+  "lit": "git"
+}
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'persist-credentials': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 54,
+  "col": 14,
+  "lit": "true"
+}
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'path': default value evaluate result: ""
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'clean': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 59,
+  "col": 14,
+  "lit": "true"
+}
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'filter': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 64,
+  "col": 14,
+  "lit": ""
+}
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'sparse-checkout': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 69,
+  "col": 14,
+  "lit": ""
+}
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'sparse-checkout-cone-mode': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 73,
+  "col": 14,
+  "lit": "true"
+}
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'fetch-depth': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 76,
+  "col": 14,
+  "lit": "1"
+}
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'fetch-tags': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 79,
+  "col": 14,
+  "lit": "false"
+}
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'show-progress': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 82,
+  "col": 14,
+  "lit": "true"
+}
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'lfs': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 85,
+  "col": 14,
+  "lit": "false"
+}
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'submodules': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 94,
+  "col": 14,
+  "lit": "false"
+}
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'set-safe-directory': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 97,
+  "col": 14,
+  "lit": "true"
+}
+[2025-05-14 00:56:43Z INFO ActionManifestManager] Input 'github-server-url': default value evaluate result: ""
+[2025-05-14 00:56:43Z INFO ExtensionManager] Getting extensions for interface: 'GitHub.Runner.Worker.IActionCommandExtension'
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.InternalPluginSetRepoPathCommandExtension, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.SetEnvCommandExtension, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.SetOutputCommandExtension, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.SaveStateCommandExtension, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.AddPathCommandExtension, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.AddMaskCommandExtension, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.AddMatcherCommandExtension, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.RemoveMatcherCommandExtension, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.WarningCommandExtension, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.ErrorCommandExtension, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.NoticeCommandExtension, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.DebugCommandExtension, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.GroupCommandExtension, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.EndGroupCommandExtension, Runner.Worker
+[2025-05-14 00:56:43Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.EchoCommandExtension, Runner.Worker
+[2025-05-14 00:56:43Z INFO ActionCommandManager] Register action command extension for command internal-set-repo-path
+[2025-05-14 00:56:43Z INFO ActionCommandManager] Register action command extension for command set-env
+[2025-05-14 00:56:43Z INFO ActionCommandManager] Register action command extension for command set-output
+[2025-05-14 00:56:43Z INFO ActionCommandManager] Register action command extension for command save-state
+[2025-05-14 00:56:43Z INFO ActionCommandManager] Register action command extension for command add-path
+[2025-05-14 00:56:43Z INFO ActionCommandManager] Register action command extension for command add-mask
+[2025-05-14 00:56:43Z INFO ActionCommandManager] Register action command extension for command add-matcher
+[2025-05-14 00:56:43Z INFO ActionCommandManager] Register action command extension for command remove-matcher
+[2025-05-14 00:56:43Z INFO ActionCommandManager] Register action command extension for command warning
+[2025-05-14 00:56:43Z INFO ActionCommandManager] Register action command extension for command error
+[2025-05-14 00:56:43Z INFO ActionCommandManager] Register action command extension for command notice
+[2025-05-14 00:56:43Z INFO ActionCommandManager] Register action command extension for command debug
+[2025-05-14 00:56:43Z INFO ActionCommandManager] Register action command extension for command group
+[2025-05-14 00:56:43Z INFO ActionCommandManager] Register action command extension for command endgroup
+[2025-05-14 00:56:43Z INFO ActionCommandManager] Register action command extension for command echo
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:43Z INFO HostContext] Well known directory 'Externals': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\externals'
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper] Starting process:
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper]   File name: 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\externals\node20\bin\node.exe'
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper]   Arguments: '"C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions\actions\checkout\v4\dist/index.js"'
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper]   Working directory: 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\Travel-TO-Pakistan-Tour\Travel-TO-Pakistan-Tour'
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper]   Encoding web name: utf-8 ; code page: '65001'
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'False'
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper]   Persist current code page: 'True'
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper]   High priority process: 'False'
+[2025-05-14 00:56:43Z INFO ProcessInvokerWrapper] Process started with process id 18504, waiting for process exit.
+[2025-05-14 00:56:43Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:43Z INFO JobServerQueue] Try to upload 1 log files or attachments, success rate: 1/1.
+[2025-05-14 00:56:45Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:45Z INFO AddMaskCommandExtension] Add new secret mask with length of 76
+[2025-05-14 00:56:45Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:45Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:45Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:46Z INFO JobServerQueue] Tried to upload 1 file(s) to results, success rate: 1/1.
+[2025-05-14 00:56:48Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:48Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:52Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:52Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:52Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:52Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:56:52Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:56:52Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:56:53Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:53Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:53Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:54Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:54Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:56Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:56Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:58Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:56:58Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:57:02Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:57:02Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:57:02Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:57:12Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:57:12Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:57:12Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:57:22Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:57:22Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:57:22Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:57:33Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:57:33Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:57:33Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:57:37Z INFO JobServerQueue] Stop aggressive process web console line queue.
+[2025-05-14 00:57:43Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:57:43Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:57:43Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:57:53Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:57:53Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:57:53Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:58:03Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:58:03Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:58:03Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:58:13Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:58:13Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:58:13Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:58:21Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:58:23Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:58:23Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:58:23Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:58:23Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:58:24Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:58:24Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:58:25Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:58:25Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:58:26Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:58:27Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper] Finished process 18504 with exit code 0, and elapsed time 00:01:44.7244911.
+[2025-05-14 00:58:27Z INFO CreateStepSummaryCommand] Step Summary file (C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp\_runner_file_commands\step_summary_11659163-356a-4f7a-9184-3303ab18d94d) is empty; skipping attachment upload
+[2025-05-14 00:58:27Z INFO StepsRunner] Step result: 
+[2025-05-14 00:58:27Z INFO ExecutionContext] Publish step telemetry for current step {
+  "action": "actions/checkout",
+  "ref": "v4",
+  "type": "node20",
+  "stage": "Main",
+  "stepId": "ce4790b2-251e-5077-f66e-a464c6feb979",
+  "stepContextName": "__actions_checkout",
+  "hasPreStep": false,
+  "hasPostStep": true,
+  "result": "succeeded",
+  "errorMessages": [
+    "no submodule mapping found in .gitmodules for path 'actions-runner/_work/Travel-TO-Pakistan-Tour/Travel-TO-Pakistan-Tour'",
+    "Unable to clean or reset the repository. The repository will be recreated instead."
+  ],
+  "executionTimeInSeconds": 106,
+  "startTime": "2025-05-14T00:56:42.9038631Z",
+  "finishTime": "2025-05-14T00:58:27.9257976Z"
+}.
+[2025-05-14 00:58:27Z INFO StepsRunner] No need for updating job result with current step result 'Succeeded'.
+[2025-05-14 00:58:27Z INFO StepsRunner] Current state: job state = ''
+[2025-05-14 00:58:27Z INFO StepsRunner] Processing step: DisplayName='Cleanup Docker and Minikube'
+[2025-05-14 00:58:27Z INFO StepsRunner] Evaluating: success()
+[2025-05-14 00:58:27Z INFO StepsRunner] Result: true
+[2025-05-14 00:58:27Z INFO StepsRunner] Starting the step.
+[2025-05-14 00:58:27Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:58:27Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:58:27Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:58:27Z INFO StepsRunner] Which2: 'chcp'
+[2025-05-14 00:58:27Z INFO StepsRunner] Location: 'C:\Windows\system32\chcp.COM'
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper] Starting process:
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper]   File name: 'C:\Windows\system32\chcp.COM'
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper]   Arguments: '65001'
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper]   Working directory: 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper]   Encoding web name:  ; code page: ''
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'False'
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper]   Persist current code page: 'True'
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper]   High priority process: 'False'
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper] Process started with process id 5688, waiting for process exit.
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 00:58:27Z INFO ProcessInvokerWrapper] Finished process 5688 with exit code 0, and elapsed time 00:00:00.0246993.
+[2025-05-14 00:58:27Z INFO StepsRunner] Successfully returned to code page 65001 (UTF8)
+[2025-05-14 00:58:27Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:58:27Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:58:27Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:58:27Z INFO HostContext] Well known directory 'Temp': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp'
+[2025-05-14 00:58:27Z INFO ExecutionContext] Write event payload to C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp\_github_workflow\event.json
+[2025-05-14 00:58:27Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:58:27Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:58:27Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:58:27Z INFO HostContext] Well known directory 'Temp': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp'
+[2025-05-14 00:58:27Z INFO ExtensionManager] Getting extensions for interface: 'GitHub.Runner.Worker.IFileCommandExtension'
+[2025-05-14 00:58:27Z INFO ExtensionManager] Getting extensions for interface: 'GitHub.Runner.Worker.IActionCommandExtension'
+[2025-05-14 00:58:27Z INFO ActionCommandManager] Register action command extension for command internal-set-repo-path
+[2025-05-14 00:58:27Z INFO ActionCommandManager] Register action command extension for command set-env
+[2025-05-14 00:58:27Z INFO ActionCommandManager] Register action command extension for command set-output
+[2025-05-14 00:58:27Z INFO ActionCommandManager] Register action command extension for command save-state
+[2025-05-14 00:58:27Z INFO ActionCommandManager] Register action command extension for command add-path
+[2025-05-14 00:58:27Z INFO ActionCommandManager] Register action command extension for command add-mask
+[2025-05-14 00:58:27Z INFO ActionCommandManager] Register action command extension for command add-matcher
+[2025-05-14 00:58:27Z INFO ActionCommandManager] Register action command extension for command remove-matcher
+[2025-05-14 00:58:27Z INFO ActionCommandManager] Register action command extension for command warning
+[2025-05-14 00:58:27Z INFO ActionCommandManager] Register action command extension for command error
+[2025-05-14 00:58:27Z INFO ActionCommandManager] Register action command extension for command notice
+[2025-05-14 00:58:27Z INFO ActionCommandManager] Register action command extension for command debug
+[2025-05-14 00:58:27Z INFO ActionCommandManager] Register action command extension for command group
+[2025-05-14 00:58:27Z INFO ActionCommandManager] Register action command extension for command endgroup
+[2025-05-14 00:58:27Z INFO ActionCommandManager] Register action command extension for command echo
+[2025-05-14 00:58:27Z INFO ScriptHandler] Which2: 'powershell'
+[2025-05-14 00:58:27Z INFO ScriptHandler] Location: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE'
+[2025-05-14 00:58:27Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:58:27Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:58:27Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:58:27Z INFO HostContext] Well known directory 'Temp': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp'
+[2025-05-14 00:58:27Z INFO ScriptHandler] Which2: 'powershell'
+[2025-05-14 00:58:28Z INFO ScriptHandler] Location: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE'
+[2025-05-14 00:58:28Z INFO ProcessInvokerWrapper] Starting process:
+[2025-05-14 00:58:28Z INFO ProcessInvokerWrapper]   File name: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE'
+[2025-05-14 00:58:28Z INFO ProcessInvokerWrapper]   Arguments: '-command ". 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp\13fb1121-169d-4979-b010-231587d8be93.ps1'"'
+[2025-05-14 00:58:28Z INFO ProcessInvokerWrapper]   Working directory: 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\Travel-TO-Pakistan-Tour\Travel-TO-Pakistan-Tour'
+[2025-05-14 00:58:28Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2025-05-14 00:58:28Z INFO ProcessInvokerWrapper]   Encoding web name:  ; code page: ''
+[2025-05-14 00:58:28Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'False'
+[2025-05-14 00:58:28Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2025-05-14 00:58:28Z INFO ProcessInvokerWrapper]   Persist current code page: 'True'
+[2025-05-14 00:58:28Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2025-05-14 00:58:28Z INFO ProcessInvokerWrapper]   High priority process: 'False'
+[2025-05-14 00:58:28Z INFO ProcessInvokerWrapper] Process started with process id 20004, waiting for process exit.
+[2025-05-14 00:58:28Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ce4790b2-251e-5077-f66e-a464c6feb979', success rate: 1/1.
+[2025-05-14 00:58:28Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'd7dedd61-f0d4-52a7-2d12-40566bec885c', success rate: 1/1.
+[2025-05-14 00:58:28Z INFO JobServerQueue] Got a step log file to send to results service.
+[2025-05-14 00:58:28Z INFO JobServerQueue] Starting upload of step log file to results service ResultsLog, C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag\blocks\deaccac3-24dc-4c85-8a66-b3ca2c2bd09f_ce4790b2-251e-5077-f66e-a464c6feb979.1
+[2025-05-14 00:58:29Z INFO JobServerQueue] Try to upload 1 log files or attachments, success rate: 1/1.
+[2025-05-14 00:58:31Z INFO JobServerQueue] Tried to upload 1 file(s) to results, success rate: 1/1.
+[2025-05-14 00:58:33Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:58:33Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:58:33Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:58:43Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:58:43Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:58:43Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:58:53Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:58:53Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:58:53Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:00Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'd7dedd61-f0d4-52a7-2d12-40566bec885c', success rate: 1/1.
+[2025-05-14 00:59:03Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:03Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:03Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:03Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'd7dedd61-f0d4-52a7-2d12-40566bec885c', success rate: 1/1.
+[2025-05-14 00:59:07Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'd7dedd61-f0d4-52a7-2d12-40566bec885c', success rate: 1/1.
+[2025-05-14 00:59:13Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:13Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:13Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:23Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:23Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:23Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:33Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:33Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:33Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:43Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:43Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:43Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:53Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:53Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:53Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:54Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'd7dedd61-f0d4-52a7-2d12-40566bec885c', success rate: 1/1.
+[2025-05-14 00:59:56Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'd7dedd61-f0d4-52a7-2d12-40566bec885c', success rate: 1/1.
+[2025-05-14 00:59:57Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'd7dedd61-f0d4-52a7-2d12-40566bec885c', success rate: 1/1.
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper] Finished process 20004 with exit code 0, and elapsed time 00:01:29.4764060.
+[2025-05-14 00:59:57Z INFO CreateStepSummaryCommand] Step Summary file (C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp\_runner_file_commands\step_summary_c7bec799-4a2f-4223-99e7-11628df515be) is empty; skipping attachment upload
+[2025-05-14 00:59:57Z INFO StepsRunner] Step result: 
+[2025-05-14 00:59:57Z INFO ExecutionContext] Publish step telemetry for current step {
+  "action": "powershell",
+  "type": "run",
+  "stage": "Main",
+  "stepId": "d7dedd61-f0d4-52a7-2d12-40566bec885c",
+  "stepContextName": "__run",
+  "result": "succeeded",
+  "errorMessages": [],
+  "executionTimeInSeconds": 90,
+  "startTime": "2025-05-14T00:58:27.9314998Z",
+  "finishTime": "2025-05-14T00:59:57.4909741Z"
+}.
+[2025-05-14 00:59:57Z INFO StepsRunner] No need for updating job result with current step result 'Succeeded'.
+[2025-05-14 00:59:57Z INFO StepsRunner] Current state: job state = ''
+[2025-05-14 00:59:57Z INFO StepsRunner] Processing step: DisplayName='Start Minikube (Docker Driver)'
+[2025-05-14 00:59:57Z INFO StepsRunner] Evaluating: success()
+[2025-05-14 00:59:57Z INFO StepsRunner] Result: true
+[2025-05-14 00:59:57Z INFO StepsRunner] Starting the step.
+[2025-05-14 00:59:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:57Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:57Z INFO StepsRunner] Which2: 'chcp'
+[2025-05-14 00:59:57Z INFO StepsRunner] Location: 'C:\Windows\system32\chcp.COM'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper] Starting process:
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   File name: 'C:\Windows\system32\chcp.COM'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Arguments: '65001'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Working directory: 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Encoding web name:  ; code page: ''
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'False'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Persist current code page: 'True'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   High priority process: 'False'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper] Process started with process id 30872, waiting for process exit.
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper] Finished process 30872 with exit code 0, and elapsed time 00:00:00.0185251.
+[2025-05-14 00:59:57Z INFO StepsRunner] Successfully returned to code page 65001 (UTF8)
+[2025-05-14 00:59:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:57Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:57Z INFO HostContext] Well known directory 'Temp': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp'
+[2025-05-14 00:59:57Z INFO ExecutionContext] Write event payload to C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp\_github_workflow\event.json
+[2025-05-14 00:59:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:57Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:57Z INFO HostContext] Well known directory 'Temp': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp'
+[2025-05-14 00:59:57Z INFO ExtensionManager] Getting extensions for interface: 'GitHub.Runner.Worker.IFileCommandExtension'
+[2025-05-14 00:59:57Z INFO ExtensionManager] Getting extensions for interface: 'GitHub.Runner.Worker.IActionCommandExtension'
+[2025-05-14 00:59:57Z INFO ActionCommandManager] Register action command extension for command internal-set-repo-path
+[2025-05-14 00:59:57Z INFO ActionCommandManager] Register action command extension for command set-env
+[2025-05-14 00:59:57Z INFO ActionCommandManager] Register action command extension for command set-output
+[2025-05-14 00:59:57Z INFO ActionCommandManager] Register action command extension for command save-state
+[2025-05-14 00:59:57Z INFO ActionCommandManager] Register action command extension for command add-path
+[2025-05-14 00:59:57Z INFO ActionCommandManager] Register action command extension for command add-mask
+[2025-05-14 00:59:57Z INFO ActionCommandManager] Register action command extension for command add-matcher
+[2025-05-14 00:59:57Z INFO ActionCommandManager] Register action command extension for command remove-matcher
+[2025-05-14 00:59:57Z INFO ActionCommandManager] Register action command extension for command warning
+[2025-05-14 00:59:57Z INFO ActionCommandManager] Register action command extension for command error
+[2025-05-14 00:59:57Z INFO ActionCommandManager] Register action command extension for command notice
+[2025-05-14 00:59:57Z INFO ActionCommandManager] Register action command extension for command debug
+[2025-05-14 00:59:57Z INFO ActionCommandManager] Register action command extension for command group
+[2025-05-14 00:59:57Z INFO ActionCommandManager] Register action command extension for command endgroup
+[2025-05-14 00:59:57Z INFO ActionCommandManager] Register action command extension for command echo
+[2025-05-14 00:59:57Z INFO ScriptHandler] Which2: 'powershell'
+[2025-05-14 00:59:57Z INFO ScriptHandler] Location: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE'
+[2025-05-14 00:59:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:57Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:57Z INFO HostContext] Well known directory 'Temp': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp'
+[2025-05-14 00:59:57Z INFO ScriptHandler] Which2: 'powershell'
+[2025-05-14 00:59:57Z INFO ScriptHandler] Location: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper] Starting process:
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   File name: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Arguments: '-command ". 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp\c94d92ce-3b37-4094-9f71-4c4f80b0324b.ps1'"'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Working directory: 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\Travel-TO-Pakistan-Tour\Travel-TO-Pakistan-Tour'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Encoding web name:  ; code page: ''
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'False'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Persist current code page: 'True'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper]   High priority process: 'False'
+[2025-05-14 00:59:57Z INFO ProcessInvokerWrapper] Process started with process id 27112, waiting for process exit.
+[2025-05-14 00:59:57Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'b6da7b27-7b57-5afc-7be1-fd2cca5bc7d5', success rate: 1/1.
+[2025-05-14 00:59:58Z INFO JobServerQueue] Got a step log file to send to results service.
+[2025-05-14 00:59:58Z INFO JobServerQueue] Starting upload of step log file to results service ResultsLog, C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag\blocks\deaccac3-24dc-4c85-8a66-b3ca2c2bd09f_d7dedd61-f0d4-52a7-2d12-40566bec885c.1
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper] Finished process 27112 with exit code 1, and elapsed time 00:00:01.1941823.
+[2025-05-14 00:59:58Z INFO CreateStepSummaryCommand] Step Summary file (C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp\_runner_file_commands\step_summary_12730fbd-68fe-4816-936b-b643916ddd03) is empty; skipping attachment upload
+[2025-05-14 00:59:58Z INFO StepsRunner] Step result: Failed
+[2025-05-14 00:59:58Z INFO ExecutionContext] Publish step telemetry for current step {
+  "action": "powershell",
+  "type": "run",
+  "stage": "Main",
+  "stepId": "b6da7b27-7b57-5afc-7be1-fd2cca5bc7d5",
+  "stepContextName": "__run_2",
+  "result": "failed",
+  "errorMessages": [
+    "Process completed with exit code 1."
+  ],
+  "executionTimeInSeconds": 2,
+  "startTime": "2025-05-14T00:59:57.4961913Z",
+  "finishTime": "2025-05-14T00:59:58.7497553Z"
+}.
+[2025-05-14 00:59:58Z INFO StepsRunner] Update job result with current step result 'Failed'.
+[2025-05-14 00:59:58Z INFO StepsRunner] Current state: job state = 'Failed'
+[2025-05-14 00:59:58Z INFO StepsRunner] Processing step: DisplayName='Verify Minikube and Docker'
+[2025-05-14 00:59:58Z INFO StepsRunner] Evaluating: success()
+[2025-05-14 00:59:58Z INFO StepsRunner] Result: false
+[2025-05-14 00:59:58Z INFO StepsRunner] Skipping step due to condition evaluation.
+[2025-05-14 00:59:58Z INFO StepsRunner] No need for updating job result with current step result 'Skipped'.
+[2025-05-14 00:59:58Z INFO StepsRunner] Current state: job state = 'Failed'
+[2025-05-14 00:59:58Z INFO StepsRunner] Processing step: DisplayName='Build and Push Images'
+[2025-05-14 00:59:58Z INFO StepsRunner] Evaluating: success()
+[2025-05-14 00:59:58Z INFO StepsRunner] Result: false
+[2025-05-14 00:59:58Z INFO StepsRunner] Skipping step due to condition evaluation.
+[2025-05-14 00:59:58Z INFO StepsRunner] No need for updating job result with current step result 'Skipped'.
+[2025-05-14 00:59:58Z INFO StepsRunner] Current state: job state = 'Failed'
+[2025-05-14 00:59:58Z INFO StepsRunner] Processing step: DisplayName='Deploy to Kubernetes'
+[2025-05-14 00:59:58Z INFO StepsRunner] Evaluating: success()
+[2025-05-14 00:59:58Z INFO StepsRunner] Result: false
+[2025-05-14 00:59:58Z INFO StepsRunner] Skipping step due to condition evaluation.
+[2025-05-14 00:59:58Z INFO StepsRunner] No need for updating job result with current step result 'Skipped'.
+[2025-05-14 00:59:58Z INFO StepsRunner] Current state: job state = 'Failed'
+[2025-05-14 00:59:58Z INFO StepsRunner] Processing step: DisplayName='Post Checkout code'
+[2025-05-14 00:59:58Z INFO StepsRunner] Evaluating: always()
+[2025-05-14 00:59:58Z INFO StepsRunner] Result: true
+[2025-05-14 00:59:58Z INFO StepsRunner] Starting the step.
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:58Z INFO StepsRunner] Which2: 'chcp'
+[2025-05-14 00:59:58Z INFO StepsRunner] Location: 'C:\Windows\system32\chcp.COM'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper] Starting process:
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   File name: 'C:\Windows\system32\chcp.COM'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Arguments: '65001'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Working directory: 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Encoding web name:  ; code page: ''
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'False'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Persist current code page: 'True'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   High priority process: 'False'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper] Process started with process id 24472, waiting for process exit.
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper] Finished process 24472 with exit code 0, and elapsed time 00:00:00.0224437.
+[2025-05-14 00:59:58Z INFO StepsRunner] Successfully returned to code page 65001 (UTF8)
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:59:58Z INFO ActionManager] Load action that reference repository from 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions\actions\checkout\v4'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Actions': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions'
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Loaded action.yml file: {
+  "name": "Checkout",
+  "description": "Checkout a Git repository at a particular version",
+  "inputs": {
+    "type": 2,
+    "map": [
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 4,
+          "col": 3,
+          "lit": "repository"
+        },
+        "value": {
+          "type": 3,
+          "file": 2,
+          "line": 6,
+          "col": 14,
+          "expr": "github.repository"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 7,
+          "col": 3,
+          "lit": "ref"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 12,
+          "col": 3,
+          "lit": "token"
+        },
+        "value": {
+          "type": 3,
+          "file": 2,
+          "line": 24,
+          "col": 14,
+          "expr": "github.token"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 25,
+          "col": 3,
+          "lit": "ssh-key"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 37,
+          "col": 3,
+          "lit": "ssh-known-hosts"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 42,
+          "col": 3,
+          "lit": "ssh-strict"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 47,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 48,
+          "col": 3,
+          "lit": "ssh-user"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 51,
+          "col": 14,
+          "lit": "git"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 52,
+          "col": 3,
+          "lit": "persist-credentials"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 54,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 55,
+          "col": 3,
+          "lit": "path"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 57,
+          "col": 3,
+          "lit": "clean"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 59,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 60,
+          "col": 3,
+          "lit": "filter"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 64,
+          "col": 14,
+          "lit": ""
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 65,
+          "col": 3,
+          "lit": "sparse-checkout"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 69,
+          "col": 14,
+          "lit": ""
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 70,
+          "col": 3,
+          "lit": "sparse-checkout-cone-mode"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 73,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 74,
+          "col": 3,
+          "lit": "fetch-depth"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 76,
+          "col": 14,
+          "lit": "1"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 77,
+          "col": 3,
+          "lit": "fetch-tags"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 79,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 80,
+          "col": 3,
+          "lit": "show-progress"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 82,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 83,
+          "col": 3,
+          "lit": "lfs"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 85,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 86,
+          "col": 3,
+          "lit": "submodules"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 94,
+          "col": 14,
+          "lit": "false"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 95,
+          "col": 3,
+          "lit": "set-safe-directory"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 97,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 98,
+          "col": 3,
+          "lit": "github-server-url"
+        },
+        "value": ""
+      }
+    ]
+  },
+  "execution": {
+    "executionType": "nodeJS",
+    "hasPre": false,
+    "hasPost": true,
+    "script": "dist/index.js",
+    "pre": null,
+    "post": "dist/index.js",
+    "nodeVersion": "node20",
+    "cleanupCondition": "always()",
+    "initCondition": "always()"
+  },
+  "deprecated": null
+}
+[2025-05-14 00:59:58Z INFO ActionManager] Action pre node.js file: N/A.
+[2025-05-14 00:59:58Z INFO ActionManager] Action node.js file: dist/index.js.
+[2025-05-14 00:59:58Z INFO ActionManager] Action post node.js file: dist/index.js.
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Temp': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp'
+[2025-05-14 00:59:58Z INFO ExecutionContext] Write event payload to C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp\_github_workflow\event.json
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Work': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Temp': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp'
+[2025-05-14 00:59:58Z INFO ExtensionManager] Getting extensions for interface: 'GitHub.Runner.Worker.IFileCommandExtension'
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'repository': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 6,
+  "col": 14,
+  "lit": "moawiz-2706/Travel-TO-Pakistan-Tour"
+}
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'ref': default value evaluate result: ""
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'token': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 24,
+  "col": 14,
+  "lit": "***"
+}
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'ssh-key': default value evaluate result: ""
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'ssh-known-hosts': default value evaluate result: ""
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'ssh-strict': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 47,
+  "col": 14,
+  "lit": "true"
+}
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'ssh-user': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 51,
+  "col": 14,
+  "lit": "git"
+}
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'persist-credentials': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 54,
+  "col": 14,
+  "lit": "true"
+}
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'path': default value evaluate result: ""
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'clean': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 59,
+  "col": 14,
+  "lit": "true"
+}
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'filter': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 64,
+  "col": 14,
+  "lit": ""
+}
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'sparse-checkout': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 69,
+  "col": 14,
+  "lit": ""
+}
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'sparse-checkout-cone-mode': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 73,
+  "col": 14,
+  "lit": "true"
+}
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'fetch-depth': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 76,
+  "col": 14,
+  "lit": "1"
+}
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'fetch-tags': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 79,
+  "col": 14,
+  "lit": "false"
+}
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'show-progress': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 82,
+  "col": 14,
+  "lit": "true"
+}
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'lfs': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 85,
+  "col": 14,
+  "lit": "false"
+}
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'submodules': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 94,
+  "col": 14,
+  "lit": "false"
+}
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'set-safe-directory': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 97,
+  "col": 14,
+  "lit": "true"
+}
+[2025-05-14 00:59:58Z INFO ActionManifestManager] Input 'github-server-url': default value evaluate result: ""
+[2025-05-14 00:59:58Z INFO ExtensionManager] Getting extensions for interface: 'GitHub.Runner.Worker.IActionCommandExtension'
+[2025-05-14 00:59:58Z INFO ActionCommandManager] Register action command extension for command internal-set-repo-path
+[2025-05-14 00:59:58Z INFO ActionCommandManager] Register action command extension for command set-env
+[2025-05-14 00:59:58Z INFO ActionCommandManager] Register action command extension for command set-output
+[2025-05-14 00:59:58Z INFO ActionCommandManager] Register action command extension for command save-state
+[2025-05-14 00:59:58Z INFO ActionCommandManager] Register action command extension for command add-path
+[2025-05-14 00:59:58Z INFO ActionCommandManager] Register action command extension for command add-mask
+[2025-05-14 00:59:58Z INFO ActionCommandManager] Register action command extension for command add-matcher
+[2025-05-14 00:59:58Z INFO ActionCommandManager] Register action command extension for command remove-matcher
+[2025-05-14 00:59:58Z INFO ActionCommandManager] Register action command extension for command warning
+[2025-05-14 00:59:58Z INFO ActionCommandManager] Register action command extension for command error
+[2025-05-14 00:59:58Z INFO ActionCommandManager] Register action command extension for command notice
+[2025-05-14 00:59:58Z INFO ActionCommandManager] Register action command extension for command debug
+[2025-05-14 00:59:58Z INFO ActionCommandManager] Register action command extension for command group
+[2025-05-14 00:59:58Z INFO ActionCommandManager] Register action command extension for command endgroup
+[2025-05-14 00:59:58Z INFO ActionCommandManager] Register action command extension for command echo
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 00:59:58Z INFO HostContext] Well known directory 'Externals': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\externals'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper] Starting process:
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   File name: 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\externals\node20\bin\node.exe'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Arguments: '"C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_actions\actions\checkout\v4\dist/index.js"'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Working directory: 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\Travel-TO-Pakistan-Tour\Travel-TO-Pakistan-Tour'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Encoding web name: utf-8 ; code page: '65001'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'False'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Persist current code page: 'True'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper]   High priority process: 'False'
+[2025-05-14 00:59:58Z INFO ProcessInvokerWrapper] Process started with process id 29892, waiting for process exit.
+[2025-05-14 00:59:58Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'b6da7b27-7b57-5afc-7be1-fd2cca5bc7d5', success rate: 1/1.
+[2025-05-14 00:59:58Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'b90ad45c-1a0c-4c8c-9fae-371a5217e880', success rate: 1/1.
+[2025-05-14 00:59:59Z INFO JobServerQueue] Try to upload 1 log files or attachments, success rate: 1/1.
+[2025-05-14 00:59:59Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'b90ad45c-1a0c-4c8c-9fae-371a5217e880', success rate: 1/1.
+[2025-05-14 00:59:59Z INFO AddMaskCommandExtension] Add new secret mask with length of 32
+[2025-05-14 00:59:59Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'b90ad45c-1a0c-4c8c-9fae-371a5217e880', success rate: 1/1.
+[2025-05-14 01:00:00Z INFO JobServerQueue] Tried to upload 1 file(s) to results, success rate: 1/1.
+[2025-05-14 01:00:00Z INFO JobServerQueue] Try to upload 1 log files or attachments, success rate: 1/1.
+[2025-05-14 01:00:00Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 01:00:00Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2025-05-14 01:00:00Z INFO ProcessInvokerWrapper] Finished process 29892 with exit code 0, and elapsed time 00:00:02.1706251.
+[2025-05-14 01:00:00Z INFO CreateStepSummaryCommand] Step Summary file (C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp\_runner_file_commands\step_summary_f344c4c7-f6d7-4547-81fb-e65c35074ac2) is empty; skipping attachment upload
+[2025-05-14 01:00:00Z INFO StepsRunner] Step result: 
+[2025-05-14 01:00:00Z INFO ExecutionContext] Publish step telemetry for current step {
+  "action": "actions/checkout",
+  "ref": "v4",
+  "type": "node20",
+  "stage": "Post",
+  "stepId": "b90ad45c-1a0c-4c8c-9fae-371a5217e880",
+  "result": "succeeded",
+  "errorMessages": [
+    "The process 'C:\\Program Files\\Git\\cmd\\git.exe' failed with exit code 128"
+  ],
+  "executionTimeInSeconds": 3,
+  "startTime": "2025-05-14T00:59:58.7566837Z",
+  "finishTime": "2025-05-14T01:00:00.9959526Z"
+}.
+[2025-05-14 01:00:00Z INFO StepsRunner] No need for updating job result with current step result 'Succeeded'.
+[2025-05-14 01:00:00Z INFO StepsRunner] Current state: job state = 'Failed'
+[2025-05-14 01:00:00Z INFO JobRunner] Finalize job.
+[2025-05-14 01:00:01Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 01:00:01Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 01:00:01Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 01:00:01Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 01:00:01Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 01:00:01Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 01:00:01Z INFO JobExtension] Initialize Env context
+[2025-05-14 01:00:01Z INFO JobExtension] Initialize steps context
+[2025-05-14 01:00:01Z INFO JobExtension] Total accessible running process: 393.
+[2025-05-14 01:00:01Z INFO JobExtension] Inspecting process environment variables. PID: 30348 (chrome)
+[2025-05-14 01:00:01Z INFO JobExtension] Inspecting process environment variables. PID: 29416 (chrome)
+[2025-05-14 01:00:01Z INFO JobExtension] Wait for all connectivity checks to finish.
+[2025-05-14 01:00:01Z INFO JobExtension] Connectivity check result: GitHub.Runner.Worker.JobExtension+CheckResult
+[2025-05-14 01:00:01Z INFO JobExtension] Connectivity check result: GitHub.Runner.Worker.JobExtension+CheckResult
+[2025-05-14 01:00:01Z INFO JobExtension] Connectivity check result: GitHub.Runner.Worker.JobExtension+CheckResult
+[2025-05-14 01:00:01Z INFO JobExtension] Connectivity check result: GitHub.Runner.Worker.JobExtension+CheckResult
+[2025-05-14 01:00:01Z INFO JobExtension] Connectivity check result: GitHub.Runner.Worker.JobExtension+CheckResult
+[2025-05-14 01:00:01Z INFO JobExtension] Connectivity check result: GitHub.Runner.Worker.JobExtension+CheckResult
+[2025-05-14 01:00:01Z INFO ExecutionContext] Publish step telemetry for current step {
+  "action": "complete_job",
+  "type": "runner",
+  "stage": "Post",
+  "stepId": "b10e2d82-eeb3-413a-b06e-d3c4af1280df",
+  "result": "succeeded",
+  "errorMessages": [],
+  "executionTimeInSeconds": 1,
+  "startTime": "2025-05-14T01:00:01.006821Z",
+  "finishTime": "2025-05-14T01:00:01.0817387Z"
+}.
+[2025-05-14 01:00:01Z INFO JobRunner] Job result after all job steps finish: Failed
+[2025-05-14 01:00:01Z INFO JobRunner] Completing the job execution context.
+[2025-05-14 01:00:01Z INFO JobRunner] Shutting down the job server queue.
+[2025-05-14 01:00:01Z INFO JobServerQueue] Fire signal to shutdown all queues.
+[2025-05-14 01:00:02Z INFO JobServerQueue] All queue process task stopped.
+[2025-05-14 01:00:02Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'b90ad45c-1a0c-4c8c-9fae-371a5217e880', success rate: 1/1.
+[2025-05-14 01:00:02Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'b10e2d82-eeb3-413a-b06e-d3c4af1280df', success rate: 1/1.
+[2025-05-14 01:00:02Z INFO JobServerQueue] Web console line queue drained.
+[2025-05-14 01:00:02Z INFO JobServerQueue] Uploading 3 files in one shot.
+[2025-05-14 01:00:03Z INFO JobServerQueue] Try to upload 3 log files or attachments, success rate: 3/3.
+[2025-05-14 01:00:03Z INFO JobServerQueue] File upload queue drained.
+[2025-05-14 01:00:03Z INFO JobServerQueue] Starting results-based upload queue...
+[2025-05-14 01:00:03Z INFO JobServerQueue] Uploading 4 file(s) in one shot through results service.
+[2025-05-14 01:00:03Z INFO JobServerQueue] Got a step log file to send to results service.
+[2025-05-14 01:00:03Z INFO JobServerQueue] Starting upload of step log file to results service ResultsLog, C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag\blocks\deaccac3-24dc-4c85-8a66-b3ca2c2bd09f_b6da7b27-7b57-5afc-7be1-fd2cca5bc7d5.1
+[2025-05-14 01:00:04Z INFO JobServerQueue] Got a step log file to send to results service.
+[2025-05-14 01:00:04Z INFO JobServerQueue] Starting upload of step log file to results service ResultsLog, C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag\blocks\deaccac3-24dc-4c85-8a66-b3ca2c2bd09f_b90ad45c-1a0c-4c8c-9fae-371a5217e880.1
+[2025-05-14 01:00:05Z INFO JobServerQueue] Got a step log file to send to results service.
+[2025-05-14 01:00:05Z INFO JobServerQueue] Starting upload of step log file to results service ResultsLog, C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag\blocks\deaccac3-24dc-4c85-8a66-b3ca2c2bd09f_b10e2d82-eeb3-413a-b06e-d3c4af1280df.1
+[2025-05-14 01:00:06Z INFO JobServerQueue] Got a job log file to send to results service.
+[2025-05-14 01:00:06Z INFO JobServerQueue] Starting upload of job log file to results service ResultsLog, C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag\blocks\deaccac3-24dc-4c85-8a66-b3ca2c2bd09f_e07742bd-189a-5079-918b-43f8b2f94b89.1
+[2025-05-14 01:00:07Z INFO JobServerQueue] Tried to upload 4 file(s) to results, success rate: 4/4.
+[2025-05-14 01:00:07Z INFO JobServerQueue] Results upload queue drained.
+[2025-05-14 01:00:08Z INFO JobServerQueue] Timeline update queue drained.
+[2025-05-14 01:00:08Z INFO JobServerQueue] Disposing job server ...
+[2025-05-14 01:00:08Z INFO JobServerQueue] Disposing results server ...
+[2025-05-14 01:00:08Z INFO JobServerQueue] All queue process tasks have been stopped, and all queues are drained.
+[2025-05-14 01:00:08Z INFO JobServerQueue] Actions upload time: 4904 ms, Result upload time: 11410 ms
+[2025-05-14 01:00:08Z INFO TempDirectoryManager] Cleaning runner temp folder: C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_work\_temp
+[2025-05-14 01:00:08Z INFO HostContext] Well known directory 'Bin': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\bin'
+[2025-05-14 01:00:08Z INFO HostContext] Well known directory 'Root': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner'
+[2025-05-14 01:00:08Z INFO HostContext] Well known directory 'Diag': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag'
+[2025-05-14 01:00:08Z INFO HostContext] Well known config file 'Telemetry': 'C:\Users\MOAWIZ\Desktop\travel-to-pakistan\actions-runner\_diag\.telemetry'
+[2025-05-14 01:00:08Z INFO JobRunner] Raising job completed event
+[2025-05-14 01:00:08Z INFO Worker] Job completed.
