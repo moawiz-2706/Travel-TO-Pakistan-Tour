@@ -276,10 +276,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and Push Frontend
+      - name: Build and Push Frontend Image
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
+          context: ./travel-to-pakistan/frontend
           push: true
           tags: ${{ env.FRONTEND_IMAGE }}
           cache-from: type=gha
@@ -287,16 +287,25 @@ jobs:
           build-args: |
             NODE_ENV=production
 
-      - name: Build and Push Backend
+      - name: Build and Push Backend Image
         uses: docker/build-push-action@v5
         with:
-          context: ./backend
+          context: ./travel-to-pakistan/backend
           push: true
           tags: ${{ env.BACKEND_IMAGE }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
             NODE_ENV=production
+
+      - name: Create Docker Hub Pull Secret
+        shell: powershell
+        run: |
+          kubectl create secret docker-registry dockerhub-secret `
+            --docker-username=${{ secrets.DOCKERHUB_USERNAME }} `
+            --docker-password=${{ secrets.DOCKERHUB_TOKEN }} `
+            --docker-email=${{ secrets.DOCKERHUB_EMAIL }} `
+            -n travel-app-namespace --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Deploy to Minikube
         shell: powershell
@@ -305,13 +314,13 @@ jobs:
           kubectl create namespace travel-app-namespace --dry-run=client -o yaml | kubectl apply -f -
 
           # Deploy MongoDB
-          kubectl apply -f ./mongodb/ -n travel-app-namespace
+          kubectl apply -f ./travel-to-pakistan/mongodb/ -n travel-app-namespace
           kubectl wait --for=condition=ready pod -l app=mongodb -n travel-app-namespace --timeout=300s
 
           # Deploy backend and frontend
-          kubectl apply -f ./backend/ -n travel-app-namespace
-          kubectl apply -f ./frontend/ -n travel-app-namespace
+          kubectl apply -f ./travel-to-pakistan/backend/ -n travel-app-namespace
+          kubectl apply -f ./travel-to-pakistan/frontend/ -n travel-app-namespace
 
           # Expose services
-          kubectl expose deployment frontend-deployment -n travel-app-namespace --type=NodePort --port=80 --name=frontend
-          kubectl expose deployment backend-deployment -n travel-app-namespace --type=NodePort --port=3000 --name=backend
+          kubectl expose deployment frontend-deployment -n travel-app-namespace --type=NodePort --port=80 --name=frontend --dry-run=client -o yaml | kubectl apply -f -
+          kubectl expose deployment backend-deployment -n travel-app-namespace --type=NodePort --port=3000 --name=backend --dry-run=client -o yaml | kubectl apply -f -
