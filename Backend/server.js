@@ -17,8 +17,14 @@ const roomRoutes = require('./routes/roomRoutes');
 const app = express();
 
 // Middleware
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://172.17.0.4:3000',
+  process.env.CORS_ORIGIN // Add your Vercel frontend URL here via environment variable
+].filter(Boolean); // Remove undefined values
+
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://172.17.0.4:3000'],
+  origin: allowedOrigins,
   credentials: true,
 }));
 app.use(express.json());
